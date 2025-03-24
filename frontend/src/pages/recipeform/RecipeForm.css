@@ -1,0 +1,472 @@
+.recipe-form-container {
+    max-width: 960px;
+    margin: 40px auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    color: #333;
+    border: 1px solid #999;
+  }
+  
+  .form-section {
+    margin-bottom: 30px;
+  }
+  
+  .form-section-title {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .form-section-description {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 20px;
+    line-height: 1.5;
+  }
+  
+  .form-divider {
+    height: 1px;
+    background-color: #e6e6e6;
+    margin: 40px 0;
+  }
+  
+  .input-container {
+    position: relative;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+  }
+  
+  .text-input {
+    width: 100%;
+    padding: 12px 40px 12px 12px;
+    border: 1px solid black;
+    border-radius: 3px;
+    font-size: 16px;
+    box-sizing: border-box;
+  }
+  
+  .text-input::placeholder {
+    color: #999;
+  }
+  
+  .textarea-input {
+    width: 100%;
+    min-height: 100px;
+    max-height: 200px;
+    padding: 12px;
+    border: 1px solid black;
+    border-radius: 3px;
+    font-size: 16px;
+    resize: vertical;
+    box-sizing: border-box;
+  }
+  
+  .remove-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .remove-btn:hover {
+    color: #333;
+  }
+  
+  .add-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: none;
+    border: 2px solid #e74c3c;
+    border-radius: 3px;
+    color: #333;
+    font-weight: bold;
+    padding: 12px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-right: 10px;
+    margin-top: 15px;
+  }
+
+  .add-button-icon {
+    color: #e74c3c;
+  }
+  
+  .add-button:hover {
+    background-color: #e74c3c;
+    color: white;
+  }
+
+  .add-button:hover .add-button-icon {
+    color: white;
+}
+  
+  .reorder-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: none;
+    border: none;
+    color: #333;
+    font-weight: bold;
+    padding: 12px 10px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-left: auto;
+}
+
+.reorder-button.active {
+  color: #008000;
+}
+
+.link-button {
+  background: none;
+  border: none;
+  text-decoration: underline;
+  color: #e74c3c;
+  cursor: pointer;
+  padding: 0;
+  font-size: inherit;
+}
+
+.link-button:hover {
+  color: #c0392b;
+}
+  
+  .entry-options {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .two-column-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+  }
+  
+  .input-group label {
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+
+  .input-group select {
+    padding: 10px;
+    height: 44px;
+    border: 1px solid black;
+    border-radius: 3px;
+    background-color: white;
+    font-size: 16px;
+  }
+  
+  .input-row {
+    display: flex;
+    gap: 10px;
+    /* max-width: 700px; */
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+  }
+  
+  .input-row label {
+    font-weight: bold;
+    min-width: 150px;
+  }
+  
+  .input-row .input-with-select {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .input-row input[type="number"] {
+    width: 100px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+  }
+  
+  .input-row select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    background-color: white;
+  }
+  
+  .timer-display {
+    font-weight: bold;
+    margin-left: 10px;
+  }
+  
+  .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 30px;
+  }
+  
+  .cancel-button {
+    padding: 12px 25px;
+    background: none;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .submit-button {
+    padding: 15px 30px;
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .submit-button:hover {
+    background-color: #c0392b;
+  }
+  
+  .form-disclaimer {
+    font-size: 14px;
+    color: #666;
+    font-style: italic;
+    margin: 20px 0;
+    line-height: 1.5;
+  }
+  
+  .terms-link {
+    color: #666;
+    text-decoration: underline;
+  }
+  
+  .recipe-intro {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 20px;
+  }
+  
+  .photo-upload-container {
+    border: 2px dashed #ccc;
+    padding: 15px;
+    text-align: center;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .photo-preview {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 3px;
+  }
+  
+  .photo-upload-text {
+    color: #666;
+    margin: 10px 0;
+    font-size: 14px;
+  }
+
+  .add-buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+  }
+
+  .draggable-list {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  
+  .draggable-item {
+    opacity: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 6px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    background-color: #F2F2F2;
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+    cursor: grab;
+  }
+  
+  .draggable-item.dragging {
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+    opacity: 0.8;
+    z-index: 10;
+  }
+  
+  .draggable-item.drag-over {
+    border: 1px dashed #999;
+  }
+  
+  .drag-handle {
+    cursor: grab;
+    padding: 5px;
+    margin-right: 10px;
+    color: #999;
+    display: flex;
+    align-items: center;
+  }
+  
+  .draggable-item:active .drag-handle {
+    cursor: grabbing;
+  }
+  
+  .item-content {
+    flex: 1;
+    position: relative;
+  }
+  
+  .item-actions {
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+  }
+  
+  .move-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+    padding: 5px;
+    color: #666;
+  }
+  
+  .move-button:hover {
+    color: #333;
+  }
+  
+  .ingredient-item .text-input,
+  .direction-item .textarea-input {
+    width: calc(100% - 20px);
+  }
+  
+  .reorder-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: none;
+    border: none;
+    color: #333;
+    font-weight: bold;
+    padding: 12px 10px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-left: auto;
+  }
+  
+  .reorder-button.active {
+    color: #008000;
+  }
+  
+  .link-button {
+    background: none;
+    border: none;
+    text-decoration: underline;
+    color: #e74c3c;
+    cursor: pointer;
+    padding: 0;
+    font-size: inherit;
+  }
+  
+  .link-button:hover {
+    color: #c0392b;
+  }
+  
+  .text-input-reordering {
+    width: 100%;
+    border: none;
+    background: none;
+    font-size: 16px;
+  }
+
+  .reordering-item {
+    padding: 10px;
+  }
+
+  .input-additional-timer {
+    max-width: 730px;
+  }
+
+  .input-time-row {
+    max-width: 700px;
+    display: flex;
+    gap: 10px;
+  }
+
+  .selected-categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 5px 0;
+  }
+  
+  .category-tag {
+    display: flex;
+    align-items: center;
+    background-color: #e9f7fe;
+    border: 1px solid #d0e8f5;
+    border-radius: 15px;
+    padding: 5px 10px;
+    font-size: 14px;
+    margin-bottom: 5px;
+  }
+  
+  .remove-category {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    margin-right: 5px;
+    border-radius: 50%;
+    background-color: #cee7f5;
+    color: #5a93b5;
+    font-size: 12px;
+    cursor: pointer;
+    line-height: 1;
+  }
+  
+  .remove-category:hover {
+    background-color: #b2d7eb;
+  }
+  
+  .category-name {
+    margin-left: 2px;
+  }
+  
+  @media (max-width: 768px) {
+    .recipe-intro {
+      grid-template-columns: 1fr;
+    }
+    
+    .two-column-grid {
+      grid-template-columns: 1fr;
+    }
+  
+    .draggable-item {
+      flex-direction: row;
+      align-items: center;
+    }
+    
+    .item-actions {
+      flex-direction: row;
+      margin-left: 10px;
+    }
+  }

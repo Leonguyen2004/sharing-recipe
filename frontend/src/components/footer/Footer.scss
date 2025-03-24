@@ -1,0 +1,64 @@
+
+
+.footer {
+    margin: 20px 40px;
+    padding: 20px;
+    background-color: #262522;
+    border-radius: 32px;
+
+    
+    .top {
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px solid gray;
+
+        .footer__logo {
+            display: flex;
+            align-items: center;
+            
+            &-image {
+              width: 40px;  
+              height: 50px;
+            }
+        
+            &-title {
+              display: flex;
+              flex-direction: column; /* Chia chữ thành 2 dòng */
+              line-height: 1; /* Để chữ không bị quá cách xa nhau */
+              margin: 0px 0px 0px 5px;
+              font-weight: bold;
+              font-size: 15px;
+              color: white;
+            }
+        }
+
+        .footer__menu {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+
+            .footer__item {
+                .footer__link {
+                    text-decoration: none;
+                    color: white;
+                }
+            }
+        }
+
+        .footer__icons {
+            display: flex;
+            gap: 10px;
+
+            .icon {
+                width: 20px;
+            }
+        }
+    }
+
+    .bottom {
+        color: white;
+        display: flex;
+        justify-content: center;
+        margin-top: 10px;
+    }
+}

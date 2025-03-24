@@ -1,0 +1,53 @@
+.rdpage-directions-section {
+    margin-bottom: 40px;
+    border-bottom: 1px solid var(--light-grey);
+    padding-bottom: 30px;
+  }
+  
+  .rdpage-directions-list {
+    margin-bottom: 30px;
+  }
+  
+  .rdpage-direction-header {
+    font-size: 20px;
+    font-weight: 700;
+    margin: 20px 0 10px;
+  }
+  
+  .rdpage-direction-step {
+    margin-bottom: 24px;
+  }
+  
+  .rdpage-step-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  
+  .rdpage-step-instruction {
+    font-size: 16px;
+    line-height: 1.6;
+  }
+  
+  .rdpage-directions-footer {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 15px;
+  }
+  
+  .rdpage-made-it-button {
+    flex: 0 0 auto;
+    min-width: 200px;
+  }
+  
+  .rdpage-print-button {
+    flex: 0 0 auto;
+    min-width: 200px;
+  }
+  
+  .rdpage-made-it-counter {
+    font-size: 16px;
+    display: flex;
+    justify-content: center;
+    color: var(--text-color);
+  }

@@ -1,0 +1,278 @@
+.rvcom-reviews-section {
+    margin-bottom: 40px;
+  }
+
+  .rvcom-section-title {
+    font-size: 30px;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+  
+  .rvcom-reviews-intro {
+    margin-bottom: 30px;
+  }
+  
+  .rvcom-reviews-intro a {
+    color: var(--primary-color);
+    text-decoration: underline;
+  }
+  
+  /* Review Form */
+  .rvcom-review-form {
+    background-color: white;
+    padding: 25px;
+    margin-bottom: 30px;
+    border: 20px solid #F5F6EA;
+  }
+  
+  .rvcom-form-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+  
+  .rvcom-field-label {
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  
+  .rvcom-required {
+    color: var(--medium-grey);
+    font-weight: normal;
+  }
+  
+  .rvcom-rating-field {
+    margin-bottom: 20px;
+  }
+  
+  .rvcom-review-textarea {
+    width: 100%;
+    min-height: 130px;
+    resize: vertical;
+    max-height: 300px;
+    border: 1px solid black;
+    padding: 10px;
+    font-family: inherit;
+    font-size: 16px;
+  }
+  
+  .rvcom-photo-field {
+    display: flex;
+    margin: 20px 0;
+  }
+  
+  .rvcom-photo-upload-button {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 10px 15px;
+    border: 1px dashed black;
+    background: none;
+    cursor: pointer;
+  }
+  
+  .rvcom-optional-text {
+    color: var(--medium-grey);
+    font-size: 14px;
+  }
+  
+  .rvcom-photo-requirements {
+    margin-left: 15px;
+    font-size: 14px;
+  }
+  
+  .rvcom-photo-requirements ul {
+    list-style-type: disc;
+    padding-left: 20px;
+    margin-top: 5px;
+  }
+  
+  .rvcom-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  
+  .rvcom-cancel-button {
+    padding: 10px 20px;
+    background: none;
+    border: none;
+    font-weight: 600;
+  }
+  
+  .rvcom-submit-button {
+    padding: 10px 20px;
+    background-color: #ccc;
+    border: none;
+    font-weight: 600;
+  }
+  
+  /* Reviews Stats */
+  .rvcom-reviews-stats {
+    margin: 30px 0;
+  }
+  
+  .rvcom-stats-summary {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .rvcom-stats-text {
+    font-size: 16px;
+    font-weight: 600;
+  }
+  
+  .rvcom-stats-breakdown {
+    margin-bottom: 20px;
+  }
+  
+  .rvcom-stats-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  
+  .rvcom-stars-label {
+    width: 60px;
+    font-size: 14px;
+    color: var(--primary-color);
+  }
+  
+  .rvcom-stats-bar-container {
+    flex: 1;
+    height: 10px;
+    background-color: #eee;
+    margin: 0 10px;
+  }
+  
+  .rvcom-stats-bar {
+    height: 100%;
+    background-color: var(--primary-color);
+  }
+  
+  .rvcom-stats-count {
+    width: 30px;
+    text-align: right;
+    font-size: 14px;
+  }
+  
+  .rvcom-stats-made-it {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .rvcom-made-it-icon {
+    font-size: 20px;
+  }
+  
+  /* Reviews List */
+  .rvcom-reviews-divider {
+    height: 1px;
+    background-color: var(--light-grey);
+    margin: 30px 0;
+  }
+  
+  .rvcom-reviews-filters {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+  }
+  
+  .rvcom-filters-title {
+    font-size: 18px;
+    font-weight: 700;
+  }
+  
+  .rvcom-filters-actions {
+    display: flex;
+    gap: 15px;
+  }
+  
+  .rvcom-filter-button {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: none;
+    border: none;
+    font-weight: 600;
+    font-size: 16px;
+  }
+  
+  .rvcom-review-item {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--light-grey);
+  }
+
+  .rvcom-review-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .rvcom-user-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  .rvcom-user-name {
+    font-weight: 700;
+    font-size: 16px;
+    text-decoration: underline #e74c3c;
+  }
+  
+  .rvcom-review-content {
+    flex: 1;
+  }
+  
+  .rvcom-review-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 10px;
+  }
+  
+  .rvcom-review-date {
+    color: var(--medium-grey);
+    font-size: 14px;
+  }
+  
+  .rvcom-review-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  
+  .rvcom-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    background-color: #f9f5ec;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  
+  .rvcom-review-text {
+    margin-bottom: 15px;
+    line-height: 1.5;
+  }
+  
+  .rvcom-helpful-button {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: none;
+    border: none;
+    color: var(--medium-grey);
+    font-size: 14px;
+  }

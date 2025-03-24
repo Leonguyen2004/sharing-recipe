@@ -1,0 +1,134 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+
+  .login-box {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    width: 350px;
+    text-align: center;
+    position: relative;
+    animation: fadeIn 0.3s ease-in-out;
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: none;
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    .welcome-label {
+
+      .brand-text {
+        margin-top: 0;
+        color: #A7C957;
+        font-weight: bold;
+      }
+      
+      .welcome-text {
+        color: #333;
+        margin-bottom: 0;
+      }
+    }
+
+    .input-group {
+      display: flex;
+      align-items: center;
+      background: #f1f1f1;
+      padding: 10px;
+      border-radius: 6px;
+      margin: 10px 0;
+
+      .icon {
+        margin-right: 10px;
+      }
+
+      .input-wrapper {
+        flex-grow: 1;
+        text-align: left;
+
+        label {
+          font-size: 12px;
+          color: #666;
+        }
+
+        input {
+          width: 100%;
+          border: none;
+          outline: none;
+          background: transparent;
+          font-size: 14px;
+        }
+      }
+
+      .toggle-password {
+        background: none;
+        border: none;
+        cursor: pointer;
+      }
+    }
+
+    .options {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      margin-bottom: 15px;
+
+      a {
+        color: #A7C957;
+        text-decoration: none;
+      }
+    }
+
+    .login-button {
+      width: 100%;
+      padding: 10px;
+      background: #A7C957;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+
+      &:hover {
+        background: #A7C957;
+      }
+    }
+
+    p {
+      margin-top: 10px;
+      font-size: 14px;
+
+      .switch-link {
+        color: #A7C957;
+        text-decoration: none;
+        font-weight: bold;
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

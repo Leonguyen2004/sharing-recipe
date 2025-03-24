@@ -1,0 +1,68 @@
+.rdpage-recipe-header {
+    margin-bottom: 30px;
+  }
+  
+  .rdpage-recipe-title {
+    font-size: 42px;
+    font-weight: 800;
+    margin-bottom: 16px;
+    line-height: 1.2;
+  }
+  
+  .rdpage-recipe-meta {
+    margin-bottom: 20px;
+  }
+  
+  .rdpage-rating-container {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .rdpage-reviews-link, 
+  .rdpage-photos-link {
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: underline;
+  }
+  
+  .rdpage-recipe-description {
+    font-size: 18px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+  
+  .rdpage-recipe-author {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 10px;
+    color: var(--medium-grey);
+    font-size: 14px;
+  }
+  
+  .rdpage-recipe-tested {
+    margin-bottom: 24px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .rdpage-tested-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    background-color: green;
+    color: white;
+    border-radius: 50%;
+    margin-right: 8px;
+    font-size: 12px;
+    font-weight: bold;
+  }
+  
+  .rdpage-recipe-actions {
+    display: flex;
+  }

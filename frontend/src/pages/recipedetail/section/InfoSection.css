@@ -1,0 +1,59 @@
+.rdpage-recipe-info {
+  padding: 25px;
+  background-color: white;
+  margin-bottom: 30px;
+  border: 1px solid black;
+  border-top: 15px solid #e8b93e;
+}
+
+.rdpage-recipe-info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.rdpage-info-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.rdpage-info-servings {
+  margin-top: 10px;
+}
+
+.rdpage-info-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.rdpage-info-value {
+  font-size: 18px;
+  font-weight: 400;
+}
+
+.rdpage-additional-timers {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.rdpage-timer-item {
+  display: flex;
+  flex-direction: column;
+}
+
+@media screen and (max-width: 768px) {
+  .rdpage-recipe-info-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .rdpage-recipe-info-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+}

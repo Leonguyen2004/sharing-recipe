@@ -1,0 +1,89 @@
+.ibcom-icon-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    background: none;
+    margin-right: 10px;
+  }
+
+  /* PRIMARY */
+  .ibcom-icon-button.primary {
+    border: 3px solid #e74c3c;
+    border-radius: 3px;
+    color: #333;
+    font-weight: bold;
+    font-size: 16px;
+    padding: 12px 20px;
+  }
+
+  .ibcom-icon-button.primary .ibcom-icon-button-icon {
+    color: #e74c3c;
+  }
+  
+  .ibcom-icon-button.primary:hover {
+    background-color: #e74c3c;
+    color: white;
+  }
+
+  .ibcom-icon-button.primary:hover .ibcom-icon-button-icon {
+    color: white;
+  }
+
+  /* FULL WIDTH */
+  .ibcom-icon-button.fullwidth {
+    width: 100%;
+  }
+
+  /* CANCEL */
+  .ibcom-icon-button.cancel {
+    border: none;
+    background: none;
+    color: #333;
+    font-weight: bold;
+    font-size: 16px;
+    padding: 12px 20px;
+  }
+
+  .ibcom-icon-button.cancel:hover {
+    text-decoration: underline;
+  }
+
+  /* SUBMIT */
+  .ibcom-icon-button.submit {
+    background-color: #e74c3c;
+    border: none;
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    padding: 12px 20px;
+  }
+
+  .ibcom-icon-button.submit:hover {
+    background-color: #c0392b;
+  }
+
+  /* HELPFUL */
+  .ibcom-icon-button.helpful {
+    background: none;
+    border: none;
+    color: black;
+    font-size: 14px;
+    gap: 2px;
+  }
+
+  .ibcom-icon-button.helpful .ibcom-icon-button-icon {
+    color: #e74c3c;
+  }
+
+  .ibcom-icon-button.helpful .ibcom-icon-button-text {
+    text-decoration: underline;
+  }
+  
+  .ibcom-icon-button.helpful:hover .ibcom-icon-button-text{
+    text-decoration: underline #e74c3c 2px;
+  }
+  
+  
+  
+  

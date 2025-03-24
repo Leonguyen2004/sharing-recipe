@@ -1,0 +1,49 @@
+.abcom-action-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 0;
+    font-weight: 600;
+    font-size: 16px;
+    transition: all 0.2s ease;
+  }
+  
+  .abcom-action-button.primary {
+    background-color: var(--primary-color);
+    color: white;
+  }
+  
+  .abcom-action-button.secondary {
+    background-color: var(--secondary-background);
+    color: var(--text-color);
+  }
+
+  .abcom-action-button.secondary svg{
+    color: var(--primary-color);
+  }
+  
+  .abcom-action-button.outline {
+    background-color: transparent;
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+  }
+  
+  .abcom-action-icon {
+    display: flex;
+    align-items: center;
+    margin-right: 8px;
+  }
+  
+  .abcom-action-button:hover .abcom-action-text{
+    text-decoration: underline;
+  }
+  
+  .abcom-action-button.icon-only {
+    padding: 12px;
+  }
+  
+  .abcom-action-button.icon-only .abcom-action-icon {
+    margin-right: 0;
+  }
