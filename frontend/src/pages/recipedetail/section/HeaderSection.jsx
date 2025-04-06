@@ -1,7 +1,6 @@
 import React from 'react';
 import StarRating from '../../../components/starrating/StarRating';
 import Breadcrumb from '../../../components/breadcumb/Breadcrumb';
-import ActionButton from '../../../components/button/ActionButton';
 import IconButton from '../../../components/button/IconButton';
 import { Heart, Printer, Share2, Star } from 'lucide-react';
 import './HeaderSection.css';

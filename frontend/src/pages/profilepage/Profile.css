@@ -1,0 +1,207 @@
+.ppage-container {
+    background-color: #F2F2F2;
+    padding: 40px;
+}
+
+.ppage-layout {
+  display: flex;
+  max-width: 1200px;
+  margin: 0 auto;
+  gap: 30px;
+}
+
+.ppage-sidebar {
+  width: 300px;
+  flex-shrink: 0;
+}
+
+.ppage-user-info {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.ppage-avatar {
+  margin-bottom: 15px;
+}
+
+.ppage-avatar img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+}
+
+.ppage-user-details h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.ppage-view-profile-btn {
+  width: 100%;
+  padding: 8px 16px;
+  background: none;
+  border: 1px solid #666;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #333;
+  font-size: 0.9rem;
+}
+
+.ppage-nav {
+  background-color: white;
+
+}
+
+.ppage-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.ppage-nav-item {
+  padding: 15px 20px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  border-bottom: 1px solid rgb(214, 200, 200);
+}
+
+.ppage-nav-item:hover {
+  background-color: #eee;
+}
+
+.ppage-nav-item.active {
+  background-color: white;
+  border-left: 4px solid #e74c3c;
+}
+
+.ppage-nav-item.active span {
+  color: #e74c3c;
+  font-weight: bold;
+}
+
+.ppage-nav-item span {
+  font-size: 0.95rem;
+}
+
+.ppage-content {
+  flex-grow: 1;
+  background-color: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.ppage-description {
+  color: #666;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.ppage-privacy-notice {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: #f8f8f8;
+  padding: 15px;
+  border-radius: 4px;
+  margin-bottom: 30px;
+}
+
+.ppage-lock-icon {
+  font-size: 1.2rem;
+}
+
+.ppage-basic-info {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 20px;
+}
+
+.ppage-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.ppage-form-group {
+  margin-bottom: 20px;
+}
+
+.ppage-form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #333;
+  font-weight: 500;
+}
+
+.ppage-form-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.ppage-form-group input:disabled {
+  background-color: #f8f8f8;
+  cursor: not-allowed;
+}
+
+.ppage-email-note {
+  margin-top: 8px;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.ppage-email-note a {
+  color: #0066cc;
+  text-decoration: none;
+}
+
+.ppage-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.ppage-date-inputs {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.ppage-date-inputs input {
+  width: 60px;
+  text-align: center;
+}
+
+.ppage-date-inputs input[placeholder="YYYY"] {
+  width: 80px;
+}
+
+.ppage-save-section {
+  margin-top: 30px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.ppage-save-btn {
+  padding: 12px 24px;
+  background-color: #e65100;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.ppage-save-btn:hover {
+  background-color: #d84315;
+} 

@@ -1,0 +1,252 @@
+//sign up
+sequenceDiagram
+    actor User
+    participant Frontend
+    participant FirebaseAuth
+    participant Firestore
+    participant EmailService
+
+    User ->> Frontend: Nhập email, password
+    Frontend ->> FirebaseAuth: Gửi yêu cầu đăng ký (createUserWithEmailAndPassword)
+    FirebaseAuth -->> Frontend: Trả về UID (thành công)
+    Frontend ->> Firestore: Tạo document users/{UID} (lưu thông tin mặc định)
+    Firestore -->> Frontend: Xác nhận lưu thành công
+    Frontend ->> EmailService: Gửi email xác thực (sendEmailVerification)
+    EmailService -->> User: Nhận email xác thực
+    Frontend -->> User: Thông báo "Đăng ký thành công!"
+
+//log in
+sequenceDiagram
+    actor User
+    participant Frontend
+    participant FirebaseAuth
+    participant Firestore
+    participant Analytics
+
+    User ->> Frontend: Nhập email + password
+    Frontend ->> FirebaseAuth: signInWithEmailAndPassword(email, password)
+    alt Thành công
+        FirebaseAuth -->> Frontend: Trả về UserCredential (UID, emailVerified)
+        Frontend ->> Firestore: getUserProfile(UID)
+        Firestore -->> Frontend: Trả về userData (role, name...)
+        Frontend ->> Analytics: Log login event
+        Frontend -->> User: Chuyển hướng đến trang chủ
+    else Thất bại
+        FirebaseAuth -->> Frontend: Trả về lỗi (wrong-password/invalid-email)
+        Frontend -->> User: Hiển thị thông báo lỗi
+    end
+
+//edit profile
+sequenceDiagram
+    actor User
+    participant Frontend
+    participant FirebaseAuth
+    participant Firestore
+    participant FirebaseStorage
+
+    User ->> Frontend: Nhập thông tin mới (name, avatar...)
+    Frontend ->> FirebaseAuth: verifyIdToken(UID)
+    FirebaseAuth -->> Frontend: Xác nhận token hợp lệ
+    
+    alt Có tải lên ảnh đại diện mới
+        Frontend ->> FirebaseStorage: uploadAvatar(UID, imageFile)
+        FirebaseStorage -->> Frontend: Trả về avatarURL
+        Frontend ->> Firestore: updateUser(UID, {name, avatarURL})
+    else Không có ảnh mới
+        Frontend ->> Firestore: updateUser(UID, {name})
+    end
+
+    Firestore -->> Frontend: Xác nhận cập nhật thành công
+    Frontend ->> FirebaseAuth: updateEmail(newEmail) (nếu có)
+    FirebaseAuth -->> Frontend: Xác nhận đổi email
+    Frontend -->> User: Hiển thị "Cập nhật thành công!"
+
+//add recipe
+sequenceDiagram
+    actor User
+    participant Frontend
+    participant FirebaseAuth
+    participant FirebaseStorage
+    participant Firestore
+
+    User ->> Frontend: Nhập thông tin công thức + chọn ảnh
+    Frontend ->> FirebaseAuth: verifyIdToken(UID)
+    FirebaseAuth -->> Frontend: Xác nhận token hợp lệ
+
+    loop Tải lên từng ảnh
+        Frontend ->> FirebaseStorage: uploadImage(UID, imageFile)
+        FirebaseStorage -->> Frontend: Trả về imageURL
+    end
+
+    Frontend ->> Firestore: addRecipe()
+
+    Firestore -->> Frontend: Xác nhận lưu thành công
+    Frontend -->> User: Hiển thị "Đã thêm công thức!"
+
+//comment
+sequenceDiagram
+    actor User
+    participant Frontend
+    participant FirebaseAuth
+    participant Firestore
+
+    User ->> Frontend: Nhập nội dung bình luận
+    Frontend ->> FirebaseAuth: verifyIdToken(UID)
+    FirebaseAuth -->> Frontend: Xác nhận token hợp lệ
+
+    Frontend ->> Firestore: addComment()
+
+    Firestore -->> Frontend: Xác nhận lưu thành công
+
+    Frontend -->> User: Hiển thị bình luận ngay lập tức
+
+//view-detail
+sequenceDiagram
+    actor User
+    participant Frontend
+    participant Firestore
+    participant FirebaseStorage
+    participant FirebaseAuth
+
+    User ->> Frontend: Truy cập trang công thức
+    Frontend ->> Firestore: getRecipe(recipeId)
+    Firestore -->> Frontend: Trả về recipeData {title, ingredients, steps, ownerUID, imagePaths}
+
+    par Load dữ liệu tác giả
+        Frontend ->> Firestore: getUserProfile(ownerUID)
+        Firestore -->> Frontend: Trả về ownerData {name, avatarURL}
+    end
+
+    Frontend ->> Firestore: getComments(recipeId)
+    Firestore -->> Frontend: Trả về comments [{userId, content, createdAt}]
+
+    loop Load avatar cho từng comment
+        Frontend ->> Firestore: getUserProfile(comment.userId)
+        Firestore -->> Frontend: Trả về userData {name, avatarURL}
+    end
+
+    Frontend ->> FirebaseAuth: verifyIdToken(currentUserUID)
+    FirebaseAuth -->> Frontend: Xác nhận quyền tương tác (save/comment)
+
+    Frontend -->> User: Hiển thị đầy đủ: recipe, ảnh, comments, tác giả
+
+//vỉew recipe list
+sequenceDiagram
+    actor User
+    participant Frontend
+    participant Firestore
+    participant FirebaseStorage
+
+    User ->> Frontend: Nhập từ khóa + chọn bộ lọc
+    Frontend ->> Firestore: queryRecipes()
+    
+    Firestore -->> Frontend: Trả về danh sách recipes[]
+
+    loop Cho mỗi recipe
+        Frontend ->> FirebaseStorage: getDownloadURL(recipe.previewImage)
+        FirebaseStorage -->> Frontend: Trả về imageURL
+    end
+
+    Frontend -->> User: Hiển thị danh sách công thức đã render
+
+//approve
+sequenceDiagram
+    actor Admin
+    participant AdminPanel
+    participant Firestore
+    participant FirebaseAuth
+    participant CloudFunctions
+
+    Admin ->> AdminPanel: Truy cập trang duyệt bài
+    AdminPanel ->> Firestore: queryPendingRecipes()
+    Firestore -->> AdminPanel: Trả về [{recipeId, title, ownerUID, status: "pending"}]
+
+    loop Duyệt từng recipe
+        Admin ->> AdminPanel: Chọn "Duyệt" hoặc "Từ chối"
+        alt Duyệt bài
+            AdminPanel ->> Firestore: updateRecipe(recipeId, {status: "approved"})
+            Firestore ->> CloudFunctions: Trigger onUpdate
+            CloudFunctions ->> Firestore: updateRecipeCounters(ownerUID)
+            CloudFunctions ->> Firestore: sendApprovalNotification(ownerUID)
+        else Từ chối
+            AdminPanel ->> Firestore: updateRecipe(recipeId, {status: "rejected", reason: "Spam"})
+            Firestore ->> CloudFunctions: Trigger onUpdate
+            CloudFunctions ->> Firestore: sendRejectionNotification(ownerUID)
+        end
+    end
+
+    Firestore -->> AdminPanel: Xác nhận cập nhật
+    AdminPanel -->> Admin: Hiển thị "Đã xử lý!"
+
+//manage category
+sequenceDiagram
+    actor Admin
+    participant AdminPanel
+    participant Firestore
+    participant CloudFunctions
+
+    Admin ->> AdminPanel: Truy cập trang quản lý danh mục
+    AdminPanel ->> Firestore: getCategories()
+    Firestore -->> AdminPanel: Trả về danh sách categories[]
+
+    alt Thêm danh mục mới
+        Admin ->> AdminPanel: Nhập tên
+        AdminPanel ->> Firestore: addCategory({name: "Món chay", iconURL, order: 1})
+        Firestore -->> AdminPanel: Xác nhận thêm thành công
+    end
+
+    alt Sửa danh mục
+        Admin ->> AdminPanel: Chọn categoryX, sửa tên
+        AdminPanel ->> Firestore: updateCategory(categoryX, {name: "Món Hàn"})
+        Firestore -->> AdminPanel: Xác nhận cập nhật
+    end
+
+    alt Xóa danh mục
+        Admin ->> AdminPanel: Chọn categoryX, bấm "Xóa"
+        AdminPanel ->> Firestore: deleteCategory(categoryX)
+        Firestore -->> AdminPanel: Xác nhận đã xóa
+    end
+
+    opt Cloud Functions
+        Firestore ->> CloudFunctions: Trigger onCategoryChange
+        CloudFunctions ->> Firestore: updateRecipeCounters()
+    end
+
+    AdminPanel -->> Admin: Hiển thị kết quả thành công
+
+//manage users
+sequenceDiagram
+    actor Admin
+    participant AdminPanel
+    participant FirebaseAuth
+    participant Firestore
+    participant CloudFunctions
+
+    Admin ->> AdminPanel: Truy cập trang quản lý user
+    AdminPanel ->> Firestore: getUsers()
+    Firestore -->> AdminPanel: Trả về danh sách users[]
+
+    alt Ban/Kích hoạt user
+        Admin ->> AdminPanel: Chọn "Ban" userX
+        AdminPanel ->> FirebaseAuth: updateUser(userX, {disabled: true})
+        FirebaseAuth -->> AdminPanel: Xác nhận
+        AdminPanel ->> Firestore: updateUserProfile(userX, {isBanned: true, reason: "Spam"})
+        Firestore -->> AdminPanel: OK
+        Firestore ->> CloudFunctions: Trigger onUserBanned
+        CloudFunctions ->> Firestore: hideAllPosts(userX)
+    end
+
+    alt Xóa bài viết vi phạm
+        Admin ->> AdminPanel: Chọn bài postY của userX
+        AdminPanel ->> Firestore: getPost(postY)
+        Firestore -->> AdminPanel: Trả về post data
+        AdminPanel ->> Firestore: deletePost(postY)
+        Firestore -->> AdminPanel: Xác nhận
+        AdminPanel ->> Firestore: addViolationLog(userX, "Nội dung xúc phạm")
+    end
+
+    opt Gửi thông báo
+        CloudFunctions ->> Firestore: createNotification()
+    end
+
+    AdminPanel -->> Admin: Hiển thị kết quả thành công

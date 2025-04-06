@@ -1,3 +1,4 @@
+import { debounce } from "lodash";
 import { Bookmark, ChevronDown, HelpCircle, LogOut, Menu, Plus, Search, User, UserCircle } from 'lucide-react';
 import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -15,24 +16,39 @@ const Navbar = () => {
   const accountDropdownRef = useRef(null);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isSignUpOpen, setIsSignUpOpen] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState(null);
+  const navDropdownRef = useRef(null);
+
+  console.log("re-render in navbar");
 
   /*==========================Side effect==================================*/
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.scrollY;
-      setIsScrolled(scrollTop > 50);
-      console.log(scrollTop);
+      // Thêm ngưỡng trễ (threshold) để tránh chuyển đổi liên tục
+      if (scrollTop > 50 && !isScrolled) {
+        setIsScrolled(true);
+      } else if (scrollTop <= 50 && isScrolled) {
+        setIsScrolled(false);
+      }
     };
-    window.addEventListener('scroll', handleScroll);
+  
+    // Thêm debounce
+    const debouncedHandleScroll = debounce(handleScroll, 2);
+    window.addEventListener('scroll', debouncedHandleScroll);
+    
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('scroll', debouncedHandleScroll);
     };
-  }, []);
+  }, [isScrolled]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (accountDropdownRef.current && !accountDropdownRef.current.contains(event.target)) {
         setIsAccountOpen(false);
+      }
+      if (navDropdownRef.current && !navDropdownRef.current.contains(event.target)) { 
+        setActiveDropdown(null);
       }
     };
 
@@ -50,7 +66,9 @@ const Navbar = () => {
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     console.log('Searching for:', searchValue);
-    // Implement search functionality here
+    if (searchValue.trim()) {
+      window.location.href = `/search?q=${encodeURIComponent(searchValue)}`;
+    }
   };
 
   const toggleAccountDropdown = () => {
@@ -60,6 +78,10 @@ const Navbar = () => {
   const handleLoginClick = useCallback(() => {
     setIsLoginOpen(true);
   }, []);
+
+  const toggleNavDropdown = (index) => {
+    setActiveDropdown(activeDropdown === index ? null : index)
+  }
 
   /*==========================Component==================================*/
   return (
@@ -119,13 +141,13 @@ const Navbar = () => {
                       </a>
                     </li>
                     <li className="dropdown-item">
-                      <a href="/profile" className="dropdown-link">
+                      <Link to="/profile" className="dropdown-link">
                         <User size={16} />
                         <span>My Profile</span>
-                      </a>
+                      </Link>
                     </li>
                     <li className="dropdown-item">
-                      <a href="#save-recipes" className="dropdown-link">
+                      <a href="/favorites" className="dropdown-link">
                         <Bookmark size={16} />
                         <span>Saved Recipes & Collections</span>
                       </a>
@@ -156,13 +178,142 @@ const Navbar = () => {
         </div>
         
         {!isScrolled && ( 
-          <div className="navbar__bottom">
+          <div className="navbar__bottom" ref={navDropdownRef}>
             <ul className="nav-list">
-              <li className="nav-item"><Link to="/recipes">EXPLORE</Link></li>
-              <li className="nav-item"><Link to="/contribute">CONTRIBUTE</Link></li>
-              <li className="nav-item"><Link to="/community">COMMUNITY</Link></li>
-              <li className="nav-item"><Link to="#">OCCASIONS</Link></li>
-              <li className="nav-item"><Link to="#">CUISINES</Link></li>
+
+              <li className={`nav-item nav-dropdown ${activeDropdown === "meals" ? "active" : ""}`}>
+                <div className="nav-dropdown-trigger" onClick={() => toggleNavDropdown("meals")}>
+                  <Link to="#" onClick={(e) => e.preventDefault()}>
+                    MEALS
+                  </Link>
+                  <ChevronDown size={14} className="dropdown-icon" />
+                </div>
+                {activeDropdown === "meals" && (
+                  <div className="nav-dropdown-content">
+                    <Link to="/breakfast" className="nav-dropdown-item">
+                      Breakfast & Brunch
+                    </Link>
+                    <Link to="/lunch" className="nav-dropdown-item">
+                      Lunch
+                    </Link>
+                    <Link to="/healthy" className="nav-dropdown-item">
+                      Healthy
+                    </Link>
+                    <Link to="/appetizers" className="nav-dropdown-item">
+                      Appetizers & Snacks
+                    </Link>
+                    <Link to="/salads" className="nav-dropdown-item">
+                      Salads
+                    </Link>
+                    <Link to="/side-dishes" className="nav-dropdown-item">
+                      Side Dishes
+                    </Link>
+                    <Link to="/soups" className="nav-dropdown-item">
+                      Soups
+                    </Link>
+                    <Link to="/bread" className="nav-dropdown-item">
+                      Bread
+                    </Link>
+                    <Link to="/drinks" className="nav-dropdown-item">
+                      Drinks
+                    </Link>
+                    <Link to="/desserts" className="nav-dropdown-item">
+                      Desserts
+                    </Link>
+                    <Link to="/all-meals" className="nav-dropdown-item view-all">
+                      VIEW ALL
+                    </Link>
+                  </div>
+                )}
+              </li>
+
+              <li className={`nav-item nav-dropdown ${activeDropdown === "ingredients" ? "active" : ""}`}>
+                <div className="nav-dropdown-trigger" onClick={() => toggleNavDropdown("ingredients")}>
+                  <Link to="#" onClick={(e) => e.preventDefault()}>
+                    INGREDIENTS
+                  </Link>
+                  <ChevronDown size={14} className="dropdown-icon" />
+                </div>
+                {activeDropdown === "ingredients" && (
+                  <div className="nav-dropdown-content">
+                    <Link to="/chicken" className="nav-dropdown-item">
+                      Chicken
+                    </Link>
+                    <Link to="/beef" className="nav-dropdown-item">
+                      Beef
+                    </Link>
+                    <Link to="/pork" className="nav-dropdown-item">
+                      Pork
+                    </Link>
+                    <Link to="/seafood" className="nav-dropdown-item">
+                      Seafood
+                    </Link>
+                    <Link to="/vegetables" className="nav-dropdown-item">
+                      Vegetables
+                    </Link>
+                    <Link to="/fruits" className="nav-dropdown-item">
+                      Fruits
+                    </Link>
+                    <Link to="/all-ingredients" className="nav-dropdown-item view-all">
+                      VIEW ALL
+                    </Link>
+                  </div>
+                )}
+              </li>
+              
+              <li className={`nav-item nav-dropdown ${activeDropdown === "occasions" ? "active" : ""}`}>
+                <div className="nav-dropdown-trigger" onClick={() => toggleNavDropdown("occasions")}>
+                  <Link to="#" onClick={(e) => e.preventDefault()}>
+                    OCCASIONS
+                  </Link>
+                  <ChevronDown size={14} className="dropdown-icon" />
+                </div>
+                {activeDropdown === "occasions" && (
+                  <div className="nav-dropdown-content">
+                    <Link to="/holidays" className="nav-dropdown-item">
+                      Holidays
+                    </Link>
+                    <Link to="/birthdays" className="nav-dropdown-item">
+                      Birthdays
+                    </Link>
+                    <Link to="/dinner-parties" className="nav-dropdown-item">
+                      Dinner Parties
+                    </Link>
+                    <Link to="/all-occasions" className="nav-dropdown-item view-all">
+                      VIEW ALL
+                    </Link>
+                  </div>
+                )}
+              </li>
+
+              <li className={`nav-item nav-dropdown ${activeDropdown === "cuisines" ? "active" : ""}`}>
+                <div className="nav-dropdown-trigger" onClick={() => toggleNavDropdown("cuisines")}>
+                  <Link to="#" onClick={(e) => e.preventDefault()}>
+                    CUISINES
+                  </Link>
+                  <ChevronDown size={14} className="dropdown-icon" />
+                </div>
+                {activeDropdown === "cuisines" && (
+                  <div className="nav-dropdown-content">
+                    <Link to="/italian" className="nav-dropdown-item">
+                      Italian
+                    </Link>
+                    <Link to="/mexican" className="nav-dropdown-item">
+                      Mexican
+                    </Link>
+                    <Link to="/asian" className="nav-dropdown-item">
+                      Asian
+                    </Link>
+                    <Link to="/american" className="nav-dropdown-item">
+                      American
+                    </Link>
+                    <Link to="/all-cuisines" className="nav-dropdown-item view-all">
+                      VIEW ALL
+                    </Link>
+                  </div>
+                )}
+              </li>
+
               <li className="nav-item"><Link to="#">KITCHEN TIPS</Link></li>
               <li className="nav-item"><Link to="#">NEWS</Link></li>
               <li className="nav-item"><Link to="#">FEATURES</Link></li>

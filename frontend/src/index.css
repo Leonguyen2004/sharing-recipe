@@ -20,6 +20,7 @@ body {
   color: var(--text-color);
   background-color: var(--background-color);
   line-height: 1.5;
+  overflow-x: hidden;
 }
 
 * {
@@ -33,9 +34,9 @@ a {
   text-decoration: none;
 }
 
-a:hover {
+/* a:hover {
   text-decoration: underline;
-}
+} */
 
 button {
   cursor: pointer;

@@ -5,12 +5,15 @@ import './StarRating.css';
 const StarRating = ({ 
   rating, 
   count, 
-  size = "regular", 
+  size, 
   showCount = true,
   onRatingChange = null 
 }) => {
   const [hoverRating, setHoverRating] = useState(0);
   const isInteractive = !!onRatingChange;
+
+  const sizeMap = { small: 15, medium: 20, large: 30 };
+  let sizeIcon = sizeMap[size];
   
   const handleMouseEnter = (index) => {
     if (isInteractive) {
@@ -30,7 +33,7 @@ const StarRating = ({
     }
   };
 
-  const renderStars = () => {
+  const renderStars = (sizeIcon) => {
     const stars = [];
     const activeRating = hoverRating || rating;
     
@@ -50,6 +53,7 @@ const StarRating = ({
             className={`srcom-star ${isFilled ? 'filled-star' : 'empty-star'}`}
             fill={isFilled ? 'currentColor' : 'none'}
             strokeWidth={1.5}
+            size={sizeIcon}
           />
         </div>
       );
@@ -60,10 +64,10 @@ const StarRating = ({
   
   return (
     <div className={`srcom-star-rating ${size}`}>
-      <div className="srcom-stars">{renderStars()}</div>
+      <div className="srcom-stars">{renderStars(sizeIcon)}</div>
       {showCount && (
         <div className="srcom-rating-text">
-          <span className="srcom-rating-value">{rating.toFixed(1)}</span>
+          <span className="srcom-rating-value" >{rating.toFixed(1)}</span>
           {count && <span className="srcom-rating-count">({count})</span>}
         </div>
       )}

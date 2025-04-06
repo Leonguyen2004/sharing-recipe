@@ -84,6 +84,33 @@
     text-decoration: underline #e74c3c 2px;
   }
   
+  /* SAVED */
+  .ibcom-icon-button.saved {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: #e74c3c;
+    border: none;
+    border-radius: 50%;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 10px 10px 7px 10px;
+    z-index: 1000;
+  }
+
+  .ibcom-icon-button.saved .ibcom-icon-button-icon {
+    color: white;
+  }
+
+  .ibcom-icon-button.saved:hover {
+    background-color: white;
+  }
   
+  .ibcom-icon-button.saved:hover .ibcom-icon-button-icon{
+    color: #e74c3c;
+  }
   
   

@@ -4,6 +4,7 @@
   }
   
   .srcom-stars {
+    margin-top: 2px;
     display: flex;
     align-items: center;
   }
@@ -33,27 +34,25 @@
   }
   
   .srcom-rating-text {
-    margin-left: 8px;
+    margin-left: 4px;
     font-weight: 700;
-    font-size: 18px;
   }
   
   .srcom-rating-count {
     margin-left: 4px;
-    font-size: 16px;
     font-weight: 400;
     color: var(--medium-grey);
   }
   
   /* Sizes */
-  .srcom-star-rating.small .srcom-star {
-    font-size: 18px;
-  }
-  
   .srcom-star-rating.small .srcom-rating-text {
-    font-size: 14px;
+    font-size: 15px;
   }
   
-  .srcom-star-rating.large .srcom-star {
-    font-size: 32px;
+  .srcom-star-rating.medium .srcom-rating-text {
+    font-size: 20px;
+  }
+
+  .srcom-star-rating.large .srcom-rating-text {
+    font-size: 30px;
   }

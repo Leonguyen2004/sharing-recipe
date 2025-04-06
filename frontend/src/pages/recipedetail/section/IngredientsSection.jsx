@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './IngredientsSection.css';
 
 const Ingredients = ({ ingredients, servings }) => {
-  const [multiplier, setMultiplier] = useState(1);
-  
   return (
     <div className="rdpage-ingredients-section">
       <h2 className="rdpage-section-title">Ingredients</h2>
