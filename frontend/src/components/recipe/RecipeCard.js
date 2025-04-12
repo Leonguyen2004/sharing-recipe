@@ -5,6 +5,8 @@ import { Link } from "react-router-dom"
 import IconButton from "../button/IconButton"
 
 const RecipeCard = ({ variant, recipe }) => {
+  const imageUrl = recipe.imageUrl || "https://placehold.co/400x400";
+
   const handleSaveRecipe = (recipeId) => {
     console.log(`Saving recipe with ID: ${recipeId}`)
   }
@@ -13,7 +15,7 @@ const RecipeCard = ({ variant, recipe }) => {
     <Link to={`/recipe/${recipe.id}`}>
       <div className="rccom-latest-item">
         <div className="rccom-latest-image">
-          <img src={recipe.image} alt="Placeholder" />
+          <img src={imageUrl} alt={recipe.title} />
         </div>
         <div className="rccom-latest-details">
           <div className="rccom-latest-meta">
@@ -31,7 +33,7 @@ const RecipeCard = ({ variant, recipe }) => {
     <Link to={`/recipe/${recipe.id}`}>
       <div className="rccom-trending-item">
         <div className="rccom-trending-image">
-          <img src={recipe.image} alt={recipe.title} />
+          <img src={imageUrl} alt={recipe.title} />
         </div>
         <div className="rccom-trending-details">
           <span className="rccom-trending-category">{recipe.category}</span>
@@ -48,7 +50,7 @@ const RecipeCard = ({ variant, recipe }) => {
       <Link to={`/recipe/${recipe.id}`}>
         <div className="rccom-fresh-item">
           <div className="rccom-fresh-image">
-            <img src={recipe.image} alt="Placeholder" />
+            <img src={imageUrl} alt={recipe.title} />
           </div>
           <div className="rccom-fresh-details">
             <div className="rccom-fresh-meta">
@@ -72,7 +74,7 @@ const RecipeCard = ({ variant, recipe }) => {
     <Link to={`/recipe/${recipe.id}`}>
       <div className="rccom-saved-item">
         <div className="rccom-saved-image">
-          <img src={recipe.image} alt={recipe.title} />
+          <img src={imageUrl} alt={recipe.title} />
         </div>
         <div className="rccom-saved-details">
           <span className="rccom-saved-category">{recipe.category}</span>
@@ -81,10 +83,6 @@ const RecipeCard = ({ variant, recipe }) => {
       </div>
     </Link>
   )
-
-  const renderVerticalVariant = () => {
-    
-  }
 
   switch (variant) {
     case "latest":

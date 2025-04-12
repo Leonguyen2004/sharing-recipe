@@ -1,6 +1,6 @@
 .ppage-container {
-    background-color: #F2F2F2;
-    padding: 40px;
+  background-color: #f2f2f2;
+  padding: 40px;
 }
 
 .ppage-layout {
@@ -30,6 +30,7 @@
   width: 80px;
   height: 80px;
   object-fit: cover;
+  border-radius: 50%;
 }
 
 .ppage-user-details h2 {
@@ -52,7 +53,7 @@
 
 .ppage-nav {
   background-color: white;
-
+  border-radius: 8px;
 }
 
 .ppage-nav ul {
@@ -110,14 +111,17 @@
   margin-bottom: 30px;
 }
 
-.ppage-lock-icon {
+.ppage-lock-icon,
+.ppage-user-icon {
   font-size: 1.2rem;
 }
 
-.ppage-basic-info {
+.ppage-basic-info,
+.ppage-section-card {
   border: 1px solid #ddd;
   border-radius: 4px;
   padding: 20px;
+  margin-bottom: 20px;
 }
 
 .ppage-section-header {
@@ -125,6 +129,13 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+}
+
+.ppage-section-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #666;
 }
 
 .ppage-form-group {
@@ -138,12 +149,18 @@
   font-weight: 500;
 }
 
-.ppage-form-group input {
+.ppage-form-group input,
+.ppage-form-group textarea {
   width: 100%;
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 1rem;
+}
+
+.ppage-tagline-input {
+  min-height: 100px;
+  resize: vertical;
 }
 
 .ppage-form-group input:disabled {
@@ -169,21 +186,6 @@
   margin-bottom: 20px;
 }
 
-.ppage-date-inputs {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-
-.ppage-date-inputs input {
-  width: 60px;
-  text-align: center;
-}
-
-.ppage-date-inputs input[placeholder="YYYY"] {
-  width: 80px;
-}
-
 .ppage-save-section {
   margin-top: 30px;
   display: flex;
@@ -204,4 +206,195 @@
 
 .ppage-save-btn:hover {
   background-color: #d84315;
-} 
+}
+
+/* Profile Settings specific styles */
+.ppage-profile-url {
+  margin-bottom: 30px;
+}
+
+.ppage-url-link {
+  color: #e65100;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.ppage-profile-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 30px;
+}
+
+.ppage-social-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.ppage-photo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.ppage-profile-img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #e65100;
+  margin-bottom: 10px;
+}
+
+.ppage-file-input {
+  display: none;
+}
+
+.ppage-upload-btn {
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: #f2f2f2;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+  font-size: 0.9rem;
+}
+
+.ppage-upload-btn:hover {
+  background-color: #e6e6e6;
+}
+
+/* Saved Recipes specific styles */
+.ppage-saved-content {
+  margin-top: 20px;
+}
+
+.ppage-recipes-grid {
+  display: grid;
+  grid-template-columns: repeat(1);
+  gap: 30px;
+  margin-top: 20px;
+}
+
+.ppage-saved-recipes-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 30px;
+  margin-top: 20px;
+}
+
+/* Personal Recipes specific styles */
+.ppage-personal-recipes-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.ppage-create-recipe-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background-color: #e65100;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.ppage-create-recipe-btn:hover {
+  background-color: #d84315;
+}
+
+.ppage-recipe-section {
+  margin-bottom: 40px;
+}
+
+.ppage-recipe-card-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.ppage-recipe-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.ppage-recipe-action-btn {
+  flex: 1;
+  padding: 6px 12px;
+  background-color: #f2f2f2;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.ppage-recipe-action-btn:hover {
+  background-color: #e6e6e6;
+}
+
+.ppage-recipe-action-danger {
+  color: #e74c3c;
+}
+
+.ppage-recipe-action-danger:hover {
+  background-color: #fde8e7;
+}
+
+.ppage-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 60px 20px;
+  background-color: #f8f8f8;
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+.ppage-empty-icon {
+  font-size: 3rem;
+  margin-bottom: 20px;
+}
+
+.ppage-empty-state h3 {
+  margin: 0 0 10px 0;
+  color: #333;
+}
+
+.ppage-empty-state p {
+  color: #666;
+  margin-bottom: 20px;
+  max-width: 400px;
+}
+
+@media (max-width: 992px) {
+  .ppage-layout {
+    flex-direction: column;
+  }
+
+  .ppage-sidebar {
+    width: 100%;
+  }
+
+  .ppage-profile-grid,
+  .ppage-social-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ppage-personal-recipes-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+}

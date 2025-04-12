@@ -8,22 +8,47 @@ import HomePage from "./pages/homepage/HomePage";
 import Profile from "./pages/profilepage/Profile";
 import Favorites from "./pages/favorites/Favorites";
 import Search from "./pages/searchpage/Search";
+import AdminPage from "./pages/adminpage/AdminPage";
+import CategoryPage from "./pages/categorypage/CategoryPage";
+import Account from "./pages/account/Account";
+
+// Tạo layout chính cho các trang thường
+const MainLayout = () => (
+  <>
+    <div style={{ marginBottom: "124px" }}>
+      <Navbar />
+    </div>
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/home" element={<HomePage />} />
+      <Route path="/recipe-form" element={<RecipeForm />} />
+      <Route path="/recipe-form/edit/:id" element={<RecipeForm />} />
+      <Route path="/recipe-detail" element={<RecipeDetail />} />
+      <Route path="/profile" element={<Profile />} />
+      <Route path="/favorites" element={<Favorites />} />
+      <Route path="/search" element={<Search />} />
+      <Route path="/category/:categoryId" element={<CategoryPage />} />
+      <Route path="/account/:userId" element={<Account />} />
+    </Routes>
+    <Footer />
+  </>
+);
+
+// Layout riêng cho admin (không có Navbar và Footer)
+const AdminLayout = () => (
+  <AdminPage/>
+);
 
 function App() {
-  return (      
+  return (
     <BrowserRouter>
-      <div style={{ marginBottom: "150px" }}>
-        <Navbar />
-      </div>
       <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/recipeform" element={<RecipeForm />} />
-        <Route path="/recipe-detail" element={<RecipeDetail/>} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/favorites" element={<Favorites />} />
-        <Route path="/search" element={<Search />} />
+        {/* Route cho admin (không có Navbar/Footer) */}
+        <Route path="/admin/*" element={<AdminLayout />} />
+        
+        {/* Tất cả các route khác sử dụng MainLayout */}
+        <Route path="/*" element={<MainLayout />} />
       </Routes>
-      <Footer/>
     </BrowserRouter>
   );
 }

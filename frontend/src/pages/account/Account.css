@@ -1,0 +1,117 @@
+.account-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    color: #333;
+  }
+  
+  .account-loading, .account-not-found {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+    font-size: 20px;
+    color: #666;
+  }
+  
+  .account-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .account-avatar {
+    margin-right: 30px;
+    flex-shrink: 0;
+  }
+  
+  .account-avatar img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #e74c3c;
+  }
+  
+  .account-info {
+    flex-grow: 1;
+  }
+  
+  .account-name {
+    color: #e74c3c;
+    font-size: 32px;
+    margin: 0 0 10px 0;
+  }
+  
+  .account-bio {
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 15px;
+    color: #555;
+  }
+  
+  .section-title {
+    color: #e74c3c;
+    font-size: 24px;
+    margin: 30px 0 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e74c3c;
+    display: inline-block;
+  }
+  
+  .recipes-section {
+    margin-bottom: 40px;
+  }
+  
+  .recipes-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .recipe-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .recipe-row > * {
+    flex: 1;
+    min-width: calc(25% - 15px);
+    max-width: calc(25% - 15px);
+  }
+  
+  /* Responsive styles */
+  @media (max-width: 1200px) {
+    .recipe-row > * {
+      min-width: calc(33.333% - 15px);
+      max-width: calc(33.333% - 15px);
+    }
+  }
+  
+  @media (max-width: 992px) {
+    .recipe-row > * {
+      min-width: calc(50% - 10px);
+      max-width: calc(50% - 10px);
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .account-header {
+      flex-direction: column;
+      text-align: center;
+    }
+    
+    .account-avatar {
+      margin-right: 0;
+      margin-bottom: 20px;
+    }
+    
+    .recipe-row > * {
+      min-width: 100%;
+      max-width: 100%;
+    }
+  }

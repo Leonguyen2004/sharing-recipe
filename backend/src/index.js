@@ -1,38 +1,21 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const dotenv = require("dotenv");
-const User = require("./models/User");
-const cors = require("cors");
+import 'dotenv/config';
+import express from "express";
+import cors from "cors";
+import authRoutes from "./routes/auth.routes.js";
+import cloudinaryRoutes from "./routes/cloudinary.routes.js";
 
-dotenv.config();
-const app = express();
-app.use(express.json()); // Middleware để đọc dữ liệu JSON
-app.use(cors());
+const server = express();
 
-// Kết nối MongoDB
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => console.log("✅ Kết nối MongoDB Atlas thành công!"))
-  .catch((err) => console.log("❌ Lỗi kết nối MongoDB:", err));
+// Middleware
+server.use(cors());
+server.use(express.json());
 
-// API thêm User
-app.post("/api/users", async (req, res) => {
-  try {
-    const { username, email, password } = req.body;
-    const newUser = new User({ username, email, password });
-    await newUser.save();
-    res.status(201).json({ message: "User created successfully!", user: newUser });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
+// Routes
+server.use("/api/auth", authRoutes);
+server.use("/api/cloudinary", cloudinaryRoutes);
 
-app.post("/api/recipe", async (req, res) => {
-  
-});
-
-// Chạy server
-const PORT = 5000;
-app.listen(PORT, () => {
-  console.log(`🚀 Server đang chạy tại http://localhost:${PORT}`);
+// Start server
+const PORT = process.env.PORT || 5000;
+server.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });

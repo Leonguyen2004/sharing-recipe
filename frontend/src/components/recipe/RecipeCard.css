@@ -185,6 +185,8 @@
 /* SAVED VARIANT */
 .rccom-saved-item {
   border: 1px solid rgb(212, 212, 212);
+  max-height: 300px;
+  overflow: hidden;
 }
 
 .rccom-saved-image {

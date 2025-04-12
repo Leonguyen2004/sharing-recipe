@@ -1,0 +1,17 @@
+.adpage-admin-dashboard {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f5f7fa;
+}
+
+.adpage-dashboard-content {
+  flex: 1;
+  margin-left: 250px;
+  transition: margin-left 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .adpage-sidebar.adpage-collapsed + .adpage-dashboard-content {
+    margin-left: 60px;
+  }
+}

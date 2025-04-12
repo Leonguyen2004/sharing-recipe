@@ -1,0 +1,29 @@
+.social-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+  
+  .social-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #333;
+    transition: transform 0.2s ease;
+    margin-right: 10px;
+  }
+  
+  .social-link:hover {
+    transform: translateY(-2px);
+  }
+  
+  .social-name {
+    margin-left: 5px;
+    font-size: 14px;
+  }
+  
+  @media (max-width: 768px) {
+    .social-links {
+      justify-content: center;
+    }
+  }

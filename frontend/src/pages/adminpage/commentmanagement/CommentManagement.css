@@ -1,0 +1,174 @@
+.adpage-comment-management {
+    padding: 20px;
+  }
+  
+  .adpage-comment-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+  
+  .adpage-sort-controls {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .adpage-sort-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-size: 14px;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .adpage-sort-btn:hover {
+    background-color: #f5f5f5;
+  }
+  
+  .adpage-sort-btn.adpage-active {
+    border-color: #e74c3c;
+    color: #e74c3c;
+    background-color: rgba(231, 76, 60, 0.05);
+  }
+  
+  .adpage-comments-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .adpage-comment-item {
+    display: flex;
+    justify-content: space-between;
+    background-color: white;
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  
+  .adpage-comment-content {
+    flex: 1;
+  }
+  
+  .adpage-recipe-name {
+    font-weight: 600;
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 8px;
+  }
+  
+  .adpage-user-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .adpage-user-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 8px;
+    object-fit: cover;
+  }
+  
+  .adpage-user-name {
+    font-weight: 500;
+    color: #555;
+    margin-right: 10px;
+  }
+  
+  .adpage-comment-date {
+    color: #999;
+    font-size: 12px;
+  }
+  
+  .adpage-comment-text {
+    color: #444;
+    line-height: 1.5;
+  }
+  
+  .adpage-comment-actions {
+    display: flex;
+    align-items: flex-start;
+  }
+  
+  .adpage-action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+    cursor: pointer;
+    color: #666;
+    transition: all 0.2s;
+  }
+  
+  .adpage-delete-btn:hover {
+    color: #e74c3c;
+    background-color: rgba(231, 76, 60, 0.1);
+  }
+  
+  .adpage-no-comments {
+    text-align: center;
+    padding: 40px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    color: #666;
+  }
+  
+  .adpage-delete-modal-content {
+    text-align: center;
+    padding: 10px;
+  }
+  
+  .adpage-delete-modal-content p {
+    margin-bottom: 20px;
+    color: #4b5563;
+  }
+  
+  .adpage-modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 20px;
+  }
+  
+  .adpage-btn {
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+  }
+  
+  .adpage-cancel-btn {
+    background-color: #f3f4f6;
+    color: #4b5563;
+  }
+  
+  .adpage-cancel-btn:hover {
+    background-color: #e5e7eb;
+  }
+  
+  .adpage-delete-btn-modal {
+    background-color: #e74c3c;
+    color: white;
+  }
+  
+  .adpage-delete-btn-modal:hover {
+    background-color: #d62c1a;
+  }

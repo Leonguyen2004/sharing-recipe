@@ -1,0 +1,93 @@
+.adpage-sidebar {
+    background-color: #1A1F2C;
+    color: #fff;
+    width: 250px;
+    height: 100vh;
+    transition: width 0.3s ease;
+    position: fixed;
+    left: 0;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .adpage-sidebar.adpage-collapsed {
+    width: 60px;
+  }
+  
+  .adpage-sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .adpage-sidebar-header h2 {
+    font-size: 18px;
+    margin: 0;
+    white-space: nowrap;
+  }
+  
+  .adpage-collapse-btn {
+    background: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .adpage-sidebar-menu {
+    padding: 20px 0;
+    flex: 1;
+    overflow-y: auto;
+  }
+  
+  .adpage-sidebar-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    width: 100%;
+    border: none;
+    background: transparent;
+    color: #B1B9D8;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.3s ease;
+    text-decoration: none;
+  }
+  
+  .adpage-sidebar-item:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+    color: #fff;
+  }
+  
+  .adpage-sidebar-item.adpage-active {
+    background-color: rgba(231, 76, 60, 0.2);
+    color: #fff;
+    border-left: 3px solid #e74c3c;
+  }
+  
+  .adpage-sidebar-item span {
+    margin-left: 15px;
+    white-space: nowrap;
+  }
+  
+  .adpage-hidden {
+    display: none;
+  }
+  
+  .adpage-sidebar-footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 10px 0;
+  }
+  
+  .adpage-home-link {
+    color: #e74c3c;
+  }
+  
+  .adpage-home-link:hover {
+    background-color: rgba(231, 76, 60, 0.1);
+  }

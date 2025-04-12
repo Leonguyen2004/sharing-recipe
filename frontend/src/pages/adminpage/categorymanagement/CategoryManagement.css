@@ -1,0 +1,351 @@
+.adpage-category-management {
+  padding: 20px;
+}
+
+.adpage-section-header h1 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 16px;
+}
+
+.adpage-header-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.adpage-add-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.adpage-add-btn:hover {
+  background-color: #d62c1a;
+}
+
+/* Category type filter */
+.adpage-category-types-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.adpage-type-filter-btn {
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: 1px solid #ddd;
+  background-color: white;
+  color: #666;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.adpage-type-filter-btn:hover {
+  background-color: #f5f5f5;
+}
+
+.adpage-type-filter-btn.active {
+  background-color: #e74c3c;
+  color: white;
+  border-color: #e74c3c;
+}
+
+/* Grid layout for categories */
+.adpage-categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  margin-top: 24px;
+}
+
+.adpage-category-card {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.adpage-category-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.adpage-category-image-container {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%; /* 16:9 Aspect Ratio */
+  overflow: hidden;
+}
+
+.adpage-category-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.adpage-category-type-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.adpage-category-details {
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.adpage-category-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.adpage-category-id {
+  font-size: 12px;
+  color: #666;
+}
+
+.adpage-category-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.adpage-no-categories {
+  text-align: center;
+  color: #666;
+  padding: 20px;
+  grid-column: 1 / -1;
+}
+
+.adpage-category-modal-content {
+  min-width: 300px;
+}
+
+.adpage-form-group {
+  margin-bottom: 16px;
+}
+
+.adpage-form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #333;
+}
+
+.adpage-form-group input,
+.adpage-select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.adpage-form-group input:focus,
+.adpage-select:focus {
+  border-color: #9b87f5;
+  box-shadow: 0 0 0 2px rgba(155, 135, 245, 0.1);
+  outline: none;
+}
+
+.adpage-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px;
+  padding-right: 30px;
+}
+
+/* Image upload styles */
+.adpage-image-upload-container {
+  width: 100%;
+}
+
+.adpage-image-upload-placeholder {
+  width: 100%;
+  padding-top: 56.25%; /* 16:9 Aspect Ratio */
+  position: relative;
+  border: 2px dashed #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #f9f9f9;
+}
+
+.adpage-image-upload-placeholder > * {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: #666;
+}
+
+.adpage-file-input {
+  display: none;
+}
+
+.adpage-image-preview-container {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%; /* 16:9 Aspect Ratio */
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.adpage-image-preview {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.adpage-remove-image-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.adpage-remove-image-btn:hover {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.adpage-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+.adpage-btn {
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  border: none;
+}
+
+.adpage-cancel-btn {
+  background-color: #f1f1f1;
+  color: #333;
+}
+
+.adpage-cancel-btn:hover {
+  background-color: #e1e1e1;
+}
+
+.adpage-add-btn {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.adpage-add-btn:hover {
+  background-color: #d62c1a;
+}
+
+.adpage-add-btn:disabled {
+  background-color: #f1a9a0;
+  cursor: not-allowed;
+}
+
+.adpage-action-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.adpage-action-btn {
+  background: none;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.adpage-edit-btn {
+  color: #7e69ab;
+}
+
+.adpage-edit-btn:hover {
+  background-color: rgba(113, 69, 209, 0.1);
+}
+
+.adpage-delete-btn {
+  color: #ef4444;
+}
+
+.adpage-delete-btn:hover {
+  background-color: rgba(239, 68, 68, 0.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .adpage-header-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .adpage-category-types-filter {
+    overflow-x: auto;
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+  }
+
+  .adpage-type-filter-btn {
+    white-space: nowrap;
+  }
+}

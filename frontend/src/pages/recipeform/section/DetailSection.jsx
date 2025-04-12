@@ -1,24 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { getAllCategories } from '../../../services/recipeService';
 
 const RecipeDetails = ({ servings, setServings, categories, setCategories }) => {
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [availableCategories, setAvailableCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const categoriesData = await getAllCategories();
+        setAvailableCategories(categoriesData);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   const handleRemoveCategory = (categoryId) => {
     setCategories(categories.filter(category => category.id !== categoryId));
   };
 
   const handleCategoryChange = (e) => {
-    const newCategory = {
-      id: Date.now().toString(),
-      name: e.target.value
-    };
+    const selectedCategoryData = availableCategories.find(
+      category => category.id === e.target.value
+    );
 
-    setSelectedCategory(e.target.value);
-  
-    if (!categories.some(category => category.name === newCategory.name)) {
-      setCategories([...categories, newCategory]);
+    if (selectedCategoryData && !categories.some(category => category.id === selectedCategoryData.id)) {
+      setCategories([...categories, selectedCategoryData]);
     }
+    setSelectedCategory(e.target.value);
   };
   
   return (
@@ -43,14 +59,14 @@ const RecipeDetails = ({ servings, setServings, categories, setCategories }) => 
             placeholder="Select Category"
             value={selectedCategory}
             onChange={handleCategoryChange}
+            disabled={loading}
           >
             <option value="" disabled>--Select a category--</option>
-            <option value="Breakfast">Breakfast</option>
-            <option value="Lunch">Lunch</option>
-            <option value="Dinner">Dinner</option>
-            <option value="Snack">Snack</option>
-            <option value="Dessert">Dessert</option>
-            <option value="Other">Other</option>
+            {availableCategories.map(category => (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
+            ))}
           </select>
         </div>
       </div>

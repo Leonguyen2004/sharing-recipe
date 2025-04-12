@@ -1,0 +1,131 @@
+.adpage-content-approval {
+  padding: 20px;
+}
+
+/* .adpage-section-header h1 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 16px;
+} */
+
+.adpage-content-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.adpage-sort-controls {
+  display: flex;
+  gap: 10px;
+}
+
+.adpage-sort-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-size: 14px;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.adpage-sort-btn:hover {
+  background-color: #f5f5f5;
+}
+
+.adpage-sort-btn.adpage-active {
+  border-color: #e74c3c;
+  color: #e74c3c;
+  background-color: rgba(231, 76, 60, 0.05);
+}
+
+.adpage-posts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.adpage-post-item {
+  display: flex;
+  justify-content: space-between;
+  background-color: white;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.adpage-post-info {
+  flex: 1;
+}
+
+.adpage-post-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.adpage-post-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  font-size: 14px;
+  color: #666;
+}
+
+.adpage-category-tag {
+  background-color: #f3f4f6;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  color: #4b5563;
+}
+
+.adpage-post-excerpt {
+  color: #4b5563;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.adpage-post-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-left: 16px;
+}
+
+.adpage-approve-btn {
+  color: #22c55e;
+  border: 1px solid #dcfce7;
+}
+
+.adpage-approve-btn:hover {
+  background-color: #dcfce7;
+}
+
+.adpage-reject-btn {
+  color: #ef4444;
+  border: 1px solid #fee2e2;
+}
+
+.adpage-reject-btn:hover {
+  background-color: #fee2e2;
+}
+
+.adpage-no-posts {
+  text-align: center;
+  padding: 40px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  color: #666;
+}

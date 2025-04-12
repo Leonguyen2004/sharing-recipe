@@ -1,7 +1,10 @@
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-import { Mail, KeyRound, CircleUser, Eye, EyeOff } from "lucide-react";
-import "./SignUp.scss";
+"use client"
+
+import { useState } from "react"
+import { useForm } from "react-hook-form"
+import { Mail, KeyRound, CircleUser, Eye, EyeOff } from "lucide-react"
+import styles from "./SignUp.module.scss"
+import { registerUser } from "../../services/authService"
 
 const SignUp = ({ onClose, onSwitch }) => {
   const {
@@ -9,40 +12,77 @@ const SignUp = ({ onClose, onSwitch }) => {
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm();
+  } = useForm()
 
-  const onSubmit = (data) => {
-    console.log(data);
-    //onClose(); // Đóng modal sau khi đăng ký
-    //onSwitch();
-  };
+  const [showPassword, setShowPassword] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
 
-  const [showPassword, setShowPassword] = useState(false);
+  const onSubmit = async (data) => {
+    setLoading(true)
+    setError(null)
+
+    try {
+      const result = await registerUser(data.name, data.email, data.password)
+      console.log("Registration successful:", result)
+
+      // Store token in sessionStorage (not localStorage since they just registered)
+      sessionStorage.setItem("authToken", result.token)
+
+      // Store user info
+      localStorage.setItem("user", JSON.stringify(result.user))
+
+      // Hiển thị thông báo thành công cụ thể hơn
+      alert("Đăng ký thành công! Tài khoản của bạn đã được tạo và lưu vào hệ thống. Bạn có thể đăng nhập ngay bây giờ.")
+      onSwitch() // Switch to login form
+    } catch (error) {
+      console.error("Registration error:", error)
+
+      // Handle different Firebase auth errors
+      if (error.code === "auth/email-already-in-use") {
+        setError("Email đã được sử dụng. Vui lòng dùng email khác hoặc đăng nhập.")
+      } else if (error.code === "auth/weak-password") {
+        setError("Mật khẩu quá yếu. Vui lòng sử dụng mật khẩu mạnh hơn.")
+      } else {
+        setError("Đã xảy ra lỗi trong quá trình đăng ký. Vui lòng thử lại.")
+      }
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
-    <div className="overlay">
-      <div className="login-box">
-        <button className="close-btn" onClick={onClose}>✖</button>
-        <div className="welcome-label">
-          <h2 className="welcome-text">Welcome to</h2>
-          <h1 className="brand-text">LET COOK</h1>
+    <div className={styles.overlay}>
+      <div className={styles["login-box"]}>
+        <button className={styles["close-btn"]} onClick={onClose}>
+          ✖
+        </button>
+        <div className={styles["welcome-label"]}>
+          <h2 className={styles["welcome-text"]}>Welcome to</h2>
+          <h1 className={styles["brand-text"]}>LET COOK</h1>
         </div>
+        {error && <div className={styles.error}>{error}</div>}
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="input-group">
-            <span className="icon"><CircleUser /></span>
-            <div className="input-wrapper">
+          <div className={styles["input-group"]}>
+            <span className={styles.icon}>
+              <CircleUser />
+            </span>
+            <div className={styles["input-wrapper"]}>
               <label>Name</label>
               <input
                 {...register("name", { required: "Name is required" })}
                 placeholder="John Doe"
+                disabled={loading}
               />
-              {errors.name && <p className="error">{errors.name.message}</p>}
+              {errors.name && <p className={styles.error}>{errors.name.message}</p>}
             </div>
           </div>
 
-          <div className="input-group">
-            <span className="icon"><Mail /></span>
-            <div className="input-wrapper">
+          <div className={styles["input-group"]}>
+            <span className={styles.icon}>
+              <Mail />
+            </span>
+            <div className={styles["input-wrapper"]}>
               <label>Email</label>
               <input
                 type="email"
@@ -54,14 +94,17 @@ const SignUp = ({ onClose, onSwitch }) => {
                   },
                 })}
                 placeholder="example@gmail.com"
+                disabled={loading}
               />
-              {errors.email && <p className="error">{errors.email.message}</p>}
+              {errors.email && <p className={styles.error}>{errors.email.message}</p>}
             </div>
           </div>
 
-          <div className="input-group">
-            <span className="icon"><KeyRound /></span>
-            <div className="input-wrapper">
+          <div className={styles["input-group"]}>
+            <span className={styles.icon}>
+              <KeyRound />
+            </span>
+            <div className={styles["input-wrapper"]}>
               <label>Password</label>
               <input
                 type={showPassword ? "text" : "password"}
@@ -70,21 +113,25 @@ const SignUp = ({ onClose, onSwitch }) => {
                   minLength: { value: 6, message: "Password must be at least 6 characters" },
                 })}
                 placeholder="********"
+                disabled={loading}
               />
-              {errors.password && <p className="error">{errors.password.message}</p>}
+              {errors.password && <p className={styles.error}>{errors.password.message}</p>}
             </div>
             <button
               type="button"
-              className="toggle-password"
+              className={styles["toggle-password"]}
               onClick={() => setShowPassword(!showPassword)}
+              disabled={loading}
             >
               {showPassword ? <EyeOff /> : <Eye />}
             </button>
           </div>
 
-          <div className="input-group">
-            <span className="icon"><KeyRound /></span>
-            <div className="input-wrapper">
+          <div className={styles["input-group"]}>
+            <span className={styles.icon}>
+              <KeyRound />
+            </span>
+            <div className={styles["input-wrapper"]}>
               <label>Confirm Password</label>
               <input
                 type={showPassword ? "text" : "password"}
@@ -93,19 +140,25 @@ const SignUp = ({ onClose, onSwitch }) => {
                   validate: (value) => value === watch("password") || "Passwords do not match",
                 })}
                 placeholder="********"
+                disabled={loading}
               />
-              {errors.confirmPassword && <p className="error">{errors.confirmPassword.message}</p>}
+              {errors.confirmPassword && <p className={styles.error}>{errors.confirmPassword.message}</p>}
             </div>
           </div>
 
-          <button type="submit" className="login-button">Sign Up</button>
+          <button type="submit" className={styles["login-button"]} disabled={loading}>
+            {loading ? "Signing Up..." : "Sign Up"}
+          </button>
         </form>
         <p>
-          Already have an account? <span className="switch-link" onClick={onSwitch}>Login</span>
+          Already have an account?{" "}
+          <span className={styles["switch-link"]} onClick={onSwitch}>
+            Login
+          </span>
         </p>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default SignUp;
+export default SignUp

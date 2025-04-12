@@ -1,0 +1,37 @@
+.adpage-search-bar {
+    display: flex;
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  .adpage-search-input-wrapper {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 0 12px;
+    transition: all 0.2s;
+  }
+  
+  .adpage-search-input-wrapper:focus-within {
+    border-color: #e74c3c;
+    box-shadow: 0 0 0 2px rgba(231, 76, 60, 0.1);
+  }
+  
+  .adpage-search-icon {
+    color: #8E9196;
+  }
+  
+  .adpage-search-input {
+    flex-grow: 1;
+    border: none;
+    outline: none;
+    padding: 10px;
+    font-size: 14px;
+  }
+  
+  .adpage-search-input::placeholder {
+    color: #8E9196;
+  }
