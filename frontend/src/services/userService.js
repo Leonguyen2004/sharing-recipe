@@ -1,77 +1,92 @@
-import { 
-    doc, 
-    getDoc, 
-    updateDoc, 
-    arrayUnion, 
-    arrayRemove,
-    collection,
-    query,
-    where,
-    getDocs,
-    addDoc,
-    deleteDoc
-} from "firebase/firestore"
-import { db } from "../firebase/config"
+import { getToken } from "./tokenService";
+// API base URL
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000/api";
+
+// Get all user
+export const getAllUsers = async () => {
+    try {
+        const token = getToken();
+        const response = await fetch(`${API_URL}/users/admin/all`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        
+        if (!response.ok) {
+            throw new Error('Failed to fetch user profile');                        
+        }
+        
+        return await response.json();
+    } catch (error) {
+        console.error('Error getting all user:', error);
+        throw error;
+    }
+}
+
+// update ban status
+export const updateUserBanStatus = async (uid, bannedStatus) => {
+    try {
+        const token = getToken();
+        const response = await fetch(`${API_URL}/users/ban/${uid}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ banned: bannedStatus })
+        });
+
+        if (!response.ok) {
+        throw new Error('Failed to update user ban status');
+        }
+    } catch (error) {
+        console.error('Error updating user ban status:', error);
+    }
+};
 
 // Lấy thông tin chi tiết người dùng
 export const getUserProfile = async (uid) => {
     try {
-        const userDoc = await getDoc(doc(db, "users", uid))
+        const token = getToken();
+        console.log(token);
         
-        if (userDoc.exists()) {
-            return { id: userDoc.id, ...userDoc.data() }
-        } else {
-            throw new Error("User not found")
+        const response = await fetch(`${API_URL}/users/${uid}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        
+        if (!response.ok) {
+            throw new Error('Failed to fetch user profile');                        
         }
+        
+        return await response.json();
     } catch (error) {
-        throw error
+        console.error('Error getting user profile:', error);
+        throw error;
     }
 }
 
 // Cập nhật thông tin người dùng
 export const updateUserProfile = async (uid, userData) => {
     try {
-        await updateDoc(doc(db, "users", uid), userData)
-        return true
-    } catch (error) {
-        throw error
-    }
-}
-
-// Lưu công thức để xem sau
-export const saveRecipe = async (uid, recipeId) => {
-    try {
-        // Tạo document mới trong collection savedRecipes
-        await addDoc(collection(db, "savedRecipes"), {
-            userId: uid,
-            recipeId: recipeId,
-            createdAt: new Date()
+        const token = getToken();
+        const response = await fetch(`${API_URL}/users/${uid}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(userData)
         });
-        return true;
-    } catch (error) {
-        throw error;
-    }
-}
-
-// Xóa công thức khỏi danh sách đã lưu
-export const unSaveRecipe = async (uid, recipeId) => {
-    try {
-        // Tìm document trong collection savedRecipes có userId và recipeId tương ứng
-        const savedRecipesQuery = query(
-            collection(db, "savedRecipes"),
-            where("userId", "==", uid),
-            where("recipeId", "==", recipeId)
-        );
-        const querySnapshot = await getDocs(savedRecipesQuery);
         
-        // Xóa document tìm được
-        if (!querySnapshot.empty) {
-            const docToDelete = querySnapshot.docs[0];
-            await deleteDoc(doc(db, "savedRecipes", docToDelete.id));
+        if (!response.ok) {
+            throw new Error('Failed to update user profile');
         }
         
         return true;
     } catch (error) {
+        console.error('Error updating user profile:', error);
         throw error;
     }
 }
@@ -79,52 +94,15 @@ export const unSaveRecipe = async (uid, recipeId) => {
 // Kiểm tra xem người dùng đã tồn tại chưa (qua email)
 export const checkUserExists = async (email) => {
     try {
-        const usersRef = collection(db, "users")
-        const q = query(usersRef, where("email", "==", email))
-        const querySnapshot = await getDocs(q)
+        const response = await fetch(`${API_URL}/users/check-exists?email=${encodeURIComponent(email)}`);
+        if (!response.ok) {
+            throw new Error('Failed to check user existence');
+        }
         
-        return !querySnapshot.empty
+        const data = await response.json();
+        return data.exists;
     } catch (error) {
-        throw error
-    }
-}
-
-// Lấy danh sách công thức cá nhân của người dùng
-export const getUserRecipes = async (uid) => {
-    try {
-        const recipesQuery = query(
-            collection(db, 'recipes'),
-            where('userId', '==', uid)
-        );
-        const recipesSnapshot = await getDocs(recipesQuery);
-        return recipesSnapshot.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data()
-        }));
-    } catch (error) {
-        throw error;
-    }
-}
-
-// Lấy danh sách công thức đã lưu của người dùng
-export const getSavedRecipes = async (uid) => {
-    try {
-        const savedRecipesQuery = query(
-            collection(db, 'savedRecipes'),
-            where('userId', '==', uid)
-        );
-        const savedRecipesSnapshot = await getDocs(savedRecipesQuery);
-        const savedRecipesData = await Promise.all(
-            savedRecipesSnapshot.docs.map(async (doc) => {
-                const recipeDoc = await getDoc(doc(db, 'recipes', doc.data().recipeId));
-                return {
-                    id: recipeDoc.id,
-                    ...recipeDoc.data()
-                };
-            })
-        );
-        return savedRecipesData;
-    } catch (error) {
+        console.error('Error checking user exists:', error);
         throw error;
     }
 }

@@ -11,6 +11,9 @@
     color: #333;
     transition: transform 0.2s ease;
     margin-right: 10px;
+    border: 2px solid #e74c3c;
+    border-radius: 4px;
+    padding: 3px 8px;
   }
   
   .social-link:hover {

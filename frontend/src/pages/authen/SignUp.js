@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form"
 import { Mail, KeyRound, CircleUser, Eye, EyeOff } from "lucide-react"
 import styles from "./SignUp.module.scss"
 import { registerUser } from "../../services/authService"
+import { setToken } from "../../services/tokenService"
 
 const SignUp = ({ onClose, onSwitch }) => {
   const {
@@ -26,8 +27,8 @@ const SignUp = ({ onClose, onSwitch }) => {
       const result = await registerUser(data.name, data.email, data.password)
       console.log("Registration successful:", result)
 
-      // Store token in sessionStorage (not localStorage since they just registered)
-      sessionStorage.setItem("authToken", result.token)
+      // Lưu token sử dụng hàm setToken mới (luôn dùng sessionStorage cho đăng ký mới)
+      setToken(result.token, false)
 
       // Store user info
       localStorage.setItem("user", JSON.stringify(result.user))

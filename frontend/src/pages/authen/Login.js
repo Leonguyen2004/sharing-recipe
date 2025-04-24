@@ -4,6 +4,7 @@ import { Eye, KeyRound, Mail, EyeOff } from "lucide-react"
 import { useState } from "react"
 import styles from "./Login.module.scss"
 import { loginUser } from "../../services/authService"
+import { setToken } from "../../services/tokenService"
 
 const Login = ({ onClose, onSwitch }) => {
   const [email, setEmail] = useState("")
@@ -22,12 +23,8 @@ const Login = ({ onClose, onSwitch }) => {
       const result = await loginUser(email, password, rememberMe)
       console.log("Login successful:", result)
 
-      // Store token in localStorage or sessionStorage based on rememberMe
-      if (rememberMe) {
-        localStorage.setItem("authToken", result.token)
-      } else {
-        sessionStorage.setItem("authToken", result.token)
-      }
+      // Lưu token sử dụng hàm setToken mới
+      setToken(result.token, rememberMe)
 
       // Store user info
       localStorage.setItem("user", JSON.stringify(result.user))

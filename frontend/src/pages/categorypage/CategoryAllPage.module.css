@@ -1,0 +1,29 @@
+.container {
+    width: 1600px;
+    min-height: 100vh;
+    margin: 200px auto;
+    color: black;
+  }
+  
+  .title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+    color: #e74c3c;
+  }
+  
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); /* ✅ 7 cột chia đều */
+    gap: 1rem;
+  }
+  
+  .link {
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-top: 0.5rem;
+    gap: 0.25rem;
+  }
+  

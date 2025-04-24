@@ -1,5 +1,5 @@
 .account-container {
-    max-width: 1200px;
+    max-width: 1600px;
     margin: 0 auto;
     padding: 20px;
     font-family: Arial, sans-serif;
@@ -56,7 +56,7 @@
   .section-title {
     color: #e74c3c;
     font-size: 24px;
-    margin: 30px 0 20px;
+    margin: 10px 0 20px;
     padding-bottom: 10px;
     border-bottom: 2px solid #e74c3c;
     display: inline-block;
@@ -64,12 +64,16 @@
   
   .recipes-section {
     margin-bottom: 40px;
+    background-color: #f7f7f7;
+    border-radius: 32px;
+    padding: 40px;
   }
   
-  .recipes-grid {
-    display: flex;
-    flex-direction: column;
+  .accpage-recipe-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 20px;
+    padding: 20px 0;
   }
   
   .recipe-row {

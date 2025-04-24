@@ -6,10 +6,6 @@ const RecipeTimers = ({
   setPrepTime,
   cookTime,
   setCookTime,
-  prepTimeUnit,
-  setPrepTimeUnit,
-  cookTimeUnit,
-  setCookTimeUnit,
   totalTime,
   additionalTimers,
   setAdditionalTimers
@@ -56,12 +52,22 @@ const RecipeTimers = ({
             id="prep-time"
             type="number"
             min="0"
-            value={prepTime}
-            onChange={(e) => setPrepTime(Number(e.target.value))}
+            value={prepTime.time}
+            onChange={(e) => {
+              setPrepTime({
+                time: Number(e.target.value),
+                unit: prepTime.unit
+              })
+            }}
           />
           <select
-            value={prepTimeUnit}
-            onChange={(e) => setPrepTimeUnit(e.target.value)}
+            value={prepTime.unit}
+            onChange={(e) => {
+              setPrepTime({
+                time: prepTime.time,
+                unit: e.target.value
+              })
+            }}
           >
             <option value="mins">mins</option>
             <option value="hours">hours</option>
@@ -76,12 +82,22 @@ const RecipeTimers = ({
             id="cook-time"
             type="number"
             min="0"
-            value={cookTime}
-            onChange={(e) => setCookTime(Number(e.target.value))}
+            value={cookTime.time}
+            onChange={(e) => {
+              setCookTime({
+                time: Number(e.target.value),
+                unit: cookTime.unit
+              })
+            }}
           />
           <select
-            value={cookTimeUnit}
-            onChange={(e) => setCookTimeUnit(e.target.value)}
+            value={cookTime.unit}
+            onChange={(e) => {
+              setCookTime({
+                time: cookTime.time,
+                unit: e.target.value
+              })
+            }}
           >
             <option value="mins">mins</option>
             <option value="hours">hours</option>

@@ -1,15 +1,11 @@
 import express from 'express';
-import { deleteImage } from '../services/cloudinaryService.js';
+import cloudinaryController from '../controllers/cloudinary.controller.js';
+import { authenticateUser, attachUserData, isAdmin } from '../middlewares/auth.middleware.js';
 
 const router = express.Router();
 
-router.delete('/delete/:publicId', async (req, res) => {
-  try {
-    await deleteImage(req.params.publicId);
-    res.status(200).json({ success: true });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
+// Protected routes
+router.post('/upload', authenticateUser,  cloudinaryController.uploadImage);
+router.delete('/delete', authenticateUser, cloudinaryController.deleteImage);
 
 export default router;

@@ -1,16 +1,24 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
 import { AuthProvider } from './context/AuthContext';
-
+import { CategoryProvider } from "./context/CategoryContext";
+import { SavedRecipeProvider } from './context/SavedRecipeContext';
+import './index.css';
+import reportWebVitals from './reportWebVitals';
+import { RecipesProvider } from './context/RecipesContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <AuthProvider>
-      <App />
+      <RecipesProvider>
+        <SavedRecipeProvider>
+          <CategoryProvider>
+            <App/>
+          </CategoryProvider>
+        </SavedRecipeProvider>
+      </RecipesProvider>
     </AuthProvider>
   </React.StrictMode>
 );

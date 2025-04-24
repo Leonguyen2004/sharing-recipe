@@ -1,0 +1,86 @@
+/* Reviews List */
+  
+  .rvcom-review-item {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--light-grey);
+  }
+
+  .rvcom-review-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .rvcom-user-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  .rvcom-user-name {
+    font-weight: 700;
+    font-size: 16px;
+    text-decoration: underline #e74c3c;
+  }
+  
+  .rvcom-review-content {
+    flex: 1;
+  }
+  
+  .rvcom-review-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 10px;
+  }
+  
+  .rvcom-review-date {
+    color: var(--medium-grey);
+    font-size: 14px;
+  }
+  
+  .rvcom-review-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  
+  .rvcom-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    background-color: #f9f5ec;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  
+  .rvcom-review-text {
+    margin-bottom: 15px;
+    line-height: 1.5;
+  }
+  
+  .rvcom-helpful-button {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: none;
+    border: none;
+    color: var(--medium-grey);
+    font-size: 14px;
+  }
+
+.rvcom-review-image-text {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+}
+
+.rvcom-review-img {
+  width: 200px;
+  aspect-ratio: 16 / 9;
+}

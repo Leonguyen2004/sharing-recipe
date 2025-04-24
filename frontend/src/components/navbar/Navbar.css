@@ -325,8 +325,8 @@ z-index: 1015;
     padding: 10px 20px;
     text-decoration: none;
     display: block;
-    font-size: 14px;
-    font-weight: normal;
+    font-size: 16px;
+    font-weight: bold;
     letter-spacing: normal;
     transition: background-color 0.2s, color 0.2s;
   }
@@ -337,7 +337,7 @@ z-index: 1015;
   }
   
   .nav-dropdown-item.view-all {
-    font-weight: 700;
+    font-weight: bold;
     border-top: 1px solid #eee;
     margin-top: 5px;
     padding-top: 15px;
@@ -357,8 +357,7 @@ z-index: 1015;
     }
 
     .navbar__bottom {
-        flex-direction: column;
-        align-items: flex-start;
+        display: none;
     }
 
     .navbar__bottom .nav-list {

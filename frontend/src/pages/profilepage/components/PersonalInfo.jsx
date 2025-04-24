@@ -3,9 +3,9 @@
 import { useState } from "react"
 import IconButton from "../../../components/button/IconButton"
 
-const PersonalInfo = () => {
+const PersonalInfo = ({user}) => {
   const [personalInfo, setPersonalInfo] = useState({
-    email: "darkgodwind@gmail.com",
+    email: user.email,
     password: "",
     confirmPassword: "",
     currentPassword: "",

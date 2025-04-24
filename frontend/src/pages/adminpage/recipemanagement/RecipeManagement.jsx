@@ -4,7 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import SearchBar from '../searchbar/Searchbar';
 import Modal from '../modal/Modal';
 import './RecipeManagement.css';
-import { getAllRecipes, deleteRecipe, getAllCategories } from '../../../services/recipeService';
+import { getAllRecipes, deleteRecipe } from '../../../services/recipeService';
+import { getAllCategories } from '../../../services/categoryService';
 import { getUserProfile } from '../../../services/userService';
 
 const RecipeManagement = () => {
@@ -185,7 +186,7 @@ const RecipeManagement = () => {
             return (
               <div key={recipe.id} className="adpage-recipe-item">
                 <div className="adpage-recipe-image">
-                  <img src={recipe.photoUrl || "/placeholder.svg"} alt={recipe.title} />
+                  <img src={recipe.imageUrl || "/placeholder.svg"} alt={recipe.title} />
                 </div>
                 <div className="adpage-recipe-content">
                   <div className="adpage-recipe-header">

@@ -9,9 +9,9 @@
   }
   
   .rdpage-direction-header {
-    font-size: 20px;
-    font-weight: 700;
-    margin: 20px 0 10px;
+    font-size: 25px;
+    font-weight: bold;
+    margin: 20px 0 5px;
   }
   
   .rdpage-direction-step {
@@ -21,12 +21,11 @@
   .rdpage-step-title {
     font-size: 18px;
     font-weight: 700;
-    margin-bottom: 8px;
+    margin-bottom: 0px;
   }
   
   .rdpage-step-instruction {
     font-size: 16px;
-    line-height: 1.6;
   }
   
   .rdpage-directions-footer {

@@ -1,17 +1,19 @@
 import { debounce } from "lodash";
-import { Bookmark, ChevronDown, ShieldUser, LogOut, Menu, Plus, Search, User, UserCircle, CircleUser } from 'lucide-react';
+import { Bookmark, ChevronDown, CircleUser, LogOut, Menu, Plus, Search, ShieldUser, User, UserCircle } from 'lucide-react';
 import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import logo_large from '../../assets/icons/logo_large.svg';
 import logo_small from '../../assets/icons/logo_small.svg';
+import { useAuth } from "../../context/AuthContext";
+import { useCategories } from "../../context/CategoryContext";
 import Login from "../../pages/authen/Login";
 import SignUp from "../../pages/authen/SignUp";
-import './Navbar.css';
-import { useAuth } from "../../context/AuthContext";
 import { logoutUser } from "../../services/authService";
-import { getCategoriesByType } from "../../services/categoryService";
+import { getUserProfile } from "../../services/userService";
+import './Navbar.css';
 
 const Navbar = () => {
+  /*==========================State==================================*/
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [isAccountOpen, setIsAccountOpen] = useState(false);
@@ -20,9 +22,7 @@ const Navbar = () => {
   const [isSignUpOpen, setIsSignUpOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const navDropdownRef = useRef(null);
-  const navigate = useNavigate();
-
-  // Thêm state để lưu trữ categories theo type
+  const [userData, setUserData] = useState([]);
   const [categoriesByType, setCategoriesByType] = useState({
     meals: [],
     ingredients: [],
@@ -31,12 +31,25 @@ const Navbar = () => {
     cookingMethod: [],
     diet: []
   });
-
-  const { currentUser, loading } = useAuth();
-
-  console.log("re-render in navbar");
+  
+  /*==========================Hook==================================*/
+  const navigate = useNavigate();
+  const { currentUser } = useAuth();
+  const { categories } = useCategories();
 
   /*==========================Side effect==================================*/
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        const userProfile = await getUserProfile(currentUser.uid);
+        setUserData(userProfile);
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+    fetchUserProfile();
+  }, [])
+
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.scrollY;
@@ -73,28 +86,37 @@ const Navbar = () => {
     };
   }, []);
 
-  // Thêm useEffect để lấy categories từ Firebase
   useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        // Lấy categories cho mỗi type
-        const types = ['meals', 'ingredients', 'occasions', 'cuisines', 'cookingMethod', 'diet'];
-        const categoriesData = {};
-        
-        for (const type of types) {
-          const categories = await getCategoriesByType(type);
-          // Giới hạn tối đa 10 category cho mỗi type
-          categoriesData[type] = categories.slice(0, 10);
+    // Phân loại categories theo type
+    const categorizeData = () => {
+      const types = ['meals', 'ingredients', 'occasions', 'cuisines', 'cookingMethod', 'diet'];
+      const categoriesData = {
+        meals: [],
+        ingredients: [],
+        occasions: [],
+        cuisines: [],
+        cookingMethod: [],
+        diet: []
+      };
+
+      // Phân loại categories
+      categories.forEach(category => {
+        const type = category.type;
+        if (type && types.includes(type)) {
+          categoriesData[type].push(category);
         }
-        
-        setCategoriesByType(categoriesData);
-      } catch (error) {
-        console.error('Error fetching categories:', error);
-      }
+      });
+
+      // Giới hạn tối đa 10 category cho mỗi type
+      types.forEach(type => {
+        categoriesData[type] = categoriesData[type].slice(0, 10);
+      });
+
+      setCategoriesByType(categoriesData);
     };
-    
-    fetchCategories();
-  }, []);
+
+    categorizeData();
+  }, [categories]);
 
   /*==========================Handle event==================================*/
   const handleSearchChange = (e) => {
@@ -178,10 +200,10 @@ const Navbar = () => {
             <div className="navbar__account" ref={accountDropdownRef}>
               <button className="account-button" onClick={toggleAccountDropdown}>
                 <div className="account-icon">
-                  {currentUser?.photoURL ? (
-                    <img src={currentUser.photoURL} alt="User" />
+                  {currentUser? (
+                    <img src={userData.photoURL} alt="User" />
                   ) : (
-                    <CircleUser size={30} /> // ví dụ dùng icon từ lucide-react
+                    <CircleUser size={30} />
                   )}
                 </div>
                 <span className="account-text">My Account</span>
@@ -204,7 +226,7 @@ const Navbar = () => {
                       </Link>
                     </li>
                     <li className="dropdown-item">
-                      <a href="/favorites" className="dropdown-link">
+                      <a href={`/account/${currentUser.uid}`} className="dropdown-link">
                         <Bookmark size={16} />
                         <span>Saved Recipes & Collections</span>
                       </a>

@@ -1,0 +1,27 @@
+.breadcrumb {
+  margin: 20px 0;
+}
+
+.breadcrumb ol {
+  display: flex;
+  list-style: none;
+  align-items: center;
+}
+
+.breadcrumb li {
+  display: flex;
+  align-items: center;
+}
+
+.breadcrumb a {
+  font-weight: 600;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.breadcrumbSeparator {
+  margin: 0 8px;
+  color: var(--medium-grey);
+}
+

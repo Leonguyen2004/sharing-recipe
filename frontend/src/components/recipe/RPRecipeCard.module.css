@@ -1,0 +1,70 @@
+.container {
+  position: relative;
+}
+
+.recipeModal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 100;
+}
+
+.recipeCard {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s;
+}
+
+.imageContainer {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+.vertical .imageContainer {
+  width: 200px;
+  height: 275px;
+  overflow: hidden;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+
+.image:hover {
+  transform: scale(1.05);
+}
+
+.content {
+  padding: 0.75rem;
+  background-color: transparent;
+}
+
+.title {
+  font-size: 1rem;
+  font-weight: bold;
+  transition: color 0.2s;
+  cursor: pointer;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.vertical .title {
+  text-align: center;
+}
+
+.title:hover {
+  color: #e74c3c; /* recipe-primary color from the tailwind config */
+}

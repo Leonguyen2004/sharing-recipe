@@ -1,30 +1,42 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { useAuth } from "../../context/AuthContext"
+import { getUserProfile } from "../../services/userService"
 import "./Profile.css"
 import PersonalInfo from "./components/PersonalInfo"
-import ProfileSettings from "./components/ProfileSettings"
-import SavedRecipes from "./components/SavedRecipes"
 import PersonalRecipes from "./components/PersonalRecipes"
+import ProfileSettings from "./components/ProfileSettings"
 
 const Profile = () => {
   const [activeTab, setActiveTab] = useState("personal-info")
-  const [userEmail, setUserEmail] = useState("darkgodwind@gmail.com")
+  const [userData, setUserData] = useState([]);
+  const { currentUser } = useAuth();
 
   const renderContent = () => {
     switch (activeTab) {
       case "personal-info":
-        return <PersonalInfo />
+        return <PersonalInfo user={currentUser}/>
       case "profile-settings":
-        return <ProfileSettings />
-      case "saved-recipes":
-        return <SavedRecipes />
+        return <ProfileSettings user={currentUser}/>
       case "personal-recipes":
-        return <PersonalRecipes />
+        return <PersonalRecipes user={currentUser}/>
       default:
-        return <PersonalInfo />
+        return <PersonalInfo user={currentUser}/>
     }
   }
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        const userProfile = await getUserProfile(currentUser.uid);
+        setUserData(userProfile);
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+    fetchUserProfile();
+  }, [])
 
   return (
     <div className="ppage-container">
@@ -32,10 +44,10 @@ const Profile = () => {
         <div className="ppage-sidebar">
           <div className="ppage-user-info">
             <div className="ppage-avatar">
-              <img src="https://placehold.co/400x400" alt="User avatar" />
+              <img src={userData.photoURL} alt="User avatar" />
             </div>
             <div className="ppage-user-details">
-              <h2>Hi, {userEmail}</h2>
+              <h2>Hi, {userData.email}</h2>
             </div>
           </div>
           <nav className="ppage-nav">
@@ -51,12 +63,6 @@ const Profile = () => {
                 onClick={() => setActiveTab("profile-settings")}
               >
                 <span>Profile Settings</span>
-              </li>
-              <li
-                className={`ppage-nav-item ${activeTab === "saved-recipes" ? "active" : ""}`}
-                onClick={() => setActiveTab("saved-recipes")}
-              >
-                <span>Saved Recipes & Collections</span>
               </li>
               <li
                 className={`ppage-nav-item ${activeTab === "personal-recipes" ? "active" : ""}`}

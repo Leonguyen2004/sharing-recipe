@@ -1,15 +1,15 @@
-import { db } from '../firebase/config';
-import { collection, addDoc, updateDoc, deleteDoc, doc, getDocs, query, where } from 'firebase/firestore';
+import { getToken } from "./tokenService";
+// API base URL
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000/api";
 
 // Lấy tất cả categories
 export const getAllCategories = async () => {
   try {
-    const categoriesRef = collection(db, 'categories');
-    const snapshot = await getDocs(categoriesRef);
-    return snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    }));
+    const response = await fetch(`${API_URL}/categories`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch categories');
+    }
+    return await response.json();
   } catch (error) {
     console.error('Error getting categories:', error);
     throw error;
@@ -19,18 +19,21 @@ export const getAllCategories = async () => {
 // Thêm category mới
 export const addCategory = async (categoryData) => {
   try {
-    const categoriesRef = collection(db, 'categories');
-    const docRef = await addDoc(categoriesRef, {
-      name: categoryData.name,
-      type: categoryData.type,
-      imageUrl: categoryData.imageUrl,
-      imagePublicId: categoryData.imagePublicId,
-      modifyAt: new Date().toISOString()
+    const token = getToken();
+    const response = await fetch(`${API_URL}/categories`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify(categoryData)
     });
-    return {
-      id: docRef.id,
-      ...categoryData
-    };
+    
+    if (!response.ok) {
+      throw new Error('Failed to add category');
+    }
+    
+    return await response.json();
   } catch (error) {
     console.error('Error adding category:', error);
     throw error;
@@ -40,18 +43,21 @@ export const addCategory = async (categoryData) => {
 // Cập nhật category
 export const updateCategory = async (categoryId, categoryData) => {
   try {
-    const categoryRef = doc(db, 'categories', categoryId);
-    await updateDoc(categoryRef, {
-      name: categoryData.name,
-      type: categoryData.type,
-      imageUrl: categoryData.imageUrl,
-      imagePublicId: categoryData.imagePublicId,
-      modifyAt: new Date().toISOString()
+    const token = getToken();
+    const response = await fetch(`${API_URL}/categories/${categoryId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify(categoryData)
     });
-    return {
-      id: categoryId,
-      ...categoryData
-    };
+    
+    if (!response.ok) {
+      throw new Error('Failed to update category');
+    }
+    
+    return await response.json();
   } catch (error) {
     console.error('Error updating category:', error);
     throw error;
@@ -61,8 +67,18 @@ export const updateCategory = async (categoryId, categoryData) => {
 // Xóa category
 export const deleteCategory = async (categoryId) => {
   try {
-    const categoryRef = doc(db, 'categories', categoryId);
-    await deleteDoc(categoryRef);
+    const token = getToken();
+    const response = await fetch(`${API_URL}/categories/${encodeURIComponent(categoryId)}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    
+    if (!response.ok) {
+      throw new Error('Failed to delete category');
+    }
+    
     return categoryId;
   } catch (error) {
     console.error('Error deleting category:', error);
@@ -73,15 +89,13 @@ export const deleteCategory = async (categoryId) => {
 // Lấy categories theo type
 export const getCategoriesByType = async (type) => {
   try {
-    const categoriesRef = collection(db, 'categories');
-    const q = query(categoriesRef, where('type', '==', type));
-    const snapshot = await getDocs(q);
-    return snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    }));
+    const response = await fetch(`${API_URL}/categories/type/${type}`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch categories by type');
+    }
+    return await response.json();
   } catch (error) {
     console.error('Error getting categories by type:', error);
     throw error;
   }
-}; 
+};

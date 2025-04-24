@@ -1,0 +1,164 @@
+.reviewsSection {
+    margin-bottom: 40px;
+  }
+  
+  .sectionTitle {
+    font-size: 30px;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+  
+  .reviewsIntro {
+    margin-bottom: 30px;
+  }
+  
+  .reviewsIntro a {
+    color: var(--primary-color);
+    text-decoration: underline;
+  }
+  
+  .reviewsDivider {
+    height: 1px;
+    background-color: var(--light-grey);
+    margin: 30px 0;
+  }
+  
+  .reviewsFilters {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+  }
+  
+  .filtersTitle {
+    font-size: 18px;
+    font-weight: 700;
+  }
+  
+  .filtersActions {
+    display: flex;
+    gap: 15px;
+  }
+  
+  .filterButton {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: none;
+    border: none;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .myReviewContainer {
+    background-color: white;
+    padding: 25px;
+    margin-bottom: 30px;
+    border: 20px solid #f5f6ea;
+  }
+  
+  .myReviewButton {
+    background: none;
+    border: none;
+    font-size: 15px;
+    cursor: pointer;
+  }
+  
+  .myReviewButton:hover {
+    text-decoration: underline #de9d23;
+  }
+  
+  /* Dropdown styles */
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .dropdownContent {
+    position: absolute;
+    right: 0;
+    background-color: white;
+    min-width: 200px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    border-radius: 4px;
+    padding: 10px 0;
+  }
+  
+  .dropdownHeader {
+    padding: 10px 15px;
+    border-bottom: 1px solid var(--light-grey);
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .closeButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .dropdownItem {
+    padding: 10px 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .dropdownItem:hover {
+    background-color: #f5f5f5;
+  }
+  
+  .checkboxContainer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .checkbox {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+  }
+  
+  .radioContainer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .radio {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+  }
+  
+  .starContainer {
+    display: flex;
+    align-items: center;
+  }
+  
+  .resetButton {
+    margin-top: 10px;
+    padding: 8px 15px;
+    background-color: #f5f5f5;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    width: 100%;
+  }
+  
+  .resetButton:hover {
+    background-color: #e5e5e5;
+  }
+  
+  .activeFilter {
+    color: var(--primary-color);
+  }
+  

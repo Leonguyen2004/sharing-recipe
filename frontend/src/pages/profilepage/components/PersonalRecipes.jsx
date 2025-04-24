@@ -51,7 +51,7 @@ const PersonalRecipes = () => {
   ])
 
   const handleCreateRecipe = () => {
-    naviagate('/recipeform');
+    naviagate('/recipe-form');
     console.log("Create new recipe")
   }
 

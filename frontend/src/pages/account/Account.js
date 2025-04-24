@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import RecipeCard from '../../components/recipe/RecipeCard';
+import { RPRecipeCard } from '../../components/recipe/RPRecipeCard';
+import { getSavedRecipes, getUserRecipes } from '../../services/recipeService';
+import { getUserProfile } from '../../services/userService';
 import './Account.css';
 import SocialLinks from './components/SocialLinks';
-import { getUserProfile, getUserRecipes, getSavedRecipes } from '../../services/userService';
 
 const Account = () => {
   const { userId } = useParams();
@@ -46,44 +47,39 @@ const Account = () => {
 
   // Helper function to render recipe cards in rows of 4
   const renderRecipeRows = (recipes) => {
-    const rows = [];
-    for (let i = 0; i < recipes.length; i += 4) {
-      const rowItems = recipes.slice(i, i + 4);
-      rows.push(
-        <div key={`row-${i}`} className="recipe-row">
-          {rowItems.map(recipe => (
-            <RecipeCard key={recipe.id} variant="saved" recipe={recipe} />
-          ))}
-        </div>
-      );
-    }
-    return rows;
+    return (
+      <div className="accpage-recipe-grid">
+        {recipes.map((recipe) => (
+          <RPRecipeCard key={recipe.id} recipe={recipe} className={"horizontal"}/>
+        ))}
+      </div>
+    )
   };
 
   return (
     <div className="account-container">
       <div className="account-header">
         <div className="account-avatar">
-          <img src={user.avatar || `https://ui-avatars.com/api/?name=${user.displayName}`} alt={`${user.displayName}'s avatar`} />
+          <img src={user.photoURL || `https://ui-avatars.com/api/?name=${user.displayName}`} alt={`${user.displayName}'s avatar`} />
         </div>
         <div className="account-info">
           <h1 className="account-name">{user.displayName}</h1>
           <p className="account-bio">{user.description}</p>
-          <SocialLinks socialLinks={user.socialLinks} />
+          <SocialLinks facebook={user.facebook} instagram={user.instagram}/>
         </div>
       </div>
 
       <div className="account-recipes">
         <section className="recipes-section">
           <h2 className="section-title">Personal Recipes</h2>
-          <div className="recipes-grid">
+          <div>
             {renderRecipeRows(personalRecipes)}
           </div>
         </section>
 
         <section className="recipes-section">
           <h2 className="section-title">Saved Recipes</h2>
-          <div className="recipes-grid">
+          <div>
             {renderRecipeRows(savedRecipes)}
           </div>
         </section>

@@ -1,33 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { getAllCategories } from '../../../services/recipeService';
+import { getAllCategories } from '../../../services/categoryService';
 
-const RecipeDetails = ({ servings, setServings, categories, setCategories }) => {
+const RecipeDetails = ({ servings, setServings, categories, setCategories, allCategories }) => {
   const [selectedCategory, setSelectedCategory] = useState("");
-  const [availableCategories, setAvailableCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const categoriesData = await getAllCategories();
-        setAvailableCategories(categoriesData);
-      } catch (error) {
-        console.error('Error fetching categories:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchCategories();
-  }, []);
+  const [loading, setLoading] = useState(false);
 
   const handleRemoveCategory = (categoryId) => {
     setCategories(categories.filter(category => category.id !== categoryId));
   };
 
   const handleCategoryChange = (e) => {
-    const selectedCategoryData = availableCategories.find(
+    const selectedCategoryData = allCategories.find(
       category => category.id === e.target.value
     );
 
@@ -62,7 +46,7 @@ const RecipeDetails = ({ servings, setServings, categories, setCategories }) => 
             disabled={loading}
           >
             <option value="" disabled>--Select a category--</option>
-            {availableCategories.map(category => (
+            {allCategories.map(category => (
               <option key={category.id} value={category.id}>
                 {category.name}
               </option>

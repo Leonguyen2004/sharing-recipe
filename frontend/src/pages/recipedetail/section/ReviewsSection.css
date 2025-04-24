@@ -1,0 +1,68 @@
+.rvcom-reviews-section {
+    margin-bottom: 40px;
+  }
+
+  .rvcom-section-title {
+    font-size: 30px;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+  
+  .rvcom-reviews-intro {
+    margin-bottom: 30px;
+  }
+  
+  .rvcom-reviews-intro a {
+    color: var(--primary-color);
+    text-decoration: underline;
+  }
+
+  .rvcom-reviews-divider {
+    height: 1px;
+    background-color: var(--light-grey);
+    margin: 30px 0;
+  }
+  
+  .rvcom-reviews-filters {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+  }
+  
+  .rvcom-filters-title {
+    font-size: 18px;
+    font-weight: 700;
+  }
+  
+  .rvcom-filters-actions {
+    display: flex;
+    gap: 15px;
+  }
+  
+  .rvcom-filter-button {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: none;
+    border: none;
+    font-weight: 600;
+    font-size: 16px;
+  }
+
+.rvcom-my-review-container {
+  background-color: white;
+  padding: 25px;
+  margin-bottom: 30px;
+  border: 20px solid #F5F6EA;
+}
+
+.rvcom-my-review-button {
+  background: none;
+  border: none;
+  font-size: 15px;
+}
+
+.rvcom-my-review-button:hover {
+  text-decoration: underline #de9d23;
+}

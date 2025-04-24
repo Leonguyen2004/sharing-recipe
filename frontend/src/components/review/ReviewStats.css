@@ -1,0 +1,60 @@
+/* Reviews Stats */
+.rvcom-reviews-stats {
+margin: 30px 0;
+}
+
+.rvcom-stats-summary {
+display: flex;
+align-items: center;
+gap: 15px;
+margin-bottom: 20px;
+}
+
+.rvcom-stats-text {
+font-size: 16px;
+font-weight: 600;
+}
+
+.rvcom-stats-breakdown {
+margin-bottom: 20px;
+}
+
+.rvcom-stats-row {
+display: flex;
+align-items: center;
+margin-bottom: 8px;
+}
+
+.rvcom-stars-label {
+width: 60px;
+font-size: 14px;
+color: var(--primary-color);
+}
+
+.rvcom-stats-bar-container {
+flex: 1;
+height: 10px;
+background-color: #eee;
+margin: 0 10px;
+}
+
+.rvcom-stats-bar {
+height: 100%;
+background-color: var(--primary-color);
+}
+
+.rvcom-stats-count {
+width: 30px;
+text-align: right;
+font-size: 14px;
+}
+
+.rvcom-stats-made-it {
+display: flex;
+align-items: center;
+gap: 10px;
+}
+
+.rvcom-made-it-icon {
+font-size: 20px;
+}

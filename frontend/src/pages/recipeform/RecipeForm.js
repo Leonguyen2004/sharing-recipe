@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useProtectedRoute } from '../../hooks/useProtectedRoute';
+import { deleteImage, uploadImage } from '../../services/cloudinaryService';
+import { addRecipe, getRecipeById, updateRecipe } from '../../services/recipeService';
+import { getAllCategories } from '../../services/categoryService';
+import './RecipeForm.css';
+import DetailSection from './section/DetailSection';
 import DirectionsSection from './section/DirectionsSection';
 import IngredientsSection from './section/IngredientsSection';
-import DetailSection from './section/DetailSection';
 import IntroSection from './section/IntroSection';
 import NoteSection from './section/NoteSection';
 import TimeSection from './section/TimeSection';
-import './RecipeForm.css';
-import { useProtectedRoute } from '../../hooks/useProtectedRoute';
-import { getRecipeById, addRecipe, updateRecipe, getAllCategories } from '../../services/recipeService';
-import { uploadImage } from '../../services/cloudinaryService';
 
 const RecipeForm = () => {
   const { currentUser, loading } = useProtectedRoute('/home');
@@ -17,40 +18,44 @@ const RecipeForm = () => {
   const { id } = useParams();
   const isEditMode = !!id;
 
+  // State recipe submit 
+  const [recipeTitle, setRecipeTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [photo, setPhoto] = useState(null);
+  const [publicId, setPublicId] = useState("");
   const [ingredients, setIngredients] = useState([
     { id: '1', text: '', isHeader: false },
     { id: '2', text: '', isHeader: false },
     { id: '3', text: '', isHeader: false }
   ]);
-
   const [directions, setDirections] = useState([
     { id: '1', text: '', isHeader: false },
     { id: '2', text: '', isHeader: false },
     { id: '3', text: '', isHeader: false }
   ]);
-
-  const [notes, setNotes] = useState([]);
-  const [recipeTitle, setRecipeTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [photo, setPhoto] = useState(null);
-  const [photoPreview, setPhotoPreview] = useState(null);
-  const [servings, setServings] = useState('');
   const [categories, setCategories] = useState([]);
-  const [prepTime, setPrepTime] = useState(0);
-  const [cookTime, setCookTime] = useState(0);
-  const [prepTimeUnit, setPrepTimeUnit] = useState('mins');
-  const [cookTimeUnit, setCookTimeUnit] = useState('mins');
-  const [totalTime, setTotalTime] = useState(0);
+  const [servings, setServings] = useState('');
+  const [notes, setNotes] = useState([]);
+  const [prepTime, setPrepTime] = useState({
+    time: 0,
+    unit: "mins"
+  });
+  const [cookTime, setCookTime] = useState({
+    time: 0,
+    unit: "mins"
+  });
+  const [totalTime, setTotalTime] = useState(0); //default mins
   const [additionalTimers, setAdditionalTimers] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+
+  // State render
   const [allCategories, setAllCategories] = useState([]);
-
-
+  const [photoPreview, setPhotoPreview] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Calculate total time when prep or cook time changes
   useEffect(() => {
-    const prepMinutes = prepTimeUnit === 'hours' ? prepTime * 60 : prepTime;
-    const cookMinutes = cookTimeUnit === 'hours' ? cookTime * 60 : cookTime;
+    const prepMinutes = prepTime.unit === 'hours' ? prepTime.time * 60 : prepTime.time;
+    const cookMinutes = cookTime.unit === 'hours' ? cookTime.time * 60 : cookTime.time;
     
     let additionalMinutes = 0;
     additionalTimers.forEach(timer => {
@@ -58,7 +63,21 @@ const RecipeForm = () => {
     });
     
     setTotalTime(prepMinutes + cookMinutes + additionalMinutes);
-  }, [prepTime, cookTime, prepTimeUnit, cookTimeUnit, additionalTimers]);
+  }, [prepTime, cookTime, additionalTimers]);
+
+  // Get all category
+  useEffect(() => {
+    const fetchAllCategories = async () => {
+      try {
+        const categoriesData = await getAllCategories();
+        setAllCategories(categoriesData);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      }
+    };
+
+    fetchAllCategories();
+  }, [])
 
   // Load recipe data if in edit mode
   useEffect(() => {
@@ -70,7 +89,8 @@ const RecipeForm = () => {
           if (recipeData) {
             setRecipeTitle(recipeData.title || '');
             setDescription(recipeData.description || '');
-            setPhotoPreview(recipeData.photoUrl || null);
+            setPhotoPreview(recipeData.imageUrl || null);
+            setPublicId(recipeData.imagePublicId || null);
             setIngredients(recipeData.ingredients || [
               { id: '1', text: '', isHeader: false },
               { id: '2', text: '', isHeader: false },
@@ -95,10 +115,14 @@ const RecipeForm = () => {
               setCategories([]);
             }
             
-            setPrepTime(recipeData.prepTime || 0);
-            setCookTime(recipeData.cookTime || 0);
-            setPrepTimeUnit(recipeData.prepTimeUnit || 'mins');
-            setCookTimeUnit(recipeData.cookTimeUnit || 'mins');
+            setPrepTime(recipeData.prepTime || {
+              time: 0,
+              unit: "mins"
+            });
+            setCookTime(recipeData.cookTime || {
+              time: 0,
+              unit: "mins"
+            });
             setAdditionalTimers(recipeData.additionalTimers || []);
           }
         } catch (error) {
@@ -114,15 +138,27 @@ const RecipeForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const currentDate = new Date();
-    const formattedDate = currentDate.toLocaleDateString('en-US');
+    setIsLoading(true);
     
     try {
-      let photoUrl = photoPreview;
+      let imageUrl = photoPreview;
+      let imagePublicId = publicId;
       
       // Upload new image if there is one
       if (photo && !photoPreview.startsWith('http')) {
-        photoUrl = await uploadImage(photo);
+        const { url, publicId: newPublicId } = await uploadImage(photo);
+        imageUrl = url;
+        imagePublicId = newPublicId;
+
+        if (publicId !== "") {
+          try {
+            await deleteImage(publicId);
+            console.log('Old image deleted:', publicId);
+          } catch (deleteError) {
+            console.error('Error deleting old image:', deleteError.message);
+            // Vẫn tiếp tục thực hiện xoá danh mục
+          }
+        }       
       }
       
       // Extract category IDs from category objects
@@ -132,35 +168,32 @@ const RecipeForm = () => {
       const recipeData = {
         title: recipeTitle,
         description: description,
-        photoUrl: photoUrl,
+        imageUrl: imageUrl,
+        imagePublicId: imagePublicId,
         ingredients: ingredients,
         directions: directions,
         servings: servings,
         categories: categoryIds,
         prepTime: prepTime,
-        prepTimeUnit: prepTimeUnit,
         cookTime: cookTime,
-        cookTimeUnit: cookTimeUnit,
         totalTime: totalTime,
         additionalTimers: additionalTimers,
         notes: notes,
-        updatedAt: formattedDate,
         userId: currentUser.uid
       };
-
-      if (!isEditMode) {
-        recipeData.createdAt = formattedDate;
-      }
       
       if (isEditMode) {
         await updateRecipe(id, recipeData);
+        navigate('/admin/recipes');
       } else {
         await addRecipe(recipeData);
+        navigate("/home");
       }
-      navigate('/recipe-management');
     } catch (error) {
       console.error('Error saving recipe:', error);
       alert('Error saving recipe. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -213,6 +246,7 @@ const RecipeForm = () => {
           setServings={setServings}
           categories={categories}
           setCategories={setCategories}
+          allCategories={allCategories}
         />
         
         <div className="form-divider"></div>
@@ -222,10 +256,6 @@ const RecipeForm = () => {
           setPrepTime={setPrepTime}
           cookTime={cookTime}
           setCookTime={setCookTime}
-          prepTimeUnit={prepTimeUnit}
-          setPrepTimeUnit={setPrepTimeUnit}
-          cookTimeUnit={cookTimeUnit}
-          setCookTimeUnit={setCookTimeUnit}
           totalTime={totalTime}
           additionalTimers={additionalTimers}
           setAdditionalTimers={setAdditionalTimers}
@@ -249,7 +279,7 @@ const RecipeForm = () => {
           <button type="button" className="cancel-button" onClick={handleCancel}>
             CANCEL
           </button>
-          <button type="submit" className="submit-button">
+          <button type="submit" className="submit-button" disabled={isLoading}>
             {isEditMode ? 'Update Recipe' : 'Submit Recipe'}
           </button>
         </div>

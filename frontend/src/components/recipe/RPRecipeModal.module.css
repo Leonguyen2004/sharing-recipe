@@ -1,0 +1,237 @@
+.modal {
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  width: 420px;
+  overflow: hidden;
+  animation: scaleUp 0.3s ease-out;
+  z-index: 60;
+}
+
+@keyframes scaleUp {
+  0% {
+    transform:  scale(0.3);
+    opacity: 0;
+  }
+  100% {
+    transform:  scale(1);
+    opacity: 1;
+  }
+}
+
+.closeButton {
+  position: absolute;
+  right: 0.75rem;
+  top: 0.75rem;
+  z-index: 10;
+  border-radius: 9999px;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 0.375rem;
+  color: #2d3748;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.closeButton:hover {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.modalContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.imageWrapper {
+  width: 100%;
+}
+
+.imageContainer {
+  position: relative;
+  height: 240px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.fadeOverlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 20px; /* từ 390px đến 400px */
+  background: linear-gradient(to bottom, transparent, white);
+}
+
+.infoSection {
+  padding: 0.5rem 1rem;  
+  max-height: 240px;
+  display: flex;
+  flex-direction: column;
+  background-color: #f7f7f7;
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: black;
+}
+
+.categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.category {
+  font-size: 0.75rem;
+  background-color: #f8d9d5;
+  color: #e74c3c;
+  padding: 0 0.5rem;
+  line-height: 1.5rem;
+  border-radius: 9999px;
+}
+
+.moreCategory {
+  font-size: 0.75rem;
+  background-color: #f7fafc;
+  color: #718096;
+  padding: 0 0.5rem;
+  line-height: 1.5rem;
+  border-radius: 9999px;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.viewButton {
+  flex: 1;
+  background-color: #e74c3c;
+  color: white;
+  padding: 0.5rem 0;
+  border-radius: 0.375rem;
+  border: none;
+  font-weight: 500;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+}
+
+.viewButton:hover {
+  background-color: #c0392b;
+}
+
+.bookmarkButton {
+  flex: none;
+  background-color: white;
+  border: 1px solid #e74c3c;
+  color: #e74c3c;
+  padding: 5px 10px 0px 12px;
+  line-height: 2rem;
+  border-radius: 0.375rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.bookmarkButton:hover {
+  background-color: #f8d9d5;
+}
+
+.bookmarkButton.saved {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.bookmarkButton.saved:hover {
+  background-color: #c0392b;
+}
+
+.bookmarkButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.stats {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  gap: 15px;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+  color: black;
+}
+
+.rating, .saves, .cookTime, .servings {
+  border: 1px solid #e74c3c;
+  border-radius: 8px;
+  padding: 3px 8px;
+}
+
+.rating {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.starIcon {
+  fill: #e74c3c;
+  color: #e74c3c;
+}
+
+.ratingValue {
+  font-weight: 500;
+}
+
+.saves {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.bookmarkIcon {
+  color: #e74c3c;
+}
+
+.footer {
+  display: flex;
+  gap: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #f7fafc;
+}
+
+.cookTime,
+.servings {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.clockIcon,
+.usersIcon {
+  color: #e74c3c;
+}
+
+.label {
+  font-size: 0.75rem;
+  color: #718096;
+}
+
+.value {
+  font-weight: 500;
+}

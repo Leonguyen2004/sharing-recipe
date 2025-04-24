@@ -1,5 +1,6 @@
 import React from 'react';
 import './IngredientsSection.css';
+import { Dot } from 'lucide-react';
 
 const Ingredients = ({ ingredients, servings }) => {
   return (
@@ -13,7 +14,9 @@ const Ingredients = ({ ingredients, servings }) => {
               {item.isHeader ? (
                 <h3>{item.text}</h3>
               ) : (
-                <span>{item.text}</span>
+                <div className='rdpage-ingredient-item-wrapper'>
+                  <Dot size={30} className='rdpage-icon'/> <span>{item.text}</span>
+                </div>
               )}
             </li>
           )

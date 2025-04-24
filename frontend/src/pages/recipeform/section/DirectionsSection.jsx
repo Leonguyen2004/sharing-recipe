@@ -13,7 +13,6 @@ const DirectionsSection = ({ directions, setDirections }) => {
       text: '',
       isHeader: false
     };
-    console.log(newStep);
     setDirections([...directions, newStep]);
   };
 

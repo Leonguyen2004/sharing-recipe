@@ -1,16 +1,20 @@
+import { getToken } from "./tokenService";
+// API base URL
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000/api";
+
 export const uploadImage = async (file) => {
   try {
+    const token = getToken();
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('upload_preset', 'ml_default'); // Sử dụng unsigned preset
 
-    const response = await fetch(
-      `https://api.cloudinary.com/v1_1/dlnk70bdi/image/upload`,
-      {
-        method: 'POST',
-        body: formData,
-      }
-    );
+    const response = await fetch(`${API_URL}/cloudinary/upload`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+      body: formData
+    });
 
     if (!response.ok) {
       const errorData = await response.json();
@@ -19,8 +23,8 @@ export const uploadImage = async (file) => {
 
     const data = await response.json();
     return {
-      url: data.secure_url,
-      publicId: data.public_id
+      url: data.url,
+      publicId: data.publicId
     };
   } catch (error) {
     console.error('Error uploading image:', error);
@@ -28,5 +32,27 @@ export const uploadImage = async (file) => {
   }
 };
 
-// Không nên xử lý delete từ frontend
-// Thay vào đó tạo API endpoint ở backend để xử lý
+export const deleteImage = async (publicId) => {
+  try {
+    const token = getToken();
+
+    const response = await fetch(`${API_URL}/cloudinary/delete?publicId=${encodeURIComponent(publicId)}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      }
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Delete failed');
+    }
+
+    const data = await response.json();
+    return data;
+
+  } catch (error) {
+    console.error('Error deleting image:', error);
+    throw new Error('Failed to delete image. Please try again.');
+  }
+};

@@ -10,6 +10,7 @@ import Favorites from "./pages/favorites/Favorites";
 import Search from "./pages/searchpage/Search";
 import AdminPage from "./pages/adminpage/AdminPage";
 import CategoryPage from "./pages/categorypage/CategoryPage";
+import CategoryAllPage from "./pages/categorypage/CategoryAllPage";
 import Account from "./pages/account/Account";
 
 // Tạo layout chính cho các trang thường
@@ -23,10 +24,11 @@ const MainLayout = () => (
       <Route path="/home" element={<HomePage />} />
       <Route path="/recipe-form" element={<RecipeForm />} />
       <Route path="/recipe-form/edit/:id" element={<RecipeForm />} />
-      <Route path="/recipe-detail" element={<RecipeDetail />} />
+      <Route path="/recipe/:recipeId" element={<RecipeDetail />} />
       <Route path="/profile" element={<Profile />} />
       <Route path="/favorites" element={<Favorites />} />
       <Route path="/search" element={<Search />} />
+      <Route path="/category/all" element={<CategoryAllPage />} />
       <Route path="/category/:categoryId" element={<CategoryPage />} />
       <Route path="/account/:userId" element={<Account />} />
     </Routes>
@@ -42,14 +44,14 @@ const AdminLayout = () => (
 function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        {/* Route cho admin (không có Navbar/Footer) */}
-        <Route path="/admin/*" element={<AdminLayout />} />
-        
-        {/* Tất cả các route khác sử dụng MainLayout */}
-        <Route path="/*" element={<MainLayout />} />
-      </Routes>
-    </BrowserRouter>
+        <Routes>
+          {/* Route cho admin (không có Navbar/Footer) */}
+          <Route path="/admin/*" element={<AdminLayout />} />
+          
+          {/* Tất cả các route khác sử dụng MainLayout */}
+          <Route path="/*" element={<MainLayout />} />
+        </Routes>
+      </BrowserRouter>
   );
 }
 

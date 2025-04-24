@@ -5,7 +5,7 @@ import { Edit, Trash2, Plus, Upload, X } from "lucide-react"
 import SearchBar from "../searchbar/Searchbar"
 import Modal from "../modal/Modal"
 import { getAllCategories, addCategory, updateCategory, deleteCategory } from '../../../services/categoryService';
-import { uploadImage } from '../../../services/cloudinaryService';
+import { uploadImage, deleteImage } from '../../../services/cloudinaryService';
 import './CategoryManagement.css';
 
 // Define high-level category types
@@ -116,7 +116,6 @@ export default function CategoryManagement() {
       };
   
       await addCategory(newCategory);
-      setCategories([...categories, newCategory]);
   
       setShowAddModal(false);
       resetForm();
@@ -150,22 +149,13 @@ export default function CategoryManagement() {
         imageUrl = url;
         imagePublicId = newPublicId;
         // Delete old image if publicId exists
-        if (publicId != "") {
+        if (publicId !== "") {
           try {
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/cloudinary/delete/${encodeURIComponent(publicId)}`, {
-              method: 'DELETE',
-            });
-
-            if (!response.ok) {
-              const errorData = await response.json();
-              console.error('Delete image error:', errorData);
-              // Không ném lỗi để tiếp tục lưu danh mục, chỉ ghi log
-            } else {
-              console.log('Old image deleted:', publicId);
-            }
+            await deleteImage(publicId);
+            console.log('Old image deleted:', publicId);
           } catch (deleteError) {
             console.error('Error deleting old image:', deleteError.message);
-            // Tiếp tục lưu danh mục dù xóa ảnh cũ thất bại
+            // Vẫn tiếp tục thực hiện xoá danh mục
           }
         }       
       }
@@ -210,22 +200,13 @@ export default function CategoryManagement() {
         await deleteCategory(selectedCategory.id);
         setCategories(categories.filter(category => category.id !== selectedCategory.id));
 
-        if (publicId != "") {
+        if (publicId !== "") {
           try {
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/cloudinary/delete/${encodeURIComponent(publicId)}`, {
-              method: 'DELETE',
-            });
-
-            if (!response.ok) {
-              const errorData = await response.json();
-              console.error('Delete image error:', errorData);
-              // Không ném lỗi để tiếp tục lưu danh mục, chỉ ghi log
-            } else {
-              console.log('Old image deleted:', publicId);
-            }
+            await deleteImage(publicId);
+            console.log('Old image deleted:', publicId);
           } catch (deleteError) {
             console.error('Error deleting old image:', deleteError.message);
-            // Tiếp tục lưu danh mục dù xóa ảnh cũ thất bại
+            // Vẫn tiếp tục thực hiện xoá danh mục
           }
         }      
 

@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Eye, Ban, CheckCircle } from 'lucide-react';
+import { Ban, CheckCircle, Eye } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { collection, getDocs, doc, updateDoc } from 'firebase/firestore';
-import { db } from '../../../firebase/config';
-import SearchBar from '../searchbar/Searchbar';
+import { getAllUsers, updateUserBanStatus } from '../../../services/userService';
 import Modal from '../modal/Modal';
+import SearchBar from '../searchbar/Searchbar';
 import './UserManagement.css';
 
 const UserManagement = () => {
@@ -13,27 +12,23 @@ const UserManagement = () => {
   const [showBanModal, setShowBanModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        setLoading(true);
+        const usersData = await getAllUsers();
+        setUsers(usersData);
+      } catch (error) {
+        console.error('Error fetching users:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchUsers();
   }, []);
-
-  const fetchUsers = async () => {
-    try {
-      const usersCollection = collection(db, 'users');
-      const userSnapshot = await getDocs(usersCollection);
-      const userList = userSnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-      setUsers(userList);
-      setLoading(false);
-    } catch (error) {
-      console.error('Error fetching users:', error);
-      setLoading(false);
-    }
-  };
 
   const filteredUsers = users.filter(user => 
     user.displayName?.toLowerCase().includes(searchTerm.toLowerCase()) || 
@@ -49,19 +44,18 @@ const UserManagement = () => {
     setShowBanModal(true);
   };
 
-  const handleBanConfirm = async () => {
+  const handleUpdateBanStatus = async () => {
     try {
-      const userRef = doc(db, 'users', selectedUser.id);
-      await updateDoc(userRef, {
-        banned: !selectedUser.banned
-      });
-      
+      setLoading(true)
+      const response = await updateUserBanStatus(selectedUser.id, !selectedUser.banned);
       setUsers(users.map(user => 
         user.id === selectedUser.id ? { ...user, banned: !user.banned } : user
       ));
       setShowBanModal(false);
     } catch (error) {
       console.error('Error updating user ban status:', error);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -146,7 +140,7 @@ const UserManagement = () => {
             </button>
             <button 
               className={`btn ${selectedUser?.banned ? 'confirm-btn' : 'ban-btn'}`} 
-              onClick={handleBanConfirm}
+              onClick={handleUpdateBanStatus}
             >
               {selectedUser?.banned ? 'Unban' : 'Ban'} User
             </button>
