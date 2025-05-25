@@ -89,8 +89,8 @@ const RecipeForm = () => {
           if (recipeData) {
             setRecipeTitle(recipeData.title || '');
             setDescription(recipeData.description || '');
-            setPhotoPreview(recipeData.imageUrl || null);
-            setPublicId(recipeData.imagePublicId || null);
+            setPhotoPreview(recipeData.imageUrl || "");
+            setPublicId(recipeData.imagePublicId || "");
             setIngredients(recipeData.ingredients || [
               { id: '1', text: '', isHeader: false },
               { id: '2', text: '', isHeader: false },
@@ -141,8 +141,8 @@ const RecipeForm = () => {
     setIsLoading(true);
     
     try {
-      let imageUrl = photoPreview;
-      let imagePublicId = publicId;
+      let imageUrl = "";
+      let imagePublicId = "";
       
       // Upload new image if there is one
       if (photo && !photoPreview.startsWith('http')) {
@@ -179,7 +179,6 @@ const RecipeForm = () => {
         totalTime: totalTime,
         additionalTimers: additionalTimers,
         notes: notes,
-        userId: currentUser.uid
       };
       
       if (isEditMode) {

@@ -1,54 +1,35 @@
-import React, { useState } from 'react';
-import { Check, X, ArrowUp, ArrowDown } from 'lucide-react';
+import { ArrowDown, ArrowUp, Check, X } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { RPRecipeCard } from "../../../components/recipe/RPRecipeCard";
+import { getRecipesPending } from '../../../services/recipeService';
 import SearchBar from '../searchbar/Searchbar';
 import './ContentApproval.css';
+import IconButton from '../../../components/button/IconButton';
+import { setRecipeStatus } from '../../../services/recipeService';
 
 const ContentApproval = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortOrder, setSortOrder] = useState('newest');
-  const [posts, setPosts] = useState([
-    {
-      id: 1,
-      title: 'Homemade Pizza Recipe',
-      author: 'Jane Smith',
-      date: '2023-04-01',
-      category: 'Italian',
-      excerpt: 'Learn how to make the perfect homemade pizza with this easy recipe...'
-    },
-    {
-      id: 2,
-      title: 'Thai Green Curry',
-      author: 'Michael Brown',
-      date: '2023-04-02',
-      category: 'Thai',
-      excerpt: 'A fragrant and authentic Thai green curry recipe thats easy to follow...'
-    },
-    {
-      id: 3,
-      title: 'Classic French Croissants',
-      author: 'Robert Johnson',
-      date: '2023-04-03',
-      category: 'French',
-      excerpt: 'Master the art of making flaky, buttery croissants with this detailed guide...'
-    },
-    {
-      id: 4,
-      title: 'Summer Berry Smoothie',
-      author: 'Emily Davis',
-      date: '2023-04-04',
-      category: 'Beverages',
-      excerpt: 'A refreshing smoothie packed with summer berries and nutrients...'
-    },
-    {
-      id: 5,
-      title: 'Japanese Ramen Noodles',
-      author: 'David Wilson',
-      date: '2023-04-05',
-      category: 'Japanese',
-      excerpt: 'Authentic Japanese ramen recipe with homemade broth and toppings...'
-    }
-  ]);
+  const [pendingRecipes, setPendingRecipes] = useState([]);
+  const [isShowRejected, setIsShowRejected] = useState(false);
 
+  useEffect(() => {
+    const fetchRecipe = async () => {
+      try {
+        const response = await getRecipesPending();
+        setPendingRecipes(response);
+      } catch (error) {
+        console.error("error fectch pending data")
+      }
+    }
+
+    fetchRecipe()
+  }, []);
+
+  const handleShowRejected = () => {
+    setIsShowRejected(!isShowRejected)
+  }
+  
   const handleSearch = (term) => {
     setSearchTerm(term);
   };
@@ -57,15 +38,17 @@ const ContentApproval = () => {
     setSortOrder(order);
   };
 
-  const sortedAndFilteredPosts = posts
+  function toDate(obj) {
+    return new Date(obj._seconds * 1000 + obj._nanoseconds / 1e6);
+  }
+
+  const sortedAndFilteredPosts = pendingRecipes
     .filter(post => 
-      post.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-      post.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      post.category.toLowerCase().includes(searchTerm.toLowerCase())
+      post.title.toLowerCase().includes(searchTerm.toLowerCase())
     )
     .sort((a, b) => {
-      const dateA = new Date(a.date);
-      const dateB = new Date(b.date);
+      const dateA = toDate(a.createdAt);
+      const dateB = toDate(b.createdAt);
       
       if (sortOrder === 'newest') {
         return dateB - dateA;
@@ -74,12 +57,22 @@ const ContentApproval = () => {
       }
     });
 
-  const handleApprove = (id) => {
-    setPosts(posts.filter(post => post.id !== id));
+  const handleApprove = async (id) => {
+    try {
+      await setRecipeStatus(id, "public");
+      setPendingRecipes(prev => prev.filter(post => post.id !== id));
+    } catch (error) {
+      console.error("Duyệt bài thất bại:", error);
+    }
   };
-
-  const handleReject = (id) => {
-    setPosts(posts.filter(post => post.id !== id));
+  
+  const handleReject = async (id) => {
+    try {
+      await setRecipeStatus(id, "reject");
+      setPendingRecipes(prev => prev.filter(post => post.id !== id));
+    } catch (error) {
+      console.error("Từ chối bài thất bại:", error);
+    }
   };
 
   return (
@@ -91,6 +84,12 @@ const ContentApproval = () => {
       <div className="adpage-content-controls">
         <SearchBar placeholder="Search posts..." onSearch={handleSearch} />
         <div className="adpage-sort-controls">
+          <button 
+            className={`adpage-sort-btn ${isShowRejected ? 'adpage-active' : ''}`}
+            onClick={handleShowRejected}
+          >
+            Show Rejected
+          </button>
           <button 
             className={`adpage-sort-btn ${sortOrder === 'newest' ? 'adpage-active' : ''}`}
             onClick={() => handleSortChange('newest')}
@@ -107,41 +106,32 @@ const ContentApproval = () => {
       </div>
 
       <div className="adpage-posts-list">
-        {sortedAndFilteredPosts.length === 0 && (
+        {sortedAndFilteredPosts.filter(recipe => isShowRejected || recipe.status !== 'reject').length === 0 && (
           <div className="adpage-no-posts">No posts found</div>
         )}
-        
-        {sortedAndFilteredPosts.map(post => (
-          <div className="adpage-post-item" key={post.id}>
-            <div className="adpage-post-info">
-              <h3 className="adpage-post-title">{post.title}</h3>
-              <div className="adpage-post-meta">
-                <span>By {post.author}</span>
-                <span>•</span>
-                <span>{post.date}</span>
-                <span>•</span>
-                <span className="adpage-category-tag">{post.category}</span>
+
+        <div className="admin-content-grid">
+          {sortedAndFilteredPosts
+            .filter(recipe => isShowRejected || recipe.status !== 'reject')
+            .map((recipe) => (
+            <div className='adpage-content-card' key={recipe.id}>
+              <RPRecipeCard recipe={recipe} className={"horizontal"}/>
+              <div className='adpage-content-button-group'>
+                <IconButton variant='fullwidth primary' icon={<Check/>} onClick={(e) => handleApprove(recipe.id)}>Approve</IconButton>
+                {recipe.status !== 'reject' && (
+                  <IconButton
+                    variant='fullwidth cancel'
+                    icon={<X />}
+                    onClick={(e) => handleReject(recipe.id)}
+                  >
+                    Reject
+                  </IconButton>
+                )}
               </div>
-              <p className="adpage-post-excerpt">{post.excerpt}</p>
             </div>
-            <div className="adpage-post-actions">
-              <button 
-                className="adpage-action-btn adpage-approve-btn" 
-                onClick={() => handleApprove(post.id)}
-                title="Approve"
-              >
-                <Check size={20} />
-              </button>
-              <button 
-                className="adpage-action-btn adpage-reject-btn" 
-                onClick={() => handleReject(post.id)}
-                title="Reject"
-              >
-                <X size={20} />
-              </button>
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
+
       </div>
     </div>
   );

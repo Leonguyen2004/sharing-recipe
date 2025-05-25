@@ -1,0 +1,77 @@
+.categoryPageContainer {
+  max-width: 100vw;
+  width: 100%;
+  margin: 0 auto;
+  overflow-x: hidden;
+} 
+
+.heroSection {
+  margin-top: 100px;
+  width: 100%;          /* Chiều rộng toàn màn hình */ 
+  height: 300px;
+  overflow: hidden;      /* Tránh scroll nếu ảnh to */
+}
+
+.heroImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;   
+  display: block;
+}
+
+.header {
+  text-align: center;
+  padding: 20px 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.headerLabel {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  margin-bottom: 16px;
+  color: #555;
+}
+
+.headerTitle {
+  font-size: 40px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  color: #222;
+}
+
+.recipeSection {
+  max-width: 1200px;
+  padding: 20px;
+  margin: 0 auto;
+}
+
+.gridRecipe {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  padding: 20px 0;
+}
+
+.loadMoreContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+
+.loadMoreButton {
+  padding: 12px 24px;
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.2s;
+}
+
+.loadMoreButton:hover {
+  background-color: #d73a28;
+}

@@ -1,5 +1,6 @@
 import { Heart, Printer, Share2, Star, Bookmark } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Breadcrumb from '../../../components/breadcumb/Breadcrumb';
 import IconButton from '../../../components/button/IconButton';
 import StarRating from '../../../components/starrating/StarRating';
@@ -17,6 +18,7 @@ const HeaderSection = ({ recipe, stats }) => {
   const [isSaved, setIsSaved] = useState(false)
   const { savedRecipes, refreshSavedRecipes } = useSavedRecipe();
   const { currentUser } = useAuth();
+  const navigate = useNavigate();
   
   // Kiểm tra xem recipe đã được lưu hay chưa
   useEffect(() => {
@@ -96,6 +98,12 @@ const HeaderSection = ({ recipe, stats }) => {
     }
   };
 
+  const handleAuthorClick = () => {
+    if (author) {
+      navigate(`/account/${author.id}`);
+    }
+  };
+
   return (
     <div className="rdpage-recipe-header">
       <Breadcrumb items={recipe.categories} />
@@ -106,7 +114,7 @@ const HeaderSection = ({ recipe, stats }) => {
         <div className="rdpage-rating-container">
           <StarRating rating={stats.average} count={stats.total}/>
           <a className="rdpage-reviews-link" onClick={(e) => scrollToSection("review-list")}>{stats.total} REVIEWS</a>
-          <a href="#photos" className="rdpage-photos-link">0 PHOTOS</a>
+          {/* <a href="#photos" className="rdpage-photos-link">0 PHOTOS</a> */}
         </div>
       </div>
       
@@ -115,7 +123,12 @@ const HeaderSection = ({ recipe, stats }) => {
       </p>
       
       <div className="rdpage-recipe-author">
-        <span>Submitted by <strong>{author.displayName}</strong></span>
+        <span>Submitted by <strong 
+          style={{ cursor: 'pointer', textDecoration: 'none' }}
+          onMouseEnter={(e) => e.target.style.textDecoration = 'underline'}
+          onMouseLeave={(e) => e.target.style.textDecoration = 'none'}
+          onClick={handleAuthorClick}
+        >{author.displayName}</strong></span>
         <span className="rdpage-recipe-date">Updated on {formatTimestampToDateTime(recipe.updatedAt || recipe.createdAt)}</span>
       </div>
       

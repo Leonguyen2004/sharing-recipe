@@ -3,6 +3,7 @@ import { Trash2, ChevronDown, ChevronUp } from 'lucide-react';
 import SearchBar from '../searchbar/Searchbar';
 import Modal from '../modal/Modal';
 import './CommentManagement.css';
+import Review from '../../../components/review/Review';
 
 const CommentManagement = () => {
   const [searchQuery, setSearchQuery] = useState('');

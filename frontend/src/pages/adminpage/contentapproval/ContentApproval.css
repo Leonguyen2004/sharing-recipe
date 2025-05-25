@@ -129,3 +129,22 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   color: #666;
 }
+
+.admin-content-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 20px 0;
+}
+
+.adpage-content-button-group {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+.adpage-content-card {
+  border-radius: 12px;
+  padding: 10px;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.3);
+}

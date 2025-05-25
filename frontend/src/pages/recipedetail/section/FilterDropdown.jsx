@@ -6,11 +6,30 @@ const FilterDropdown = ({
   isOpen,
   onClose,
   ratingFilters,
+  setRatingFilters,
   showWithImages,
-  toggleRatingFilter,
-  toggleShowWithImages,
-  resetFilters,
+  setShowWithImages,
 }) => {
+  // Toggle a rating filter (1-5 stars)
+  const toggleRatingFilter = (rating) => {
+    if (ratingFilters.includes(rating)) {
+      setRatingFilters(ratingFilters.filter((r) => r !== rating))
+    } else {
+      setRatingFilters([...ratingFilters, rating])
+    }
+  }
+
+  // Toggle show only reviews with images
+  const toggleShowWithImages = () => {
+    setShowWithImages(!showWithImages)
+  }
+
+  // Reset all filters
+  const resetFilters = () => {
+    setRatingFilters([])
+    setShowWithImages(false)
+  }
+
   if (!isOpen) return null
 
   return (
@@ -52,7 +71,7 @@ const FilterDropdown = ({
         </div>
       ))}
 
-      <div className={styles.dropdownItem} onClick={toggleShowWithImages}>
+      {/* <div className={styles.dropdownItem} onClick={toggleShowWithImages}>
         <div className={styles.checkboxContainer}>
           <input
             type="checkbox"
@@ -63,7 +82,7 @@ const FilterDropdown = ({
           />
           <label htmlFor="with-images">With images</label>
         </div>
-      </div>
+      </div> */}
 
       <div className={styles.dropdownItem}>
         <button className={styles.resetButton} onClick={resetFilters}>

@@ -19,24 +19,6 @@
   }
 }
 
-.closeButton {
-  position: absolute;
-  right: 0.75rem;
-  top: 0.75rem;
-  z-index: 10;
-  border-radius: 9999px;
-  background-color: rgba(255, 255, 255, 0.8);
-  padding: 0.375rem;
-  color: #2d3748;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  transition: background-color 0.2s, color 0.2s;
-}
-
-.closeButton:hover {
-  background-color: #e74c3c;
-  color: white;
-}
-
 .modalContent {
   display: flex;
   flex-direction: column;

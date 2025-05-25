@@ -5,6 +5,12 @@ import './MediaSection.css';
 import defaultImage from "../../../assets/img/recipe-image.jpeg";
 
 const RecipeMedia = ({ recipe }) => {
+  const scrollToSection = (sectionId) => {
+    const section = document.getElementById(sectionId);
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
   
   return (
     <div className="rdpage-recipe-media">
@@ -23,7 +29,7 @@ const RecipeMedia = ({ recipe }) => {
             variant="secondary"
             className="rdpage-photo-button"
           >
-            <div className="rdpage-button-text">
+            <div className="rdpage-button-text" onClick={(e) => scrollToSection("reviews")}>
               <span>Add Photo</span>
             </div>
           </ActionButton>

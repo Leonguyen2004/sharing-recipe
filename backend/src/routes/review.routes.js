@@ -14,7 +14,7 @@ router.get("/my/:recipeId", authenticateUser, reviewController.getMyReviewForRec
 router.post('/', authenticateUser, reviewController.addReview);
 
 // Get reviews by recipe
-router.get('/recipe/:recipeId', reviewController.getReviewsByRecipe);
+router.get('/recipe', reviewController.getReviewsByRecipe);
 
 // Delete a review
 router.delete('/:reviewId', authenticateUser, attachUserData, isReviewAuthorOrAdmin, reviewController.deleteReview);

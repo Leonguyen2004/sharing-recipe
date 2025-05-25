@@ -22,7 +22,8 @@ const Account = () => {
 
         // Lấy công thức cá nhân
         const personalRecipesData = await getUserRecipes(userId);
-        setPersonalRecipes(personalRecipesData);
+        const filteredPersonalRecipes = personalRecipesData.filter(recipe => recipe.status === 'public');
+        setPersonalRecipes(filteredPersonalRecipes);
 
         // Lấy công thức đã lưu
         const savedRecipesData = await getSavedRecipes(userId);

@@ -1,59 +1,148 @@
-import React, { useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { RPRecipeCard } from '../../../components/recipe/RPRecipeCard';
+import { getAllRecipes } from '../../../services/recipeService';
 import styles from './TrendingSection.module.css';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { useRecipes } from '../../../context/RecipesContext';
-import { RPRecipeCard } from '../../../components/recipe/RPRecipeCard';
 
-const VISIBLE_CARDS = 6;
-const CARD_WIDTH = 176; // ví dụ: 160px card + 16px gap
+import { Navigation, Pagination } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
+
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 const TrendingSection = () => {
-  const carouselRef = useRef(null);
-  const [startIndex, setStartIndex] = useState(0);
-  const totalCards = 10;
-  const { recipes } = useRecipes();
+  const [trendingRecipe, setTrendingRecipe] = useState([])
 
-  const scrollToIndex = (index) => {
-    const scrollX = index * CARD_WIDTH;
-    carouselRef.current.scrollTo({ left: scrollX, behavior: 'smooth' });
-  };
+  useEffect(() => {
+    const fetchTrendingRecipe = async () => {
+      const response = await getAllRecipes({
+        sortBy: "averageRating",
+        sortOrder: "desc",
+        limit: "10",
+        status: "public"
+      })
+      setTrendingRecipe(response.data)
+    } 
 
-  const handleScrollLeft = () => {
-    if (startIndex > 0) {
-      const newIndex = startIndex - 1;
-      setStartIndex(newIndex);
-      scrollToIndex(newIndex);
-    }
-  };
+    fetchTrendingRecipe();
+  }, [])
 
-  const handleScrollRight = () => {
-    if (startIndex + VISIBLE_CARDS < totalCards) {
-      const newIndex = startIndex + 1;
-      setStartIndex(newIndex);
-      scrollToIndex(newIndex);
-    }
-  };
+  // return (
+  //   <div className={styles.trendingSection}>
+  //     <div className={styles.title}>
+  //         <h2>Trending Recipes</h2>
+  //       </div>
+  //     <div className={styles.carouselContainer}>
+  //       <Swiper
+  //         modules={[Navigation, Pagination]}
+  //         spaceBetween={20} // Khoảng cách giữa các slide
+  //         slidesPerView={6} // Số lượng slide hiển thị ban đầu
+  //         slidesPerGroup={1} // Số lượng slide trượt mỗi lần
+  //         navigation // Kích hoạt nút điều hướng (prev/next)
+  //         loop={false} // Không lặp lại slide (tùy chọn, có thể đặt true nếu muốn)
+  //         breakpoints={{
+  //           // Responsive breakpoints (tùy chọn)
+  //           320: {
+  //             slidesPerView: 1,
+  //             spaceBetween: 10,
+  //           },
+  //           480: {
+  //             slidesPerView: 2,
+  //             spaceBetween: 10,
+  //           },
+  //           640: {
+  //             slidesPerView: 3,
+  //             spaceBetween: 15,
+  //           },
+  //           768: {
+  //             slidesPerView: 4,
+  //             spaceBetween: 15,
+  //           },
+  //           1024: {
+  //             slidesPerView: 6,
+  //             spaceBetween: 20,
+  //           },
+  //         }}
+  //       >
+  //         {trendingRecipe.map((recipe, index) => (
+  //           <SwiperSlide key={index} className={styles.slide}>
+  //             <div className={styles.card}>
+  //               <RPRecipeCard recipe={recipe} className={"vertical"} key={index}/>
+  //             </div>
+  //           </SwiperSlide>
+  //         ))}
+  //       </Swiper>
+  //     </div>
+  //   </div>
+  // );
 
   return (
-    <div className={styles.wrapper}>
-      <h2 className={styles.title}>Top 10 recipe today</h2>
+    <div className={styles.trendingSection}>
+      <div className={styles.title}>
+        <h2>Trending Recipes</h2>
+      </div>
+      <RecipeRow recipes={trendingRecipe} />
+    </div>
+  )
+};
+
+function RecipeRow({ recipes }) {
+  const [startIndex, setStartIndex] = useState(0)
+  const visibleCount = 6
+
+  const handlePrevious = () => {
+    setStartIndex((prev) => Math.max(0, prev - 1))
+  }
+
+  const handleNext = () => {
+    setStartIndex((prev) => Math.min(recipes.length - visibleCount, prev + 1))
+  }
+
+  const visibleRecipes = recipes.slice(startIndex, startIndex + visibleCount)
+  const canScrollLeft = startIndex > 0
+  const canScrollRight = startIndex < recipes.length - visibleCount
+
+  return (
+    <div className={styles.recipeRow}>
+
       <div className={styles.carouselContainer}>
-        <button className={styles.navLeft} onClick={handleScrollLeft}>
-          <ChevronLeft size={32} />
+        <button
+          className={`${styles.navButton} ${styles.prevButton} ${!canScrollLeft ? styles.disabled : ""}`}
+          onClick={handlePrevious}
+          disabled={!canScrollLeft}
+        >
+          <ChevronLeft size={24} />
         </button>
 
-        <div className={styles.carousel} ref={carouselRef}>
-          {recipes.map((recipe, index) => (
-            <RPRecipeCard recipe={recipe} className={"vertical"}/>
+        <div className={styles.cardsContainer}>
+          {visibleRecipes.map((recipe, index) => (
+            <div key={recipe.id || index} className={styles.cardWrapper}>
+              <RPRecipeCard recipe={recipe} className={"vertical"}/>
+            </div>
           ))}
+
+          {/* If we don't have enough recipes, show placeholders */}
+          {visibleRecipes.length < visibleCount &&
+            Array(visibleCount - visibleRecipes.length)
+              .fill(0)
+              .map((_, index) => (
+                <div key={`placeholder-${index}`} className={styles.cardWrapper}>
+                  <div className={styles.placeholder}></div>
+                </div>
+              ))}
         </div>
-        
-        <button className={styles.navRight} onClick={handleScrollRight}>
-          <ChevronRight size={32} />
+
+        <button
+          className={`${styles.navButton} ${styles.nextButton} ${!canScrollRight ? styles.disabled : ""}`}
+          onClick={handleNext}
+          disabled={!canScrollRight}
+        >
+          <ChevronRight size={24} />
         </button>
       </div>
     </div>
-  );
-};
+  )
+}
 
 export default TrendingSection;

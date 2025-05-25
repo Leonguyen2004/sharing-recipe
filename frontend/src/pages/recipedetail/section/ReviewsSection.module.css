@@ -161,4 +161,25 @@
   .activeFilter {
     color: var(--primary-color);
   }
+
+  .loadMoreContainer {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+    margin-bottom: 20px;
+  }
   
+  .loadMoreButton {
+    padding: 12px 24px;
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.2s;
+  }
+  
+  .loadMoreButton:hover {
+    background-color: #d73a28;
+  }

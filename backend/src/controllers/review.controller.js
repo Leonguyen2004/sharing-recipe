@@ -4,8 +4,30 @@ const reviewController = {
   // Lấy tất cả reviews
   getAllReviews: async (req, res) => {
     try {
-      const reviews = await reviewService.getAllReviews();
-      res.status(200).json(reviews);
+      const rawStarsFilter = req.query.starsFilter;
+
+      const starsFilter = rawStarsFilter ? rawStarsFilter.split(',').map(Number) : [];
+
+      const sortOrder = req.query.sortOrder || 'desc';
+
+      const startAfter = req.query.startAfter || null;
+
+      const limit = Math.min(parseInt(req.query.limit) || 10, 100);
+
+      const reviewsResult = await reviewService.getReviewsByRecipe({
+        starsFilter,
+        sortOrder,
+        startAfter,
+        limit
+      });
+      
+      res.status(200).json({
+        data: reviewsResult.reviews,
+        pagination: {
+          hasNext: reviewsResult.hasNext,
+          lastDocId: reviewsResult.lastDocId
+        }
+      });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
@@ -37,9 +59,37 @@ const reviewController = {
   // Lấy reviews theo recipe
   getReviewsByRecipe: async (req, res) => {
     try {
-      const { recipeId } = req.params;
-      const reviews = await reviewService.getReviewsByRecipe(recipeId);
-      res.status(200).json(reviews);
+      const recipeId = req.query.recipeId || "";
+
+      const rawStarsFilter = req.query.starsFilter;
+
+      const starsFilter = rawStarsFilter ? rawStarsFilter.split(',').map(Number) : [];
+
+      const hasImageOnly = req.query.hasImageOnly || false;
+
+      const sortOrder = req.query.sortOrder || 'desc';
+
+      const startAfter = req.query.startAfter || null;
+
+      const limit = Math.min(parseInt(req.query.limit) || 10, 100);
+
+      const reviewsResult = await reviewService.getReviewsByRecipe({
+        recipeId,
+        starsFilter,
+        hasImageOnly,
+        sortOrder,
+        startAfter,
+        limit
+      });
+      
+      
+      res.status(200).json({
+        data: reviewsResult.reviews,
+        pagination: {
+          hasNext: reviewsResult.hasNext,
+          lastDocId: reviewsResult.lastDocId
+        }
+      });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }

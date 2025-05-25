@@ -41,21 +41,54 @@ export const checkUserExists = async (email) => {
   }
 }; 
 
-export const getAllUsers = async () => {
+export const getAllUsers = async (searchTerm, banned, sortBy, sortOrder, limit, lastDocumentId) => {
   try {
-    const usersCollection = db.collection('users');
-    const snapshot = await usersCollection.get();
+    let query = db.collection('users');
 
-    const users = snapshot.docs.map(doc => ({
+    if (searchTerm) {
+      query = query.where('email', '>=', searchTerm).where('email', '<=', searchTerm + '\uFFFF');
+ 
+    }
+
+    if (typeof banned === 'boolean') {
+      query = query.where('banned', '==', banned);
+    }
+
+    if (sortBy) {
+      query = query.orderBy(sortBy, sortOrder);
+    }
+
+    // Pagination
+    if (lastDocumentId) {
+      const lastDoc = await db.collection('users').doc(lastDocumentId).get();
+      query = query.startAfter(lastDoc);
+    }
+
+    query = query.select('banned', 'createdAt', 'displayName', 'email', 'photoURL', 'recipeCount');
+
+    if (limit) {
+      query = query.limit(limit + 1); // +1 to check if there's a next page
+    }
+
+    const snapshot = await query.get();
+
+    const hasNext = snapshot.docs.length > limit;
+
+    const users = snapshot.docs.slice(0, limit).map(doc => ({
       id: doc.id,
       ...doc.data()
     }));
-    return users;
+    
+    return {
+      users,
+      hasNext,
+      lastDocumentId: hasNext ? users[users.length - 1].id : null
+    };
   } catch (error) {
-    console.error('Error checking user exists:', error);
+    console.error('Error getting all users:', error);
     throw error;
   }
-}
+};  
 
 export const updateUserBanStatus = async (userId, banned) => {
   try {

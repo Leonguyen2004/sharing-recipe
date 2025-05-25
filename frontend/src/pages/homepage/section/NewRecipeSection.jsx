@@ -1,8 +1,9 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { RPRecipeCard } from "../../../components/recipe/RPRecipeCard";
 import { useCategories } from "../../../context/CategoryContext";
-import { useRecipes } from "../../../context/RecipesContext";
+import { getAllRecipes } from "../../../services/recipeService";
 import styles from "./NewRecipeSection.module.css";
 
 export default function NewRecipeSection() {
@@ -10,51 +11,73 @@ export default function NewRecipeSection() {
   const [chickenRecipes, setChickenRecipes] = useState([])
   const [beefRecipes, setBeefRecipes] = useState([])
   const { categories } = useCategories();
-  const { recipes } = useRecipes();
-  const targetCategoryNames = ["Chicken", "Beef", "Pork"];
+  const [loading, setLoading] = useState(true);
+  const [targetCategoryIds, setTargetCategoryIds] = useState({});
+
+  // const targetNames = ['Beef', 'Chicken', 'Pork'];
+  // const targetCategoryIds = {};
+  // targetNames.forEach(name => {
+  //   const found = categories.find(category => category.name === name);
+  //   if (found) {
+  //     targetCategoryIds[name] = found.id;
+  //   }
+  // }); 
 
   useEffect(() => {
-    const categoryIdMap = categories
-      .filter(category => targetCategoryNames.includes(category.name))
-      .reduce((acc, category) => {
-        acc[category.name] = category.id;
-        return acc;
-      }, {});
-
-    const filterRecipe = () => {
-      const allRecipes = recipes;
-
-      // Filter recipes by category
-      const pork = allRecipes.filter((recipe) => recipe.categories && recipe.categories.includes(categoryIdMap["Pork"])).slice(0, 10)
-
-      const chicken = allRecipes
-        .filter((recipe) => recipe.categories && recipe.categories.includes(categoryIdMap["Chicken"]))
-        .slice(0, 10)
-
-      const beef = allRecipes.filter((recipe) => recipe.categories && recipe.categories.includes(categoryIdMap["Beef"])).slice(0, 10)
-
-      setPorkRecipes(pork)
-      setChickenRecipes(chicken)
-      setBeefRecipes(beef)
+    const targetNames = ['Beef', 'Chicken', 'Pork'];
+    const categoryIds = {};
+  
+    if (categories.length > 0) {
+      targetNames.forEach(name => {
+        const found = categories.find(category => category.name === name);
+        if (found) categoryIds[name] = found.id;
+      });
+      setTargetCategoryIds(categoryIds);
+  
+      if (!Object.values(categoryIds).every(Boolean)) {
+        console.error('Missing some category IDs');
+        return;
+      }
+  
+      const fetchAllRecipes = async () => {
+        try {
+          setLoading(true);
+          const [chicken, beef, pork] = await Promise.all([
+            getAllRecipes({ categories: categoryIds["Chicken"], limit: "10", sortBy: "createdAt", sortOrder: "desc", status: "public" }),
+            getAllRecipes({ categories: categoryIds["Beef"], limit: "10", sortBy: "createdAt", sortOrder: "desc", status: "public" }),
+            getAllRecipes({ categories: categoryIds["Pork"], limit: "10", sortBy: "createdAt", sortOrder: "desc", status: "public" }),
+          ]);
+          setChickenRecipes(chicken.data);
+          setBeefRecipes(beef.data);
+          setPorkRecipes(pork.data);
+        } catch (error) {
+          console.error('Error fetching recipes:', error);
+        } finally {
+          setLoading(false);
+        }
+      };
+  
+      fetchAllRecipes();
     }
-
-    filterRecipe()
-  }, [categories])
+  }, [categories]);
+  
+  if (loading) return <div>Loading....</div>
 
   return (
     <div className={styles.container}>
-      <RecipeRow title="New Pork Recipe" recipes={porkRecipes} />
+      <RecipeRow title="New Pork Recipe" recipes={porkRecipes} categoryId={targetCategoryIds["Pork"]} />
 
-      <RecipeRow title="New Chicken Recipe" recipes={chickenRecipes} />
+      <RecipeRow title="New Chicken Recipe" recipes={chickenRecipes} categoryId={targetCategoryIds["Chicken"]} />
 
-      <RecipeRow title="New Beef Recipe" recipes={beefRecipes} />
+      <RecipeRow title="New Beef Recipe" recipes={beefRecipes} categoryId={targetCategoryIds["Beef"]} />
     </div>
   )
 }
 
-function RecipeRow({ title, recipes }) {
+function RecipeRow({ title, recipes, categoryId }) {
   const [startIndex, setStartIndex] = useState(0)
   const visibleCount = 5
+  const navigate = useNavigate();
 
   const handlePrevious = () => {
     setStartIndex((prev) => Math.max(0, prev - 1))
@@ -62,6 +85,13 @@ function RecipeRow({ title, recipes }) {
 
   const handleNext = () => {
     setStartIndex((prev) => Math.min(recipes.length - visibleCount, prev + 1))
+  }
+
+  const handleViewAll = (e) => {
+    e.preventDefault();
+    if (categoryId) {
+      navigate(`/category/${categoryId}`);
+    }
   }
 
   const visibleRecipes = recipes.slice(startIndex, startIndex + visibleCount)
@@ -72,7 +102,7 @@ function RecipeRow({ title, recipes }) {
     <div className={styles.recipeRow}>
       <div className={styles.rowHeader}>
         <h2 className={styles.rowTitle}>{title}</h2>
-        <a href="#" className={styles.viewAll}>
+        <a href="#" className={styles.viewAll} onClick={handleViewAll}>
           View all <span className={styles.arrow}><ChevronRight size={20}/></span>
         </a>
       </div>

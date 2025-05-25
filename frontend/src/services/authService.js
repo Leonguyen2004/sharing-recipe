@@ -15,12 +15,16 @@ export const registerUser = async (name, email, password) => {
             },
             body: JSON.stringify({ name, email, password }),
         });
+        
+        const data = await response.json();
 
         if (!response.ok) {
-            throw new Error('Registration failed');
+            throw {
+                code: data.code || 'auth/unknown',
+                message: data.message || 'Đăng ký thất bại'
+            };
         }
 
-        const data = await response.json();
         return data;
     } catch (error) {
         throw error;
@@ -53,7 +57,8 @@ export const loginUser = async (email, password, rememberMe = false) => {
             token: idToken
         };
     } catch (error) {
-        throw error;
+        console.error('Login error:', error);
+        throw (error)
     }
 }
 

@@ -6,10 +6,16 @@ import './Review.css';
 import { getUserProfile } from '../../services/userService';
 import { auth } from '../../firebase/config';
 import { formatTimestampToDateTime } from "../../services/timeService";
+import { CircleUser } from 'lucide-react';
+import { deleteReview } from '../../services/reviewService';
+import { useAuth } from "../../context/AuthContext";
 
 const Review = ({ myReview }) => {
     const [authorData, setAuthorData] = useState({});
     const [loading, setLoading] = useState(false);
+    const { userRole } = useAuth();
+    console.log(userRole);
+    
 
     useEffect(() => {
         const fetchAuthorOfReview = async () => {
@@ -32,11 +38,11 @@ const Review = ({ myReview }) => {
     return (
         <div key={myReview.id} className="rvcom-review-item">
             <div className="rvcom-review-user">
-                <img 
-                    src={authorData.photoURL} 
-                    alt="avatar"
-                    className="rvcom-user-avatar" 
-                />
+                {authorData.photoURL? (
+                    <img src={authorData.photoURL} alt="User" className="rvcom-user-avatar"/>
+                ) : (
+                    <CircleUser size={50} />
+                )}
                 <h3 className="rvcom-user-name">{authorData.displayName}</h3>
             </div>
             

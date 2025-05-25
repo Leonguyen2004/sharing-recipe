@@ -1,18 +1,61 @@
 import { db } from '../config/firebase.js';
+import { updateRecipe } from './recipe.service.js';
 
 const REVIEWS_COLLECTION = 'reviews';
+const RECIPES_COLLECTION = 'recipes';
 
 // Lấy tất cả reviews
-export const getAllReviews = async () => {
+export const getAllReviews = async ({
+  starsFilter,
+  sortOrder,
+  startAfter,
+  limit
+}) => {
   try {
-    const reviewsRef = db.collection(REVIEWS_COLLECTION);
+    let reviewsRef = db.collection(REVIEWS_COLLECTION)
+
+    // Apply starFilter if provided (array of numbers)
+    if (starsFilter && Array.isArray(starsFilter) && starsFilter.length > 0) {
+      reviewsRef = reviewsRef.where('rating', 'in', starsFilter);
+    }
+
+    // Apply sorting (default: createdAt, desc)
+    if (sortOrder) {
+      reviewsRef = reviewsRef.orderBy('createdAt', sortOrder);
+    }
+    
+    // Apply pagination with startAfter
+    if (startAfter) {
+      const lastDoc = await db.collection('reviews').doc(startAfter).get();
+      reviewsRef = reviewsRef.startAfter(lastDoc);
+    }
+
+    // Fetch one extra document to check for next page
+    if (limit) {
+      const queryLimit = limit + 1; // Default limit of 10 + 1 if none provided
+      reviewsRef = reviewsRef.limit(queryLimit);
+    }
+
     const snapshot = await reviewsRef.get();
-    return snapshot.docs.map(doc => ({
+    const allResults = snapshot.docs;
+    
+    const hasNext = allResults.length > limit;
+
+    // Cắt bỏ doc thừa dùng để check
+    const results = hasNext ? allResults.slice(0, -1) : allResults;
+
+    const reviews = results.map(doc => ({
       id: doc.id,
-      ...doc.data(),
+      ...doc.data()
     }));
+
+    return {
+      reviews,
+      hasNext: hasNext,
+      lastDocId: reviews[reviews.length - 1]?.id,
+    };
   } catch (error) {
-    console.error('Error getting all reviews:', error);
+    console.error('Error getting reviews by recipe:', error);
     throw error;
   }
 };
@@ -45,6 +88,13 @@ export const addReview = async (recipeId, reviewData, uid) => {
       createdAt: new Date()
     };
     const docRef = await reviewsRef.add(newReview);
+
+    const { average, total } = await getReviewStats(recipeId);
+    await db.collection('recipes').doc(recipeId).update({
+      averageRating: average,
+      totalReview: total
+    });
+
     return {
       id: docRef.id,
       ...newReview
@@ -56,14 +106,63 @@ export const addReview = async (recipeId, reviewData, uid) => {
 };
 
 // Lấy reviews theo recipe
-export const getReviewsByRecipe = async (recipeId) => {
+export const getReviewsByRecipe = async ({
+  recipeId,
+  starsFilter,
+  hasImageOnly,
+  sortOrder,
+  startAfter,
+  limit
+}) => {
   try {
-    const reviewsRef = db.collection(REVIEWS_COLLECTION);
-    const snapshot = await reviewsRef.where('recipeId', '==', recipeId).get();
-    return snapshot.docs.map(doc => ({
+    let reviewsRef = db.collection(REVIEWS_COLLECTION)
+      .where('recipeId', '==', recipeId);
+
+    // Apply starFilter if provided (array of numbers)
+    if (starsFilter && Array.isArray(starsFilter) && starsFilter.length > 0) {
+      reviewsRef = reviewsRef.where('rating', 'in', starsFilter);
+    }
+
+    // // Apply hasImageOnly filter (imageUrl is a non-empty string)
+    // if (hasImageOnly) {
+    //   reviewsRef = reviewsRef.where('imageUrl', '>', '');
+    // }
+
+    // Apply sorting (default: createdAt, desc)
+    if (sortOrder) {
+      reviewsRef = reviewsRef.orderBy('createdAt', sortOrder);
+    }
+    
+    // Apply pagination with startAfter
+    if (startAfter) {
+      const lastDoc = await db.collection('reviews').doc(startAfter).get();
+      reviewsRef = reviewsRef.startAfter(lastDoc);
+    }
+
+    // Fetch one extra document to check for next page
+    if (limit) {
+      const queryLimit = limit + 1; // Default limit of 10 + 1 if none provided
+      reviewsRef = reviewsRef.limit(queryLimit);
+    }
+
+    const snapshot = await reviewsRef.get();
+    const allResults = snapshot.docs;
+    
+    const hasNext = allResults.length > limit;
+
+    // Cắt bỏ doc thừa dùng để check
+    const results = hasNext ? allResults.slice(0, -1) : allResults;
+
+    const reviews = results.map(doc => ({
       id: doc.id,
-      ...doc.data(),
+      ...doc.data()
     }));
+
+    return {
+      reviews,
+      hasNext: hasNext,
+      lastDocId: reviews[reviews.length - 1]?.id,
+    };
   } catch (error) {
     console.error('Error getting reviews by recipe:', error);
     throw error;
@@ -71,10 +170,19 @@ export const getReviewsByRecipe = async (recipeId) => {
 };
 
 // Xóa review
-export const deleteReview = async (reviewId, uid) => {
+export const deleteReview = async (reviewId) => {
   try {
     const reviewRef = db.collection(REVIEWS_COLLECTION).doc(reviewId);
+    const reviewSnap = await reviewRef.get();
+    const recipeId = reviewSnap.data().recipeId;
     await reviewRef.delete();
+
+    const { average, total } = await getReviewStats(recipeId);
+    await db.collection('recipes').doc(recipeId).update({
+      averageRating: average,
+      totalReview: total
+    });
+
     return true;
   } catch (error) {
     console.error('Error deleting review:', error);
@@ -83,10 +191,18 @@ export const deleteReview = async (reviewId, uid) => {
 };
 
 // Cập nhật review
-export const updateReview = async (reviewId, newReviewData, uid) => {
+export const updateReview = async (reviewId, newReviewData) => {
   try {
     const reviewRef = db.collection(REVIEWS_COLLECTION).doc(reviewId);
     await reviewRef.update(newReviewData);
+    const reviewSnap = await reviewRef.get();
+    const recipeId = reviewSnap.data().recipeId;
+
+    const { average, total } = await getReviewStats(recipeId);
+    await db.collection('recipes').doc(recipeId).update({
+      averageRating: average,
+      totalReview: total
+    });
 
     return {
       id: reviewId,
@@ -101,7 +217,15 @@ export const updateReview = async (reviewId, newReviewData, uid) => {
 // Lấy thống kê review của recipe
 export const getReviewStats = async (recipeId) => {
   try {
-    const reviews = await getReviewsByRecipe(recipeId);
+    const reviewsSnapshot = await db
+    .collection(REVIEWS_COLLECTION)
+    .where('recipeId', '==', recipeId)
+    .get();
+
+    const reviews = reviewsSnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
     
     if (reviews.length === 0) {
       return {

@@ -31,6 +31,7 @@ const Navbar = () => {
     cookingMethod: [],
     diet: []
   });
+  console.log("render in navbar");                                                                                                                              
   
   /*==========================Hook==================================*/
   const navigate = useNavigate();
@@ -47,7 +48,9 @@ const Navbar = () => {
         console.error('Error fetching user data:', error);
       }
     };
-    fetchUserProfile();
+    if (currentUser) {
+      fetchUserProfile();
+    }
   }, [])
 
   useEffect(() => {
@@ -127,7 +130,7 @@ const Navbar = () => {
     e.preventDefault();
     console.log('Searching for:', searchValue);
     if (searchValue.trim()) {
-      window.location.href = `/search?q=${encodeURIComponent(searchValue)}`;
+      navigate(`/search?searchTerm=${encodeURIComponent(searchValue)}`);
     }
   };
 
@@ -136,7 +139,7 @@ const Navbar = () => {
   };
 
   const handleLoginClick = useCallback(() => {
-    setIsLoginOpen(true);
+    navigate("/login");
   }, []);
 
   const handleLogout = async () => {
@@ -170,13 +173,13 @@ const Navbar = () => {
             </button>
             )}
             <div className="navbar__logo">
-                <a href="/home">
+                <Link to="/home">
                     <img 
                         src={isScrolled ? logo_small : logo_large} 
                         alt="Allrecipes" 
                         className={isScrolled ? "navbar__logo-small" : "navbar__logo-large"} 
                     />
-                </a>
+                </Link>
             </div>
           </div>
 
@@ -200,7 +203,7 @@ const Navbar = () => {
             <div className="navbar__account" ref={accountDropdownRef}>
               <button className="account-button" onClick={toggleAccountDropdown}>
                 <div className="account-icon">
-                  {currentUser? (
+                  {userData.photoURL? (
                     <img src={userData.photoURL} alt="User" />
                   ) : (
                     <CircleUser size={30} />
@@ -226,24 +229,26 @@ const Navbar = () => {
                       </Link>
                     </li>
                     <li className="dropdown-item">
-                      <a href={`/account/${currentUser.uid}`} className="dropdown-link">
+                      <Link to={`/account/${currentUser.uid}`} className="dropdown-link">
                         <Bookmark size={16} />
                         <span>Saved Recipes & Collections</span>
-                      </a>
+                      </Link>
                     </li>
                     <li className="dropdown-divider"></li>
                     <li className="dropdown-item">
-                      <a href="/recipe-form" className="dropdown-link">
+                      <Link to="/recipe-form" className="dropdown-link">
                         <Plus size={16} />
                         <span>Add a Recipe</span>
-                      </a>
+                      </Link>
                     </li>
-                    <li className="dropdown-item">
-                      <a href="/admin" className="dropdown-link">
+                    {userData.role === "admin" && (
+                      <li className="dropdown-item">
+                      <Link to="/admin" className="dropdown-link">
                         <ShieldUser size={16} />
                         <span>Admin dashboard</span>
-                      </a>
+                      </Link>
                     </li>
+                    )}
                   </ul>
                 </div>
               )}
@@ -278,7 +283,7 @@ const Navbar = () => {
                         {category.name}
                       </div>
                     ))}
-                    <Link to="/all-meals" className="nav-dropdown-item view-all">
+                    <Link to="/category/all" className="nav-dropdown-item view-all">
                       VIEW ALL
                     </Link>
                   </div>
@@ -303,7 +308,7 @@ const Navbar = () => {
                         {category.name}
                       </div>
                     ))}
-                    <Link to="/all-ingredients" className="nav-dropdown-item view-all">
+                    <Link to="/category/all" className="nav-dropdown-item view-all">
                       VIEW ALL
                     </Link>
                   </div>
@@ -328,7 +333,7 @@ const Navbar = () => {
                         {category.name}
                       </div>
                     ))}
-                    <Link to="/all-occasions" className="nav-dropdown-item view-all">
+                    <Link to="/category/all" className="nav-dropdown-item view-all">
                       VIEW ALL
                     </Link>
                   </div>
@@ -353,7 +358,7 @@ const Navbar = () => {
                         {category.name}
                       </div>
                     ))}
-                    <Link to="/all-cuisines" className="nav-dropdown-item view-all">
+                    <Link to="/category/all" className="nav-dropdown-item view-all">
                       VIEW ALL
                     </Link>
                   </div>
@@ -378,7 +383,7 @@ const Navbar = () => {
                         {category.name}
                       </div>
                     ))}
-                    <Link to="/all-cooking-methods" className="nav-dropdown-item view-all">
+                    <Link to="/category/all" className="nav-dropdown-item view-all">
                       VIEW ALL
                     </Link>
                   </div>
@@ -403,7 +408,7 @@ const Navbar = () => {
                         {category.name}
                       </div>
                     ))}
-                    <Link to="/all-diets" className="nav-dropdown-item view-all">
+                    <Link to="/category/all" className="nav-dropdown-item view-all">
                       VIEW ALL
                     </Link>
                   </div>

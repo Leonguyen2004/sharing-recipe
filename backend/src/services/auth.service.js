@@ -13,16 +13,14 @@ export const registerUser = async ({ name, email, password }) => {
     await db.collection('users').doc(userRecord.uid).set({
       displayName: name,
       description: "",
-      socialLinks: {
-        facebook: "",
-        instagram: "",
-        twitter: "",
-      },
+      facebook: "",
+      instagram: "",
       email,
       photoURL: "",
       photoPublicId: "",
       role: "user",
       banned: false,
+      recipeCount: 0,
       createdAt: new Date(),
       lastLoginAt: new Date()
     });
@@ -40,6 +38,6 @@ export const registerUser = async ({ name, email, password }) => {
     };
   } catch(error) {
     console.error('Error register user:', error);
-    throw error;
+    throw error.errorInfo;
   }
 };

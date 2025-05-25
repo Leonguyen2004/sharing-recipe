@@ -3,9 +3,10 @@ import { getToken } from "./tokenService";
 const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000/api";
 
 // Lấy tất cả recipes
-export const getAllRecipes = async () => {
+export const getAllRecipes = async (params = {}) => {
   try {
-    const response = await fetch(`${API_URL}/recipes`);
+    const queryString = new URLSearchParams(params).toString();
+    const response = await fetch(`${API_URL}/recipes${queryString ? `?${queryString}` : ''}`);
     if (!response.ok) {
       throw new Error('Failed to fetch recipes');
     }
@@ -42,6 +43,46 @@ export const getRecipeById = async (recipeId) => {
     }
     return await response.json();
   } catch (error) {
+    console.error('Error getting recipe:', error);
+    throw error;
+  }
+};
+
+export const getRecipesPending = async () => {
+  try {
+    const token = getToken();
+    const response = await fetch(`${API_URL}/recipes/admin/pending`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+    });
+    if (!response.ok) {
+      throw new Error('Failed to fetch recipes');
+    }
+    return await response.json();
+  } catch(error) {
+    console.error('Error getting recipe:', error);
+    throw error;
+  }
+};
+
+export const setRecipeStatus = async (recipeId, status) => {
+  try {
+    const token = getToken();
+    const response = await fetch(`${API_URL}/recipes/admin/status`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ recipeId, status })
+    });
+    if (!response.ok) {
+      throw new Error('Failed to fetch recipes');
+    }
+    return await response.json();
+  } catch(error) {
     console.error('Error getting recipe:', error);
     throw error;
   }

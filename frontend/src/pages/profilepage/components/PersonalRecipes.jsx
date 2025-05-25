@@ -1,58 +1,31 @@
-import { useState } from "react"
-import RecipeCard from "../../../components/recipe/RecipeCard"
+import { useEffect, useState } from "react"
+import AdminRecipeCard from "../../../components/recipe/AdminRecipeCard"
 import IconButton from "../../../components/button/IconButton"
 import { Plus } from 'lucide-react'
 import { useNavigate } from "react-router-dom";
+import { getUserRecipes } from "../../../services/recipeService";
 
-const PersonalRecipes = () => {
-    const naviagate = useNavigate();
-  // Mock data - will be fetched from API later
-  const [personalRecipes, setPersonalRecipes] = useState([
-    {
-      id: 1,
-      title: "Homemade Pasta with Fresh Tomato Sauce",
-      category: "ITALIAN",
-      timeAgo: "2 DAYS AGO",
-      rating: 4.9,
-      ratingCount: 28,
-      image: "https://placehold.co/400x400",
-      isPublished: true,
-    },
-    {
-      id: 2,
-      title: "Spicy Thai Basil Chicken",
-      category: "ASIAN",
-      timeAgo: "1 WEEK AGO",
-      rating: 4.7,
-      ratingCount: 15,
-      image: "https://placehold.co/400x400",
-      isPublished: true,
-    },
-    {
-      id: 3,
-      title: "Classic French Onion Soup",
-      category: "FRENCH",
-      timeAgo: "2 WEEKS AGO",
-      rating: 4.5,
-      ratingCount: 12,
-      image: "https://placehold.co/400x400",
-      isPublished: true,
-    },
-    {
-      id: 4,
-      title: "Chocolate Lava Cake",
-      category: "DESSERT",
-      timeAgo: "1 MONTH AGO",
-      rating: 5.0,
-      ratingCount: 32,
-      image: "https://placehold.co/400x400",
-      isPublished: false,
-    },
-  ])
+const PersonalRecipes = ({user}) => {
+  const naviagate = useNavigate();
+  const [publishedRecipes, setPublishedRecipes] = useState([]);
+  const [pendingRecipes, setPendingRecipes] = useState([]);
+  useEffect(() => {
+    const fetchPersonalRecipes = async () => {
+      try {
+        const response = await getUserRecipes(user.uid);
+        const publicRecipes = response.filter(recipe => recipe.status === 'public');
+        const pendingRecipes = response.filter(recipe => recipe.status === 'pending' || recipe.status === 'reject');
+        setPublishedRecipes(publicRecipes);
+        setPendingRecipes(pendingRecipes);
+      } catch (error) {
+        console.error('Error fetching personal recipes:', error);
+      }
+    }
+    fetchPersonalRecipes()
+  }, [])
 
   const handleCreateRecipe = () => {
     naviagate('/recipe-form');
-    console.log("Create new recipe")
   }
 
   return (
@@ -69,19 +42,30 @@ const PersonalRecipes = () => {
         Manage your personal recipes. You can create, edit, and publish your own recipes to share with the community.
       </p>
 
-      {personalRecipes.length > 0 ? (
+      {publishedRecipes.length > 0 || pendingRecipes.length > 0 ? (
         <>
           <div className="ppage-recipe-section">
-            <h2>Published Recipes</h2>
+            <h2 className="ppage-recipe-header">Published Recipes</h2>
             <div className="ppage-recipes-grid">
-              {personalRecipes
-                .filter((recipe) => recipe.isPublished)
+              {publishedRecipes
                 .map((recipe) => (
                   <div key={recipe.id} className="ppage-recipe-card-wrapper">
-                    <RecipeCard variant="latest" recipe={recipe} />
+                    <AdminRecipeCard recipe={recipe} />
                     <div className="ppage-recipe-actions">
-                      <button className="ppage-recipe-action-btn">Edit</button>
-                      <button className="ppage-recipe-action-btn ppage-recipe-action-danger">Delete</button>
+                    </div>
+                  </div>
+                ))}
+            </div>
+          </div>
+
+          <div className="ppage-recipe-section">
+            <h2 className="ppage-recipe-header">Pending Recipes</h2>
+            <div className="ppage-recipes-grid">
+              {pendingRecipes
+                .map((recipe) => (
+                  <div key={recipe.id} className="ppage-recipe-card-wrapper">
+                    <AdminRecipeCard recipe={recipe} />
+                    <div className="ppage-recipe-actions">
                     </div>
                   </div>
                 ))}

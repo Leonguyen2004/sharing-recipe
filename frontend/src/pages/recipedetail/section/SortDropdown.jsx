@@ -2,7 +2,7 @@
 import { X } from "lucide-react"
 import styles from "./ReviewsSection.module.css"
 
-const SortDropdown = ({ isOpen, onClose, sortOption, setSorting }) => {
+const SortDropdown = ({ isOpen, onClose, sortOrder, setSortOrder }) => {
   if (!isOpen) return null
 
   return (
@@ -17,7 +17,7 @@ const SortDropdown = ({ isOpen, onClose, sortOption, setSorting }) => {
       <div
         className={styles.dropdownItem}
         onClick={() => {
-          setSorting("newest")
+          setSortOrder("desc")
           onClose()
         }}
       >
@@ -27,7 +27,7 @@ const SortDropdown = ({ isOpen, onClose, sortOption, setSorting }) => {
             id="newest"
             name="sort"
             className={styles.radio}
-            checked={sortOption === "newest"}
+            checked={sortOrder === "desc"}
             onChange={() => {}}
           />
           <label htmlFor="newest">Newest first</label>
@@ -37,7 +37,7 @@ const SortDropdown = ({ isOpen, onClose, sortOption, setSorting }) => {
       <div
         className={styles.dropdownItem}
         onClick={() => {
-          setSorting("oldest")
+          setSortOrder("asc")
           onClose()
         }}
       >
@@ -47,7 +47,7 @@ const SortDropdown = ({ isOpen, onClose, sortOption, setSorting }) => {
             id="oldest"
             name="sort"
             className={styles.radio}
-            checked={sortOption === "oldest"}
+            checked={sortOrder === "asc"}
             onChange={() => {}}
           />
           <label htmlFor="oldest">Oldest first</label>

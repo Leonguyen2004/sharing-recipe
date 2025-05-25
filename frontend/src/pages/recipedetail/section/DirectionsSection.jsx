@@ -35,13 +35,13 @@ const Directions = ({ recipe }) => {
       </div>
       
       <div className="rdpage-directions-footer">
-        <IconButton
+        {/* <IconButton
           icon={<Utensils size={18} />} 
           variant="primary"
           size="fullwidth"
         >
           I MADE IT
-        </IconButton>
+        </IconButton> */}
         
         {/* <IconButton 
           icon={<Printer size={18} />} 

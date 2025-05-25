@@ -5,12 +5,14 @@ import { onAuthStateChanged, onIdTokenChanged } from "firebase/auth"
 import { auth } from "../firebase/config"
 import { verifyToken } from "../services/authService"
 import { setToken } from "../services/tokenService"
+import { getUserProfile } from "../services/userService"
 
 const AuthContext = createContext()
 export const useAuth = () => useContext(AuthContext)
 
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null)
+  const [userRole, setUserRole] = useState("")
   const [loading, setLoading] = useState(true)
 
   // Khi người dùng đăng nhập / đăng xuất
@@ -37,6 +39,20 @@ export const AuthProvider = ({ children }) => {
     return unsubscribe
   }, [])
 
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        const userProfile = await getUserProfile(currentUser.uid);
+        setUserRole(userProfile.role);
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+    if (currentUser) {
+      fetchUserProfile();
+    }
+  }, [currentUser])
+
   // Lắng nghe khi Firebase tự refresh token
   useEffect(() => {
     const unsubscribe = onIdTokenChanged(auth, async (user) => {
@@ -60,6 +76,7 @@ export const AuthProvider = ({ children }) => {
   const value = {
     currentUser,
     loading,
+    userRole
   }
 
   return <AuthContext.Provider value={value}>{!loading && children}</AuthContext.Provider>

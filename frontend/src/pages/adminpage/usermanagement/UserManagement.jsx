@@ -1,4 +1,4 @@
-import { Ban, CheckCircle, Eye } from 'lucide-react';
+import { Ban, BookOpen, CheckCircle, Clock, Eye } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAllUsers, updateUserBanStatus } from '../../../services/userService';
@@ -12,31 +12,92 @@ const UserManagement = () => {
   const [showBanModal, setShowBanModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [users, setUsers] = useState([]);
+  const [pagination, setPagination] = useState({});
   const [loading, setLoading] = useState(false);
+  const [selectedFilters, setSelectedFilters] = useState({
+    sortBy: 'createdAt',
+    sortOrder: 'desc'
+  });
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
+  const [showBanUsers, setShowBanUsers] = useState(false);
 
+  const fetchMoreUsers = async () => {
+    try {
+      const params = {
+        searchTerm,
+        limit: "2",
+        sortBy: "createdAt",
+        sortOrder: "desc",
+        banned: showBanUsers
+      }
+      if (pagination.hasNext) {
+        params.lastDocumentId = pagination.lastDocumentId
+      }
+      if (selectedFilters.sortBy) {
+        params.sortBy = selectedFilters.sortBy
+      }
+      if (selectedFilters.sortOrder) {
+        params.sortOrder = selectedFilters.sortOrder
+      }
+      const response = await getAllUsers(params);
+      setUsers(prev => [...prev, ...response.data]);
+      setPagination(response.pagination)
+    } catch(error) {
+      console.log("error fetch search data", error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // Fetch all recipes
   useEffect(() => {
     const fetchUsers = async () => {
+      console.log("fectch data");
+      
       try {
-        setLoading(true);
-        const usersData = await getAllUsers();
-        setUsers(usersData);
-      } catch (error) {
-        console.error('Error fetching users:', error);
+        const params = {
+          searchTerm,
+          limit: "2",
+          sortBy: "createdAt",
+          sortOrder: "desc",
+          banned: showBanUsers
+        }
+        if (selectedFilters.sortBy) {
+          params.sortBy = selectedFilters.sortBy
+        }
+        if (selectedFilters.sortOrder) {
+          params.sortOrder = selectedFilters.sortOrder
+        }
+        const response = await getAllUsers(params);
+        setUsers(response.data);
+        setPagination(response.pagination)
+      } catch(error) {
+        console.log("error fetch search data", error);
       } finally {
         setLoading(false);
       }
-    };
+    }
 
     fetchUsers();
-  }, []);
+  }, [selectedFilters, debouncedSearchTerm, showBanUsers]);
 
-  const filteredUsers = users.filter(user => 
-    user.displayName?.toLowerCase().includes(searchTerm.toLowerCase()) || 
-    user.email?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 1000); // Chờ 500ms sau khi người dùng ngừng gõ
+
+    return () => clearTimeout(handler);
+  }, [searchTerm]);
 
   const handleSearch = (term) => {
     setSearchTerm(term);
+  };
+
+  const handleSort = (sortBy, sortOrder) => {
+    setSelectedFilters({
+      sortBy,
+      sortOrder
+    })
   };
 
   const handleBanClick = (user) => {
@@ -75,6 +136,37 @@ const UserManagement = () => {
       
       <div className="adpage-search-controls">
         <SearchBar placeholder="Search users..." onSearch={handleSearch} />
+
+        <div className="adpage-sort-controls">
+          <button 
+            className={`adpage-sort-btn ${selectedFilters.sortBy === 'createdAt' && selectedFilters.sortOrder === 'desc' ? 'adpage-active' : ''}`} 
+            onClick={() => handleSort('createdAt', 'desc')}
+          >
+            <Clock size={16} />
+            Newest
+          </button>
+          <button 
+            className={`adpage-sort-btn ${selectedFilters.sortBy === 'createdAt' && selectedFilters.sortOrder === 'asc' ? 'adpage-active' : ''}`} 
+            onClick={() => handleSort('createdAt', 'asc')}
+          >
+            <Clock size={16} />
+            Oldest
+          </button>
+          <button 
+            className={`adpage-sort-btn ${selectedFilters.sortBy === 'recipeCount' && selectedFilters.sortOrder === 'desc' ? 'adpage-active' : ''}`} 
+            onClick={() => handleSort('recipeCount', 'desc')}
+          >
+            <BookOpen size={16} />
+            Most Recipes
+          </button>
+          <button 
+            className={`adpage-sort-btn ${showBanUsers === true && selectedFilters.sortOrder === 'desc' ? 'adpage-active' : ''}`} 
+            onClick={() => setShowBanUsers(!showBanUsers)}
+          >
+            <BookOpen size={16} />
+            Banned Users
+          </button>
+        </div>
       </div>
 
       <div className="users-table-container">
@@ -84,16 +176,18 @@ const UserManagement = () => {
               <th>ID</th>
               <th>Name</th>
               <th>Email</th>
+              <th>Recipe</th>
               <th>Status</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            {filteredUsers.map(user => (
+            {users.map(user => (
               <tr key={user.id} className={user.banned ? 'banned-user' : ''}>
                 <td>{user.id}</td>
                 <td>{user.displayName || 'N/A'}</td>
                 <td>{user.email}</td>
+                <td>{user.recipeCount || 0}</td>
                 <td>
                   <span className={`status-badge ${user.banned ? 'banned' : 'active'}`}>
                     {user.banned ? 'Banned' : 'Active'}
@@ -122,6 +216,14 @@ const UserManagement = () => {
           </tbody>
         </table>
       </div>
+
+      {pagination.hasNext && (
+        <div className='adpage-loadmore-container'>
+          <button className='adpage-loadmore-button' onClick={fetchMoreUsers}>
+            Load More
+          </button>
+        </div>
+      )}
 
       <Modal 
         isOpen={showBanModal} 

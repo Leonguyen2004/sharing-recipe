@@ -78,15 +78,6 @@ const RecipeDetail = () => {
     fetchStats();
   }, []);
 
-  useEffect(() => {
-    const fetchReviewsByRecipeId = async () => {
-      const reviewsData = await getReviewsByRecipe(recipeId);
-      setReviews(reviewsData);
-    }
-
-    fetchReviewsByRecipeId() 
-  }, [])
-
   if (loading) {
     return <div className="rdpage-container">Đang tải...</div>;
   }

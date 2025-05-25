@@ -1,0 +1,90 @@
+.filterPanel {
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .filterSection {
+    margin-bottom: 20px;
+  }
+  
+  .filterSection h3 {
+    margin: 0 0 12px 0;
+    font-size: 18px;
+    color: #333;
+    font-weight: 600;
+  }
+  
+  .categoryList {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 8px;
+  }
+  
+  .categoryItem {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 4px 0;
+  }
+  
+  .categoryItem input {
+    margin-right: 8px;
+  }
+  
+  .sortOptions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .sortOption {
+    padding: 8px 16px;
+    background-color: #f0f0f0;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .sortOption:hover {
+    background-color: #e0e0e0;
+  }
+  
+  .sortOption.active {
+    background-color: #e74c3c;
+    color: white;
+  }
+  
+  .filterActions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+  }
+  
+  .applyFilterButton {
+    padding: 10px 20px;
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.2s;
+  }
+  
+  .applyFilterButton:hover {
+    background-color: #db3623;
+  }
+  
+  @media (max-width: 768px) {
+    .categoryList {
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    }
+    
+    .sortOptions {
+      flex-direction: column;
+    }
+  }

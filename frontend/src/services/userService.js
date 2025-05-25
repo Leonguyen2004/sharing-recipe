@@ -3,10 +3,11 @@ import { getToken } from "./tokenService";
 const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000/api";
 
 // Get all user
-export const getAllUsers = async () => {
+export const getAllUsers = async (params) => {
     try {
         const token = getToken();
-        const response = await fetch(`${API_URL}/users/admin/all`, {
+        const queryString = new URLSearchParams(params).toString();
+        const response = await fetch(`${API_URL}/users/admin/all${queryString ? `?${queryString}` : ''}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -48,7 +49,7 @@ export const updateUserBanStatus = async (uid, bannedStatus) => {
 export const getUserProfile = async (uid) => {
     try {
         const token = getToken();
-        console.log(token);
+        //console.log(token);
         
         const response = await fetch(`${API_URL}/users/${uid}`, {
             headers: {

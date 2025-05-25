@@ -16,8 +16,6 @@ export const getAllCategories = async () => {
 
 // Thêm category mới
 export const addCategory = async (categoryData) => {
-  console.log("cho nay van in ra dc");
-  
   try {
     const docRef = await db.collection('categories').add({
       ...categoryData,

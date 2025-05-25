@@ -3,9 +3,10 @@ import { getToken } from "./tokenService";
 const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000/api";
 
 // Lấy tất cả đánh giá
-export const getAllReviews = async () => {
+export const getAllReviews = async (params = {}) => {
   try {
-    const response = await fetch(`${API_URL}/reviews`);
+    const queryString = new URLSearchParams(params).toString();
+    const response = await fetch(`${API_URL}/reviews${queryString ? `?${queryString}` : ''}`);
     if (!response.ok) {
       throw new Error('Failed to fetch reviews');
     }
@@ -65,9 +66,10 @@ export const addReview = async (recipeId, reviewData) => {
 };
 
 // Lấy đánh giá theo công thức
-export const getReviewsByRecipe = async (recipeId) => {
+export const getReviewsByRecipe = async (params = {}) => {
   try {
-    const response = await fetch(`${API_URL}/reviews/recipe/${recipeId}`);
+    const queryString = new URLSearchParams(params).toString();
+    const response = await fetch(`${API_URL}/reviews/recipe/${queryString ? `?${queryString}` : ''}`);
     if (!response.ok) {
       throw new Error('Failed to fetch reviews by recipe');
     }

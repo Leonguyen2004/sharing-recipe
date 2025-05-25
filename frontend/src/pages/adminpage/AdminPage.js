@@ -31,8 +31,6 @@ const AdminPage = () => {
         setLoading(true)
         const userProfile = await getUserProfile(currentUser.uid);
         setUserData(userProfile);
-        console.log(userProfile);
-        
       } catch(error) {
         console.error('Error fetch user profile:', error);
         throw error;

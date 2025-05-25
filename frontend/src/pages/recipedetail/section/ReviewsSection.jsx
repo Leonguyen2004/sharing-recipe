@@ -1,39 +1,72 @@
 "use client"
 
-import { useEffect, useState } from "react"
 import { ArrowUpDown, Filter } from "lucide-react"
+import { useEffect, useState } from "react"
+import Review from "../../../components/review/Review"
 import ReviewForm from "../../../components/review/ReviewForm"
 import ReviewStats from "../../../components/review/ReviewStats"
-import Review from "../../../components/review/Review"
-import { getReviewByUserAndRecipe } from "../../../services/reviewService"
-import useReviewFilters from "../../../hooks/useReviewFilters"
-import SortDropdown from "./SortDropdown"
+import { getReviewByUserAndRecipe, getReviewsByRecipe } from "../../../services/reviewService"
 import FilterDropdown from "./FilterDropdown"
 import styles from "./ReviewsSection.module.css"
+import SortDropdown from "./SortDropdown"
 
-const ReviewsSection = ({ recipe, stats, distribution, reviews }) => {
+const ReviewsSection = ({ recipe, stats, distribution }) => {
   const [hasReview, setHasReview] = useState(false)
   const [isEditReview, setIsEditReview] = useState(false)
   const [myReview, setMyReview] = useState(null)
   const [loading, setLoading] = useState(false)
   const [isAddReview, setIsAddReview] = useState(false)
+  const [reviews, setReviews] = useState([])
+  const [pagination, setPagination] = useState({});
 
   // Sort and filter state
   const [isSortOpen, setIsSortOpen] = useState(false)
   const [isFilterOpen, setIsFilterOpen] = useState(false)
+  const [ratingFilters, setRatingFilters] = useState([])
+  const [showWithImages, setShowWithImages] = useState(false)
+  const [sortOrder, setSortOrder] = useState("desc")
+  // get reviews data
+  useEffect(() => {
+    const fetchReviewsByRecipeId = async () => {
+      try {
+        const params = {
+          recipeId: recipe.id,
+          starsFilter: ratingFilters,
+          hasImageOnly: showWithImages,
+          sortOrder: sortOrder,
+          limit: 1,
+        }
+        const response = await getReviewsByRecipe(params);
+        setReviews(response.data);
+        setPagination(response.pagination);
+      } catch (error) {
+        console.error("Error fetching reviews data:", error)
+      }
+    }
 
-  // Use our custom hook
-  const {
-    filteredAndSortedReviews,
-    sortOption,
-    ratingFilters,
-    showWithImages,
-    toggleRatingFilter,
-    toggleShowWithImages,
-    setSorting,
-    resetFilters,
-  } = useReviewFilters(reviews || [])
+    fetchReviewsByRecipeId() 
+  }, [ratingFilters, showWithImages, sortOrder])
 
+  // Get more reviews
+  const fetchMoreReviews = async () => {
+    try {
+      const params = {
+        recipeId: recipe.id,
+        starsFilter: ratingFilters,
+        hasImageOnly: showWithImages,
+        sortOrder: sortOrder,
+        limit: 1,
+        startAfter: pagination.lastDocId
+      }
+      const response = await getReviewsByRecipe(params);
+      setReviews(prev => [...prev, ...response.data]);
+      setPagination(response.pagination);
+    } catch (error) {
+      console.error("Error fetching reviews data:", error)
+    }
+  }
+
+  // get review personal
   useEffect(() => {
     const fetchMyReview = async () => {
       try {
@@ -100,13 +133,13 @@ const ReviewsSection = ({ recipe, stats, distribution, reviews }) => {
 
       <div className={styles.reviewsFilters}>
         <h3 className={styles.filtersTitle}>
-          {filteredAndSortedReviews.length} Reviews
+          {reviews.length} Reviews
           {(ratingFilters.length > 0 || showWithImages) && " (filtered)"}
         </h3>
         <div className={styles.filtersActions}>
           <div className={styles.dropdown}>
             <button
-              className={`${styles.filterButton} ${sortOption !== "newest" ? styles.activeFilter : ""}`}
+              className={`${styles.filterButton} ${sortOrder !== "desc" ? styles.activeFilter : ""}`}
               onClick={toggleSortDropdown}
             >
               <ArrowUpDown size={16} />
@@ -115,8 +148,8 @@ const ReviewsSection = ({ recipe, stats, distribution, reviews }) => {
             <SortDropdown
               isOpen={isSortOpen}
               onClose={() => setIsSortOpen(false)}
-              sortOption={sortOption}
-              setSorting={setSorting}
+              sortOrder={sortOrder}
+              setSortOrder={setSortOrder}
             />
           </div>
 
@@ -132,22 +165,29 @@ const ReviewsSection = ({ recipe, stats, distribution, reviews }) => {
               isOpen={isFilterOpen}
               onClose={() => setIsFilterOpen(false)}
               ratingFilters={ratingFilters}
+              setRatingFilters={setRatingFilters}
               showWithImages={showWithImages}
-              toggleRatingFilter={toggleRatingFilter}
-              toggleShowWithImages={toggleShowWithImages}
-              resetFilters={resetFilters}
+              setShowWithImages={setShowWithImages}
             />
           </div>
         </div>
       </div>
 
       <div id="review-list" className="rvcom-reviews-list">
-        {filteredAndSortedReviews.map((review) => (
+        {reviews.map((review) => (
           <Review key={review.id} myReview={review} />
         ))}
 
-        {filteredAndSortedReviews.length === 0 && <p>No reviews match your current filters.</p>}
+        {reviews.length === 0 && <p>No reviews match your current filters.</p>}
       </div>
+
+      {pagination.hasNext && (
+        <div className={styles.loadMoreContainer}>
+          <button className={styles.loadMoreButton} onClick={fetchMoreReviews}>
+            Load More
+          </button>
+        </div>
+      )}
     </div>
   )
 }

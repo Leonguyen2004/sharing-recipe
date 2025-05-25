@@ -6,21 +6,16 @@ import { CategoryProvider } from "./context/CategoryContext";
 import { SavedRecipeProvider } from './context/SavedRecipeContext';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
-import { RecipesProvider } from './context/RecipesContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <AuthProvider>
-      <RecipesProvider>
-        <SavedRecipeProvider>
-          <CategoryProvider>
-            <App/>
-          </CategoryProvider>
-        </SavedRecipeProvider>
-      </RecipesProvider>
-    </AuthProvider>
-  </React.StrictMode>
+  <AuthProvider>
+    <SavedRecipeProvider>
+      <CategoryProvider>
+        <App/>
+      </CategoryProvider>
+    </SavedRecipeProvider>
+  </AuthProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function

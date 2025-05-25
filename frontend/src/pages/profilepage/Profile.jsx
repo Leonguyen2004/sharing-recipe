@@ -7,6 +7,7 @@ import "./Profile.css"
 import PersonalInfo from "./components/PersonalInfo"
 import PersonalRecipes from "./components/PersonalRecipes"
 import ProfileSettings from "./components/ProfileSettings"
+import { CircleUser } from "lucide-react"
 
 const Profile = () => {
   const [activeTab, setActiveTab] = useState("personal-info")
@@ -44,7 +45,11 @@ const Profile = () => {
         <div className="ppage-sidebar">
           <div className="ppage-user-info">
             <div className="ppage-avatar">
-              <img src={userData.photoURL} alt="User avatar" />
+              {userData.photoURL? (
+                <img src={userData.photoURL} alt="User" />
+              ) : (
+                <CircleUser size={50} />
+              )}
             </div>
             <div className="ppage-user-details">
               <h2>Hi, {userData.email}</h2>

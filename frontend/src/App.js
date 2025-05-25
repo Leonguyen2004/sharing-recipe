@@ -7,11 +7,13 @@ import RecipeForm from "./pages/recipeform/RecipeForm";
 import HomePage from "./pages/homepage/HomePage";
 import Profile from "./pages/profilepage/Profile";
 import Favorites from "./pages/favorites/Favorites";
-import Search from "./pages/searchpage/Search";
+import SearchPage from "./pages/searchpage/SearchPage";
 import AdminPage from "./pages/adminpage/AdminPage";
 import CategoryPage from "./pages/categorypage/CategoryPage";
 import CategoryAllPage from "./pages/categorypage/CategoryAllPage";
 import Account from "./pages/account/Account";
+import LoginPage from "./pages/authen/LoginPage";
+import RegisterPage from "./pages/authen/RegisterPage";
 
 // Tạo layout chính cho các trang thường
 const MainLayout = () => (
@@ -27,7 +29,7 @@ const MainLayout = () => (
       <Route path="/recipe/:recipeId" element={<RecipeDetail />} />
       <Route path="/profile" element={<Profile />} />
       <Route path="/favorites" element={<Favorites />} />
-      <Route path="/search" element={<Search />} />
+      <Route path="/search" element={<SearchPage />} />
       <Route path="/category/all" element={<CategoryAllPage />} />
       <Route path="/category/:categoryId" element={<CategoryPage />} />
       <Route path="/account/:userId" element={<Account />} />
@@ -42,6 +44,8 @@ const AdminLayout = () => (
 );
 
 function App() {
+  console.log("Render in App.js");
+  
   return (
     <BrowserRouter>
         <Routes>
@@ -49,6 +53,8 @@ function App() {
           <Route path="/admin/*" element={<AdminLayout />} />
           
           {/* Tất cả các route khác sử dụng MainLayout */}
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
           <Route path="/*" element={<MainLayout />} />
         </Routes>
       </BrowserRouter>

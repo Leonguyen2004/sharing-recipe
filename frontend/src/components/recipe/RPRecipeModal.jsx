@@ -23,7 +23,6 @@ export const RPRecipeModal = ({ recipe, onClose, isOpen, modalContainerClass }) 
   const navigate = useNavigate();
   const [saveCount, setSaveCount] = useState(0);
   const [rating, setRating] = useState(0);
- 
 
   const formatTime = (minutes) => {
     if (minutes > 60) {
@@ -193,12 +192,12 @@ export const RPRecipeModal = ({ recipe, onClose, isOpen, modalContainerClass }) 
 
               <div className={styles.stats}>
                 <div className={styles.rating}>
-                  <Star className={styles.starIcon} size={18} />
-                  <span className={styles.ratingValue}>{rating || 0}</span>
+                  <Star size={18} className={styles.starIcon}/>
+                  <span className={styles.value}>{recipe.averageRating || 0}</span>
                 </div>
                 <div className={styles.saves}>
                   <Bookmark size={18} className={styles.bookmarkIcon} />
-                  <span>{saveCount || 0} saves</span>
+                  <span className={styles.value}>{recipe.saveCount || 0} saves</span>
                 </div>
                 <div className={styles.cookTime}>
                   <Clock size={18} className={styles.clockIcon} />

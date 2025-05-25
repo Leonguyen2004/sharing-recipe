@@ -1,0 +1,182 @@
+.container {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+}
+
+.formContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2rem;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.imageContainer {
+  flex: 1;
+  background-size: cover;
+  background-image: url("../../assets/img/pexels-janetrangdoan-1099680.jpg");
+  background-position: center;
+  position: relative;
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .imageContainer {
+    display: block;
+  }
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  color: white;
+  text-align: center;
+}
+
+.logoContainer {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-left: 0.5rem;
+  color: #e74c3c;
+}
+
+.subtitle {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+.form {
+  width: 100%;
+}
+
+.inputGroup {
+  margin-bottom: 1.5rem;
+}
+
+.label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.inputIcon {
+  position: absolute;
+  left: 1rem;
+  color: #777;
+}
+
+.input {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #e74c3c;
+}
+
+.passwordToggle {
+  position: absolute;
+  right: 1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #777;
+}
+
+.passwordToggle:hover {
+  color: #e74c3c;
+}
+
+.submitButton {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.submitButton:hover {
+  background-color: #c0392b;
+}
+
+.submitButton:disabled {
+  background-color: #e57373;
+  cursor: not-allowed;
+}
+
+.footer {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.link {
+  color: #e74c3c;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+.errorMessage {
+  background-color: #ffebee;
+  color: #c62828;
+  padding: 0.75rem;
+  border-radius: 4px;
+  margin-bottom: 1.5rem;
+  border-left: 4px solid #c62828;
+}
+
+.welcomeText {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.welcomeSubtext {
+  font-size: 1.25rem;
+  opacity: 0.9;
+}
+
+.passwordHint {
+  font-size: 0.8rem;
+  color: #777;
+  margin-top: 0.5rem;
+}

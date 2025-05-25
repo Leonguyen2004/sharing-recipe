@@ -33,11 +33,32 @@ const userController = {
 
   getAllUsers: async (req, res) => {
     try {
-      const users = await userService.getAllUsers();
-      res.json(users);
+      const { 
+        searchTerm,
+        sortBy,
+        sortOrder,
+        lastDocumentId
+      } = req.query;
+
+      const limit = Math.min(parseInt(req.query.limit) || 10, 100);
+
+      const banned = req.query.banned === 'true' ? true : false;
+
+      const result = await userService.getAllUsers(searchTerm, banned, sortBy, sortOrder, limit, lastDocumentId);
+
+      res.status(200).json({
+        data: result.users,
+        pagination: {
+          lastDocumentId: result.lastDocumentId,
+          hasNext: result.hasNext,
+        }
+      });
     } catch (error) {
-      console.error('Error fetching users:', error);
-      res.status(500).json({ error: 'Failed to fetch users' });
+      console.error('Error getting users:', error);
+      res.status(500).json({ 
+        success: false, 
+        error: error.message 
+      });
     }
   },
 

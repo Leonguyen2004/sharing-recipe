@@ -1,5 +1,9 @@
 .container {
   position: relative;
+  max-width: 300px;
+  width: 100%;
+  max-height: 600px;
+  box-sizing: border-box;
 }
 
 .recipeModal {
@@ -12,11 +16,15 @@
 
 .recipeCard {
   position: relative;
-  overflow: hidden;
+  overflow: visible;
+  max-width: 300px;
+  width: 100%;
+  max-height: 600px;
   transition: transform 0.3s;
 }
 
 .imageContainer {
+  position: relative;
   width: 100%;
   aspect-ratio: 16 / 9;
   overflow: hidden;
@@ -24,9 +32,42 @@
   border-radius: 10px;
 }
 
+.infoBoxContainer {
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+  display: flex;
+  justify-content: start;
+  padding: 0 12px;
+  box-sizing: border-box;
+  border: none;
+}
+
+.infoBox {
+  padding: 3px 12px;
+  font-size: 14px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  backdrop-filter: blur(4px);
+  border-radius: 12px 12px 0 0;
+}
+
+.starsBox {
+  background: rgb(168, 167, 164); /* Màu vàng cho sao */
+}
+
+.savesBox {
+  display: flex;
+  gap: 2px;
+  background: rgba(33, 150, 243, 0.9); /* Màu xanh cho lượt lưu */
+}
+
 .vertical .imageContainer {
-  width: 200px;
-  height: 275px;
+  width: 100%;
+  aspect-ratio: 12 / 16;
   overflow: hidden;
   cursor: pointer;
   border-radius: 10px;

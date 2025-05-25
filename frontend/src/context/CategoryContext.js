@@ -17,12 +17,15 @@ export const CategoryProvider = ({ children }) => {
 
   useEffect(() => {
     const fetchCategories = async () => {
+      console.log("fetch cate data");
+      
       try {
         const categoriesData = await getAllCategories();
         const simplifiedCategories = categoriesData.map(category => ({
           id: category.id,
           name: category.name,
           type: category.type,
+          imageUrl: category.imageUrl,
         }));
         setCategories(simplifiedCategories);
       } catch (error) {
