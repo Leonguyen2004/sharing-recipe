@@ -1,3 +1,4 @@
+import { LogIn } from "lucide-react";
 import { getToken } from "./tokenService";
 // API base URL
 const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000/api";
@@ -100,6 +101,7 @@ export const addRecipe = async (recipeData) => {
       },
       body: JSON.stringify(recipeData)
     });
+    console.log(JSON.stringify(recipeData));
     
     if (!response.ok) {
       throw new Error('Failed to add recipe');

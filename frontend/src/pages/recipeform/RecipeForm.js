@@ -183,10 +183,10 @@ const RecipeForm = () => {
       
       if (isEditMode) {
         await updateRecipe(id, recipeData);
-        navigate('/admin/recipes');
+        navigate(-1);
       } else {
         await addRecipe(recipeData);
-        navigate("/home");
+        navigate(-1);
       }
     } catch (error) {
       console.error('Error saving recipe:', error);

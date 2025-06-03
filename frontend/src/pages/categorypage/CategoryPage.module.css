@@ -43,6 +43,8 @@
 
 .recipeSection {
   max-width: 1200px;
+  min-height: 400px;
+
   padding: 20px;
   margin: 0 auto;
 }

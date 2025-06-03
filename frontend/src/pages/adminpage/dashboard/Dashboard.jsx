@@ -1,34 +1,57 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { UserCheck, UserX, FileText, MessageSquare, Award, BookOpen, Users, Eye } from 'lucide-react';
 import './Dashboard.css';
+import { getAdminDashboardStats } from '../../../services/adminService';
 
 const Dashboard = () => {
-  // Mock data - would be replaced with real API calls in production
-  const stats = {
+  const [stats, setStats] = useState({
     recipes: {
-      total: 2356,
-      pending: 78,
-      popular: {
-        name: "Italian Pasta",
-        rating: 4.9,
-        saves: 845
-      }
+      total: 0,
+      pending: 0,
+      mostSaved: null,
+      weekly: 0,
+      monthly: 0
     },
     users: {
-      active: 1267,
-      banned: 43,
-      topContributor: {
-        name: "Jamie Oliver",
-        recipes: 37
-      }
+      total: 0,
+      banned: 0,
+      topContributor: 'No data'
     },
-    activity: {
-      visits: 12589,
-      weeklyPosts: 87,
-      monthlyPosts: 342,
-      comments: 1245
+    reviews: {
+      total: 0
     }
-  };
+  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        setLoading(true);
+        const response = await getAdminDashboardStats();
+        if (response.success) {
+          setStats(response.data);
+        } else {
+          setError('Failed to fetch dashboard stats');
+        }
+      } catch (error) {
+        console.error('Error fetching dashboard stats:', error);
+        setError('Error loading dashboard data');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStats();
+  }, []);
+
+  if (loading) {
+    return <div className="adpage-loading">Loading dashboard data...</div>;
+  }
+
+  if (error) {
+    return <div className="adpage-error">{error}</div>;
+  }
 
   return (
     <div className="adpage-dashboard">
@@ -66,11 +89,10 @@ const Dashboard = () => {
                 <Award size={24} />
               </div>
               <div className="adpage-stat-info">
-                <h3>Most Popular Recipe</h3>
-                <p>{stats.recipes.popular.name}</p>
+                <h3>Most Saved Recipe</h3>
+                <p>{stats.recipes.mostSaved?.title || 'No data'}</p>
                 <div className="adpage-stat-details">
-                  <span>Rating: {stats.recipes.popular.rating}</span>
-                  <span>Saves: {stats.recipes.popular.saves}</span>
+                  <span>Saves: {stats.recipes.mostSaved?.saveCount || 0}</span>
                 </div>
               </div>
             </div>
@@ -88,8 +110,8 @@ const Dashboard = () => {
                 <UserCheck size={24} />
               </div>
               <div className="adpage-stat-info">
-                <h3>Active Users</h3>
-                <p>{stats.users.active}</p>
+                <h3>Total Users</h3>
+                <p>{stats.users.total}</p>
               </div>
             </div>
             <div className="adpage-stat-card">
@@ -107,10 +129,7 @@ const Dashboard = () => {
               </div>
               <div className="adpage-stat-info">
                 <h3>Top Contributor</h3>
-                <p>{stats.users.topContributor.name}</p>
-                <div className="adpage-stat-details">
-                  <span>Recipes: {stats.users.topContributor.recipes}</span>
-                </div>
+                <p>{stats.users.topContributor}</p>
               </div>
             </div>
           </div>
@@ -123,12 +142,12 @@ const Dashboard = () => {
           </h2>
           <div className="adpage-stats-cards">
             <div className="adpage-stat-card">
-              <div className="adpage-stat-icon adpage-icon-visits">
-                <Eye size={24} />
+              <div className="adpage-stat-icon adpage-icon-comments">
+                <MessageSquare size={24} />
               </div>
               <div className="adpage-stat-info">
-                <h3>Page Visits</h3>
-                <p>{stats.activity.visits}</p>
+                <h3>Total Reviews</h3>
+                <p>{stats.reviews.total}</p>
               </div>
             </div>
             <div className="adpage-stat-card">
@@ -138,18 +157,9 @@ const Dashboard = () => {
               <div className="adpage-stat-info">
                 <h3>New Recipes</h3>
                 <div className="adpage-stat-details">
-                  <span>This Week: {stats.activity.weeklyPosts}</span>
-                  <span>This Month: {stats.activity.monthlyPosts}</span>
+                  <span>This Week: {stats.recipes.weekly}</span>
+                  <span>This Month: {stats.recipes.monthly}</span>
                 </div>
-              </div>
-            </div>
-            <div className="adpage-stat-card">
-              <div className="adpage-stat-icon adpage-icon-comments">
-                <MessageSquare size={24} />
-              </div>
-              <div className="adpage-stat-info">
-                <h3>Comments</h3>
-                <p>{stats.activity.comments}</p>
               </div>
             </div>
           </div>

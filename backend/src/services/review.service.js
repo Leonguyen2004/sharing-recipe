@@ -3,21 +3,17 @@ import { updateRecipe } from './recipe.service.js';
 
 const REVIEWS_COLLECTION = 'reviews';
 const RECIPES_COLLECTION = 'recipes';
+const USERS_COLLECTION = 'users';
 
 // Lấy tất cả reviews
 export const getAllReviews = async ({
-  starsFilter,
   sortOrder,
   startAfter,
-  limit
+  limit,
+  lastDocumentId
 }) => {
   try {
     let reviewsRef = db.collection(REVIEWS_COLLECTION)
-
-    // Apply starFilter if provided (array of numbers)
-    if (starsFilter && Array.isArray(starsFilter) && starsFilter.length > 0) {
-      reviewsRef = reviewsRef.where('rating', 'in', starsFilter);
-    }
 
     // Apply sorting (default: createdAt, desc)
     if (sortOrder) {
@@ -26,7 +22,7 @@ export const getAllReviews = async ({
     
     // Apply pagination with startAfter
     if (startAfter) {
-      const lastDoc = await db.collection('reviews').doc(startAfter).get();
+      const lastDoc = await db.collection('reviews').doc(lastDocumentId).get();
       reviewsRef = reviewsRef.startAfter(lastDoc);
     }
 
@@ -44,18 +40,41 @@ export const getAllReviews = async ({
     // Cắt bỏ doc thừa dùng để check
     const results = hasNext ? allResults.slice(0, -1) : allResults;
 
+    // Lấy thông tin reviews
     const reviews = results.map(doc => ({
       id: doc.id,
       ...doc.data()
     }));
 
+    // Lấy thông tin author và recipe cho mỗi review
+    const reviewsWithDetails = await Promise.all(reviews.map(async (review) => {
+      // Lấy thông tin author
+      const authorDoc = await db.collection(USERS_COLLECTION).doc(review.authorId).get();
+      const authorData = authorDoc.data();
+
+      // Lấy thông tin recipe
+      const recipeDoc = await db.collection(RECIPES_COLLECTION).doc(review.recipeId).get();
+      const recipeData = recipeDoc.data();
+
+      return {
+        ...review,
+        author: {
+          photoURL: authorData?.photoURL || null,
+          displayName: authorData?.displayName || 'Unknown User'
+        },
+        recipe: {
+          title: recipeData?.title || 'Unknown Recipe'
+        }
+      };
+    }));
+
     return {
-      reviews,
+      reviews: reviewsWithDetails,
       hasNext: hasNext,
       lastDocId: reviews[reviews.length - 1]?.id,
     };
   } catch (error) {
-    console.error('Error getting reviews by recipe:', error);
+    console.error('Error getting reviews:', error);
     throw error;
   }
 };

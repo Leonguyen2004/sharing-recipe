@@ -5,8 +5,17 @@ const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000/api";
 // Lấy tất cả đánh giá
 export const getAllReviews = async (params = {}) => {
   try {
+    const token = getToken();
     const queryString = new URLSearchParams(params).toString();
-    const response = await fetch(`${API_URL}/reviews${queryString ? `?${queryString}` : ''}`);
+    const response = await fetch(`${API_URL}/reviews${queryString ? `?${queryString}` : ''}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      }
+    );
     if (!response.ok) {
       throw new Error('Failed to fetch reviews');
     }

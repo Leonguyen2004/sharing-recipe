@@ -1,88 +1,67 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Trash2, ChevronDown, ChevronUp } from 'lucide-react';
 import SearchBar from '../searchbar/Searchbar';
 import Modal from '../modal/Modal';
 import './CommentManagement.css';
-import Review from '../../../components/review/Review';
+import { formatTimestampToDateTime } from '../../../services/timeService';
+import { getAllReviews } from '../../../services/reviewService';
+import { CircleUser } from 'lucide-react';
+import { deleteReview } from '../../../services/reviewService';
 
 const CommentManagement = () => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [sortBy, setSortBy] = useState('newest');
+  const [sort, setSort] = useState({
+    sortBy: 'desc',
+    sortOrder: 'createdAt'
+  });
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [commentToDelete, setCommentToDelete] = useState(null);
+  const [reviews, setReviews] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(false);
+  const [lastDocumentId, setLastDocumentId] = useState(null);
 
-  // Mock data
-  const initialComments = [
-    {
-      id: 1,
-      recipeId: 101,
-      recipeName: 'Homemade Pizza',
-      user: {
-        id: 201,
-        name: 'John Doe',
-        avatar: 'https://randomuser.me/api/portraits/men/1.jpg'
-      },
-      text: 'This recipe is amazing! I made it for my family and they loved it. Will definitely make it again.',
-      date: new Date('2023-04-05')
-    },
-    {
-      id: 2,
-      recipeId: 102,
-      recipeName: 'Chocolate Cake',
-      user: {
-        id: 202,
-        name: 'Jane Smith',
-        avatar: 'https://randomuser.me/api/portraits/women/2.jpg'
-      },
-      text: 'The cake turned out to be too sweet for my taste, but everyone else enjoyed it.',
-      date: new Date('2023-04-01')
-    },
-    {
-      id: 3,
-      recipeId: 103,
-      recipeName: 'Chicken Curry',
-      user: {
-        id: 203,
-        name: 'Michael Johnson',
-        avatar: 'https://randomuser.me/api/portraits/men/3.jpg'
-      },
-      text: 'Great recipe but I recommend adding more spices if you like it hot!',
-      date: new Date('2023-04-10')
-    },
-    {
-      id: 4,
-      recipeId: 101,
-      recipeName: 'Homemade Pizza',
-      user: {
-        id: 204,
-        name: 'Emily Davis',
-        avatar: 'https://randomuser.me/api/portraits/women/4.jpg'
-      },
-      text: 'Perfect crust recipe. I added some garlic to the dough and it was delicious.',
-      date: new Date('2023-03-28')
-    },
-    {
-      id: 5,
-      recipeId: 104,
-      recipeName: 'Vegetable Stir Fry',
-      user: {
-        id: 205,
-        name: 'Robert Wilson',
-        avatar: 'https://randomuser.me/api/portraits/men/5.jpg'
-      },
-      text: 'Quick and healthy! I added some tofu for extra protein.',
-      date: new Date('2023-04-08')
+  const fetchReviews = async (isLoadMore = false) => {
+    try {
+      setLoading(true);
+      const params = {
+        sortOrder: sort.sortBy,
+        sortBy: sort.sortOrder,
+        limit: 10,
+        lastDocumentId: isLoadMore ? lastDocumentId : null
+      };
+
+      const response = await getAllReviews(params);
+      console.log(response);
+      
+      if (isLoadMore) {
+        setReviews(prev => [...prev, ...response.reviews]);
+      } else {
+        setReviews(response.data);
+      }
+      
+      setHasMore(response.hasNext);
+      setLastDocumentId(response.lastDocId);
+    } catch (error) {
+      console.error('Error fetching reviews:', error);
+    } finally {
+      setLoading(false);
     }
-  ];
+  };
 
-  const [comments, setComments] = useState(initialComments);
+  useEffect(() => {
+    fetchReviews();
+  }, [sort]);
 
   const handleSearch = (query) => {
     setSearchQuery(query);
   };
 
-  const handleSort = (sortType) => {
-    setSortBy(sortType);
+  const handleSort = (sortOrder) => {
+    setSort({
+      sortBy: sortOrder,
+      sortOrder: 'createdAt'
+    });
   };
 
   const openDeleteModal = (comment) => {
@@ -95,28 +74,35 @@ const CommentManagement = () => {
     setCommentToDelete(null);
   };
 
-  const handleDeleteComment = () => {
-    setComments(comments.filter(comment => comment.id !== commentToDelete.id));
-    closeDeleteModal();
+  const handleDeleteComment = async () => {
+    try {
+      await deleteReview(commentToDelete);
+      setReviews(reviews.filter(review => review.id !== commentToDelete));
+      closeDeleteModal();
+    } catch (error) {
+      console.error('Error deleting review:', error);
+      // Có thể thêm thông báo lỗi ở đây nếu cần
+    }
   };
 
-  const filteredComments = comments.filter(comment => {
+  const handleLoadMore = () => {
+    if (!loading && hasMore) {
+      fetchReviews(true);
+    }
+  };
+
+  const filteredReviews = reviews?.filter(review => {
+    if (!review || !review.author || !review.recipe) return false;
+    
     const matchesQuery = 
-      comment.user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      comment.recipeName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      comment.text.toLowerCase().includes(searchQuery.toLowerCase());
+      review.author.displayName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      review.recipe.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      review.content?.toLowerCase().includes(searchQuery.toLowerCase());
     
     return matchesQuery;
-  });
-
-  const sortedComments = [...filteredComments].sort((a, b) => {
-    if (sortBy === 'newest') {
-      return b.date - a.date;
-    } else if (sortBy === 'oldest') {
-      return a.date - b.date;
-    }
-    return 0;
-  });
+  }) || [];
+  console.log(reviews);
+  
 
   return (
     <div className="adpage-comment-management">
@@ -125,19 +111,19 @@ const CommentManagement = () => {
       </div>
       
       <div className="adpage-comment-controls">
-        <SearchBar placeholder="Search by user or recipe name..." onSearch={handleSearch} />
+        {/* <SearchBar placeholder="Search by user or recipe name..." onSearch={handleSearch} /> */}
         
         <div className="adpage-sort-controls">
           <button 
-            className={`adpage-sort-btn ${sortBy === 'newest' ? 'adpage-active' : ''}`} 
-            onClick={() => handleSort('newest')}
+            className={`adpage-sort-btn ${sort.sortBy === 'desc' ? 'adpage-active' : ''}`} 
+            onClick={() => handleSort('desc')}
           >
             <ChevronUp size={16} />
             Newest First
           </button>
           <button 
-            className={`adpage-sort-btn ${sortBy === 'oldest' ? 'adpage-active' : ''}`} 
-            onClick={() => handleSort('oldest')}
+            className={`adpage-sort-btn ${sort.sortBy === 'asc' ? 'adpage-active' : ''}`} 
+            onClick={() => handleSort('asc')}
           >
             <ChevronDown size={16} />
             Oldest First
@@ -146,30 +132,53 @@ const CommentManagement = () => {
       </div>
 
       <div className="adpage-comments-list">
-        {sortedComments.length > 0 ? (
-          sortedComments.map(comment => (
-            <div key={comment.id} className="adpage-comment-item">
-              <div className="adpage-comment-content">
-                <div className="adpage-recipe-name">{comment.recipeName}</div>
-                <div className="adpage-user-info">
-                  <img src={comment.user.avatar} alt={comment.user.name} className="adpage-user-avatar" />
-                  <span className="adpage-user-name">{comment.user.name}</span>
-                  <span className="adpage-comment-date">
-                    {comment.date.toLocaleDateString()}
-                  </span>
+        {filteredReviews.length > 0 ? (
+          <>
+            {filteredReviews.map(review => (
+              <div key={review.id} className="adpage-comment-item">
+                <div className="adpage-comment-content">
+                  <div className="adpage-recipe-name">{review.recipe.title}</div>
+                  <div className="adpage-user-info">
+                    {
+                      review.author.photoURL ? (
+                        <img 
+                          src={review.author.photoURL} 
+                          alt={review.author.displayName} 
+                          className="adpage-user-avatar" 
+                        />
+                      ) : (
+                        <CircleUser size={40} className="adpage-user-avatar" />
+                      )
+                    }
+                    <span className="adpage-user-name">{review.author.displayName}</span>
+                    <span className="adpage-comment-date">
+                      {formatTimestampToDateTime(review.createdAt)}
+                    </span>
+                  </div>
+                  <div className="adpage-comment-text">{review.comment}</div>
                 </div>
-                <div className="adpage-comment-text">{comment.text}</div>
+                <div className="adpage-comment-actions">
+                  <button 
+                    className="adpage-action-btn adpage-delete-btn" 
+                    onClick={() => openDeleteModal(review.id)}
+                  >
+                    <Trash2 size={18} />
+                  </button>
+                </div>
               </div>
-              <div className="adpage-comment-actions">
+            ))}
+            {hasMore && (
+              <div className="adpage-load-more">
                 <button 
-                  className="adpage-action-btn adpage-delete-btn" 
-                  onClick={() => openDeleteModal(comment)}
+                  className="adpage-load-more-btn"
+                  onClick={handleLoadMore}
+                  disabled={loading}
                 >
-                  <Trash2 size={18} />
+                  {loading ? 'Loading...' : 'Load More'}
                 </button>
               </div>
-            </div>
-          ))
+            )}
+          </>
         ) : (
           <div className="adpage-no-comments">No comments found</div>
         )}

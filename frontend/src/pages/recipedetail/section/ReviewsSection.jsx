@@ -1,6 +1,6 @@
 "use client"
 
-import { ArrowUpDown, Filter } from "lucide-react"
+import { ArrowUpDown, Filter, Trash2 } from "lucide-react"
 import { useEffect, useState } from "react"
 import Review from "../../../components/review/Review"
 import ReviewForm from "../../../components/review/ReviewForm"
@@ -9,6 +9,8 @@ import { getReviewByUserAndRecipe, getReviewsByRecipe } from "../../../services/
 import FilterDropdown from "./FilterDropdown"
 import styles from "./ReviewsSection.module.css"
 import SortDropdown from "./SortDropdown"
+import { deleteReview } from "../../../services/reviewService"
+import Modal from "../../../components/modal/Modal"
 
 const ReviewsSection = ({ recipe, stats, distribution }) => {
   const [hasReview, setHasReview] = useState(false)
@@ -18,6 +20,8 @@ const ReviewsSection = ({ recipe, stats, distribution }) => {
   const [isAddReview, setIsAddReview] = useState(false)
   const [reviews, setReviews] = useState([])
   const [pagination, setPagination] = useState({});
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [reviewToDelete, setReviewToDelete] = useState(null);
 
   // Sort and filter state
   const [isSortOpen, setIsSortOpen] = useState(false)
@@ -101,6 +105,27 @@ const ReviewsSection = ({ recipe, stats, distribution }) => {
     if (isSortOpen) setIsSortOpen(false)
   }
 
+  const handleDeleteReview = async () => {
+    try {
+      await deleteReview(reviewToDelete);
+      setReviews(reviews.filter(review => review.id !== reviewToDelete));
+      setIsDeleteModalOpen(false);
+      setReviewToDelete(null);
+    } catch (error) {
+      console.error("Error deleting review:", error);
+    }
+  };
+
+  const openDeleteModal = (reviewId) => {
+    setReviewToDelete(reviewId);
+    setIsDeleteModalOpen(true);
+  };
+
+  const closeDeleteModal = () => {
+    setIsDeleteModalOpen(false);
+    setReviewToDelete(null);
+  };
+
   if (loading) return <div>Loading....</div>
 
   return (
@@ -109,9 +134,18 @@ const ReviewsSection = ({ recipe, stats, distribution }) => {
 
       {!isEditReview && hasReview ? (
         <div className={styles.myReviewContainer}>
-          <button className={styles.myReviewButton} onClick={handleEditReview}>
-            Edit review?
-          </button>
+          <div className={styles.myReviewActions}>
+            <button className={styles.myReviewButton} onClick={handleEditReview}>
+              Edit review
+            </button>
+            <button 
+              className={`${styles.myReviewButton} ${styles.deleteButton}`} 
+              onClick={() => openDeleteModal(myReview.id)}
+            >
+              <Trash2 size={16} />
+              Delete review
+            </button>
+          </div>
           <Review myReview={myReview} />
         </div>
       ) : (
@@ -188,6 +222,24 @@ const ReviewsSection = ({ recipe, stats, distribution }) => {
           </button>
         </div>
       )}
+
+      <Modal 
+        isOpen={isDeleteModalOpen} 
+        onClose={closeDeleteModal}
+        title="Delete Review"
+      >
+        <div className={styles.deleteModalContent}>
+          <p>Are you sure you want to delete this review?</p>
+          <div className={styles.modalActions}>
+            <button className={styles.cancelButton} onClick={closeDeleteModal}>
+              Cancel
+            </button>
+            <button className={styles.deleteButton} onClick={handleDeleteReview}>
+              Delete
+            </button>
+          </div>
+        </div>
+      </Modal>
     </div>
   )
 }

@@ -49,7 +49,7 @@ export const updateUserBanStatus = async (uid, bannedStatus) => {
 export const getUserProfile = async (uid) => {
     try {
         const token = getToken();
-        //console.log(token);
+        console.log(token);
         
         const response = await fetch(`${API_URL}/users/${uid}`, {
             headers: {

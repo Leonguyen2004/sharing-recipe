@@ -1,14 +1,10 @@
-import { ThumbsUp } from 'lucide-react';
+import { CircleUser } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
-import IconButton from '../button/IconButton';
+import { useAuth } from "../../context/AuthContext";
+import { formatTimestampToDateTime } from "../../services/timeService";
+import { getUserProfile } from '../../services/userService';
 import StarRating from '../starrating/StarRating';
 import './Review.css';
-import { getUserProfile } from '../../services/userService';
-import { auth } from '../../firebase/config';
-import { formatTimestampToDateTime } from "../../services/timeService";
-import { CircleUser } from 'lucide-react';
-import { deleteReview } from '../../services/reviewService';
-import { useAuth } from "../../context/AuthContext";
 
 const Review = ({ myReview }) => {
     const [authorData, setAuthorData] = useState({});

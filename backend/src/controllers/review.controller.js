@@ -4,23 +4,21 @@ const reviewController = {
   // Lấy tất cả reviews
   getAllReviews: async (req, res) => {
     try {
-      const rawStarsFilter = req.query.starsFilter;
-
-      const starsFilter = rawStarsFilter ? rawStarsFilter.split(',').map(Number) : [];
-
       const sortOrder = req.query.sortOrder || 'desc';
 
       const startAfter = req.query.startAfter || null;
 
       const limit = Math.min(parseInt(req.query.limit) || 10, 100);
 
-      const reviewsResult = await reviewService.getReviewsByRecipe({
-        starsFilter,
+      const lastDocumentId = req.query.lastDocumentId || null;
+
+      const reviewsResult = await reviewService.getAllReviews({
         sortOrder,
         startAfter,
-        limit
+        limit,
+        lastDocumentId
       });
-      
+
       res.status(200).json({
         data: reviewsResult.reviews,
         pagination: {
@@ -81,7 +79,6 @@ const reviewController = {
         startAfter,
         limit
       });
-      
       
       res.status(200).json({
         data: reviewsResult.reviews,

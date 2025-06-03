@@ -105,7 +105,7 @@ const RecipeDetail = () => {
         
         <DirectionsSection recipe={recipe}/>
         
-        <ReviewsSection recipe={recipe} stats={stats} distribution={distribution} reviews={reviews} />
+        <ReviewsSection recipe={recipe} stats={stats} distribution={distribution} />
       </div>
     </div>
   );
