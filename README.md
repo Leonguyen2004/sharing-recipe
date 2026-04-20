@@ -7,7 +7,7 @@
 ![Cloudinary](https://img.shields.io/badge/Cloudinary-4B4BFF?style=flat&logo=cloudinary&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black)
 
-## 🚀 Giới thiệu tổng quan
+## Giới thiệu tổng quan
 
 **ShareRecipes** là ứng dụng web chia sẻ công thức nấu ăn hướng đến trải nghiệm người dùng và quy trình vận hành backend chặt chẽ. Dự án giải quyết bài toán:
 
@@ -22,7 +22,7 @@ Luồng nghiệp vụ cốt lõi:
 3. Admin duyệt nội dung, quản lý danh mục và người dùng.
 4. Review/đánh giá công thức được tính toán lại tự động để duy trì độ chính xác.
 
-## ⭐ Tính năng nổi bật (Core Features)
+## Tính năng nổi bật (Core Features)
 
 - **Đăng nhập/Đăng ký bảo mật** với Firebase Authentication.
 - **Quản lý công thức nấu ăn**: tạo, sửa, xóa, lưu công thức và duyệt theo danh mục.
@@ -50,7 +50,7 @@ Luồng nghiệp vụ cốt lõi:
 - Hồ sơ người dùng
   ![Hồ sơ người dùng](./design/profile_user.png)
 
-## 🧱 Công nghệ sử dụng (Tech Stack)
+## Công nghệ sử dụng (Tech Stack)
 
 ### Backend
 
@@ -75,7 +75,7 @@ Luồng nghiệp vụ cốt lõi:
 - Firebase Firestore
 - Firebase Authentication
 
-## 🏗️ Kiến trúc hệ thống (System Architecture)
+## Kiến trúc hệ thống (System Architecture)
 
 Ứng dụng được thiết kế theo mô hình client-server rõ ràng với:
 
@@ -107,7 +107,7 @@ flowchart TD
 
 > Lưu ý: Mặc dù mô hình có Firebase Auth/Firestore, backend vẫn vận hành như một lớp API riêng biệt để xử lý xác thực, quyền truy cập và logic nghiệp vụ.
 
-## 🧾 Cơ sở dữ liệu (Database Schema)
+## Cơ sở dữ liệu (Database Schema)
 
 Các thực thể chính và quan hệ:
 
@@ -134,7 +134,7 @@ Các thực thể chính và quan hệ:
 - Xử lý rollback/cleanup ảnh Cloudinary khi xóa recipe.
 - Cập nhật `recipeCount` của user khi thêm/xóa recipe.
 
-## 📡 Tài liệu API (API Documentation)
+## Tài liệu API (API Documentation)
 
 Hiện tại dự án không triển khai Swagger/OpenAPI trong mã nguồn. Dưới đây là bảng tóm tắt các endpoints quan trọng nhất.
 
@@ -170,7 +170,7 @@ Hiện tại dự án không triển khai Swagger/OpenAPI trong mã nguồn. Dư
 | GET         | `/api/reviews/stats/:recipeId`      | No                   | Lấy thống kê review của recipe                          |
 | POST        | `/api/cloudinary/upload`            | Bearer token         | Upload ảnh media lên Cloudinary                         |
 
-## ⚙️ Hướng dẫn nhanh
+## Hướng dẫn nhanh
 
 1. **Backend**
    - Chạy `npm install` trong `backend/`
