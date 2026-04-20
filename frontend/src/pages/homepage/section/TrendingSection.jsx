@@ -1,11 +1,9 @@
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { RPRecipeCard } from '../../../components/recipe/RPRecipeCard';
 import { getAllRecipes } from '../../../services/recipeService';
 import styles from './TrendingSection.module.css';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
 
-import { Navigation, Pagination } from 'swiper/modules';
-import { Swiper, SwiperSlide } from 'swiper/react';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
